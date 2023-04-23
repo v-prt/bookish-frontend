@@ -1,0 +1,63 @@
+{
+  "accessInfo": {
+    "accessViewStatus": "SAMPLE",
+    "country": "CA",
+    "embeddable": true,
+    "epub": {
+      "isAvailable": false
+    },
+    "pdf": {
+      "isAvailable": false
+    },
+    "publicDomain": false,
+    "quoteSharingAllowed": false,
+    "textToSpeechPermission": "ALLOWED",
+    "viewability": "PARTIAL",
+    "webReaderLink": "http://play.google.com/books/reader?id=L18VBQAAQBAJ&hl=&source=gbs_api"
+  },
+  "etag": "F3ys+VvVHvM",
+  "id": "L18VBQAAQBAJ",
+  "kind": "books#volume",
+  "saleInfo": {
+    "country": "CA",
+    "isEbook": false,
+    "saleability": "NOT_FOR_SALE"
+  },
+  "searchInfo": {
+    "textSnippet": "Now, in The Psychology of Harry Potter, leading psychologists delve into the ultimate Chamber of Secrets, analyzing human mind and motivation by examining the themes and characters that make the Harry Potter books the bestselling fantasy ..."
+  },
+  "selfLink": "https://www.googleapis.com/books/v1/volumes/L18VBQAAQBAJ",
+  "volumeInfo": {
+    "allowAnonLogging": false,
+    "authors": ["Neil Mulholland"],
+    "averageRating": 3.5,
+    "canonicalVolumeLink": "https://books.google.com/books/about/The_Psychology_of_Harry_Potter.html?hl=&id=L18VBQAAQBAJ",
+    "categories": ["Literary Criticism"],
+    "contentVersion": "0.1.2.0.preview.0",
+    "description": "Harry Potter has provided a portal to the wizarding world for millions of readers, but an examination of Harry, his friends and his enemies will take us on yet another journey: through the psyche of the Muggle (and wizard!) mind. The twists and turns of the series, as well as the psychological depth and complexity of J. K. Rowling’s characters, have kept fans enthralled with and puzzling over the many mysteries that permeate Hogwarts and beyond: • Do the Harry Potter books encourage disobedience? • Why is everyone so fascinated by Professor Lupin? • What exactly will Harry and his friends do when they finally pass those N.E.W.T.s? • Do even wizards live by the ticking of the clock? • Is Harry destined to end up alone? And why did it take Ron and Hermione so long to get together? Now, in The Psychology of Harry Potter, leading psychologists delve into the ultimate Chamber of Secrets, analyzing human mind and motivation by examining the themes and characters that make the Harry Potter books the bestselling fantasy series of all time. Grab a spot on the nearest couch, and settle in for some fresh revelations about our favorite young wizard!",
+    "imageLinks": {
+      "smallThumbnail": "http://books.google.com/books/content?id=L18VBQAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
+      "thumbnail": "http://books.google.com/books/content?id=L18VBQAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+    },
+    "industryIdentifiers": ["123", "123"],
+    "infoLink": "http://books.google.ca/books?id=L18VBQAAQBAJ&dq=harry+potte&hl=&source=gbs_api",
+    "language": "en",
+    "maturityRating": "NOT_MATURE",
+    "pageCount": 338,
+    "panelizationSummary": {
+      "containsEpubBubbles": false,
+      "containsImageBubbles": false
+    },
+    "previewLink": "http://books.google.ca/books?id=L18VBQAAQBAJ&printsec=frontcover&dq=harry+potte&hl=&cd=1&source=gbs_api",
+    "printType": "BOOK",
+    "publishedDate": "2007-04-10",
+    "publisher": "BenBella Books",
+    "ratingsCount": 5,
+    "readingModes": {
+      "image": false,
+      "text": false
+    },
+    "subtitle": "An Unauthorized Examination Of The Boy Who Lived",
+    "title": "The Psychology of Harry Potter"
+  }
+}

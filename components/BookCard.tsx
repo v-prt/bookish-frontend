@@ -12,7 +12,7 @@ export const BookCard: React.FC<Props> = ({ book }) => {
       <Image style={styles.image} source={{ uri: book.image }} />
       <View style={styles.textContainer}>
         <Text style={styles.title}>{book.title}</Text>
-        <Text style={styles.author}>{book.author}</Text>
+        <Text style={styles.author}>by {book.author || 'Unknown Author'}</Text>
       </View>
     </View>
   )
@@ -20,26 +20,26 @@ export const BookCard: React.FC<Props> = ({ book }) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: COLORS.primary,
-    borderRadius: 10,
     flexDirection: 'row',
+    alignItems: 'center',
     margin: 10,
-    padding: 10,
   },
   image: {
+    backgroundColor: COLORS.secondary,
     borderRadius: 10,
     height: 100,
     width: 75,
   },
   textContainer: {
+    maxWidth: '70%',
     marginLeft: 10,
   },
   title: {
-    color: COLORS.white,
-    fontSize: 20,
+    color: COLORS.accentDark,
+    fontSize: 16,
   },
   author: {
     color: COLORS.grey,
-    fontSize: 16,
+    fontSize: 14,
   },
 })

@@ -8,6 +8,7 @@ interface HomeProps {}
 export const Home: React.FC<HomeProps> = ({}) => {
   return (
     <View style={styles.screen}>
+      {/* TODO: design & styling, set recommended books based on user data, overview/stats, genre search buttons? */}
       <Text style={styles.text}>Recommended for you</Text>
       <BookList books={recommendedBooks} />
     </View>
