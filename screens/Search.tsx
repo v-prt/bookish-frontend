@@ -6,6 +6,7 @@ import { Input } from '../ui/Input'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { Formik } from 'formik'
+import { sanitizeText } from '../utils'
 
 interface Props {}
 
@@ -19,9 +20,11 @@ export const Search: React.FC<Props> = ({}) => {
     async ({ pageParam = 0 }) => {
       if (searchText?.length > 0) {
         const maxResults = 20
+
         const res = await axios.get(
-          `https://www.googleapis.com/books/v1/volumes?q=${searchText}+inauthor:${searchText}&startIndex=${pageParam}&maxResults=${maxResults}`
+          `https://www.googleapis.com/books/v1/volumes?q=${searchText}&startIndex=${pageParam}&maxResults=${maxResults}`
         )
+
         const items = res.data.items
         const totalItems = res.data.totalItems
         return { items, totalItems }
@@ -65,13 +68,18 @@ export const Search: React.FC<Props> = ({}) => {
     fetchNextPage()
   }
 
+  const handleInput = (text: string) => {
+    const sanitizedText = sanitizeText(text)
+    setSearchText(sanitizedText)
+  }
+
   return (
     <View style={styles.screen}>
       <View style={styles.searchBar}>
         <Formik
           initialValues={{ search: '' }}
           onSubmit={values => {
-            setSearchText(values.search)
+            handleInput(values.search)
             // reset search results
             setSearchResults(null)
             setTotalResults(null)
