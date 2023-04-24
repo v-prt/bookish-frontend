@@ -15,6 +15,8 @@ export const BookCard: React.FC<Props> = ({ book }) => {
       <View style={styles.textContainer}>
         <SerifText style={styles.title}>{book.title}</SerifText>
         <SansSerifText style={styles.author}>by {book.author || 'Unknown Author'}</SansSerifText>
+        {/* TODO: show avg rating? use stars */}
+        {/* <SansSerifText style={styles.rating}>{book.averageRating || '-'} stars</SansSerifText> */}
       </View>
     </View>
   )
@@ -42,5 +44,8 @@ const styles = StyleSheet.create({
   author: {
     color: COLORS.primary500,
     fontSize: 14,
+  },
+  rating: {
+    color: COLORS.grey,
   },
 })

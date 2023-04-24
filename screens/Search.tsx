@@ -10,16 +10,21 @@ import { sanitizeText } from '../utils'
 import { IconButton } from '../ui/IconButton'
 import { GenreButton } from '../components/GenreButton'
 
-// genre card images
-const fiction = require('../assets/images/fiction.jpg')
-const nonFiction = require('../assets/images/nonfiction.jpg')
-const romance = require('../assets/images/romance.jpg')
-const mystery = require('../assets/images/mystery.jpg')
-const thriller = require('../assets/images/thriller.jpg')
-const horror = require('../assets/images/horror.jpg')
-const scienceFiction = require('../assets/images/science-fiction.jpg')
+// genre images
+const adventure = require('../assets/images/adventure.jpg')
+const comics = require('../assets/images/comics.jpg')
 const fantasy = require('../assets/images/fantasy.jpg')
-// TODO: add more genres: kids, young adult, graphic novels, poetry, history, adventure, religion
+const fiction = require('../assets/images/fiction.jpg')
+const history = require('../assets/images/history.jpg')
+const horror = require('../assets/images/horror.jpg')
+const kids = require('../assets/images/kids.jpg')
+const mystery = require('../assets/images/mystery.jpg')
+const nonFiction = require('../assets/images/nonfiction.jpg')
+const poetry = require('../assets/images/poetry.jpg')
+const romance = require('../assets/images/romance.jpg')
+const scienceFiction = require('../assets/images/science-fiction.jpg')
+const thriller = require('../assets/images/thriller.jpg')
+const youngAdult = require('../assets/images/young-adult.jpg')
 
 interface Props {}
 
@@ -63,6 +68,7 @@ export const Search: React.FC<Props> = ({}) => {
         title: book.volumeInfo.title,
         image: book.volumeInfo.imageLinks?.thumbnail,
         author: book.volumeInfo.authors?.[0],
+        averageRating: book.volumeInfo.averageRating,
       }
     })
     const booksWithImages = uniqueBooks.filter((book: any) => book.image !== undefined)
@@ -87,38 +93,20 @@ export const Search: React.FC<Props> = ({}) => {
   }
 
   const genres = [
-    {
-      label: 'Fiction',
-      image: fiction,
-    },
-    {
-      label: 'Non-Fiction',
-      image: nonFiction,
-    },
-    {
-      label: 'Romance',
-      image: romance,
-    },
-    {
-      label: 'Fantasy',
-      image: fantasy,
-    },
-    {
-      label: 'Mystery',
-      image: mystery,
-    },
-    {
-      label: 'Science Fiction',
-      image: scienceFiction,
-    },
-    {
-      label: 'Thriller',
-      image: thriller,
-    },
-    {
-      label: 'Horror',
-      image: horror,
-    },
+    { label: 'Adventure', image: adventure },
+    { label: 'Fantasy', image: fantasy },
+    { label: 'Fiction', image: fiction },
+    { label: 'Graphic Novels', image: comics },
+    { label: 'History', image: history },
+    { label: 'Horror', image: horror },
+    { label: 'Kids', image: kids },
+    { label: 'Mystery', image: mystery },
+    { label: 'Non-Fiction', image: nonFiction },
+    { label: 'Poetry', image: poetry },
+    { label: 'Romance', image: romance },
+    { label: 'Science Fiction', image: scienceFiction },
+    { label: 'Thriller', image: thriller },
+    { label: 'Young Adult', image: youngAdult },
   ]
 
   return (
