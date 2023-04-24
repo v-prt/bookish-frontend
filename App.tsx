@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { QueryClient, QueryClientProvider } from 'react-query'
-import { SafeAreaView, StyleSheet, View } from 'react-native'
+import { SafeAreaView, StyleSheet } from 'react-native'
 import { setCustomText } from 'react-native-global-props'
 import { NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
@@ -10,6 +10,7 @@ import { COLORS, customTextProps } from './GlobalStyles'
 import { Home } from './screens/Home'
 import { Search } from './screens/Search'
 import { Library } from './screens/Library'
+import { useFonts } from './hooks/useFonts'
 
 const queryClient = new QueryClient()
 
@@ -37,7 +38,7 @@ const App: React.FC = () => {
 
   useEffect(() => {
     const loadFonts = async () => {
-      // await useFonts()
+      await useFonts()
       setAppReady(true)
     }
     loadFonts()

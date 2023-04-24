@@ -1,6 +1,8 @@
 import { StyleSheet, View, Text, Image } from 'react-native'
 import { COLORS } from '../GlobalStyles'
 import { Book } from '../types'
+import { SerifText } from '../ui/SerifText'
+import { SansSerifText } from '../ui/SansSerifText'
 
 interface Props {
   book: Book
@@ -11,8 +13,8 @@ export const BookCard: React.FC<Props> = ({ book }) => {
     <View style={styles.container}>
       <Image style={styles.image} source={{ uri: book.image }} />
       <View style={styles.textContainer}>
-        <Text style={styles.title}>{book.title}</Text>
-        <Text style={styles.author}>by {book.author || 'Unknown Author'}</Text>
+        <SerifText style={styles.title}>{book.title}</SerifText>
+        <SansSerifText style={styles.author}>by {book.author || 'Unknown Author'}</SansSerifText>
       </View>
     </View>
   )
@@ -35,11 +37,10 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   title: {
-    color: COLORS.accentDark,
     fontSize: 16,
   },
   author: {
-    color: COLORS.grey,
+    color: COLORS.primary500,
     fontSize: 14,
   },
 })

@@ -1,14 +1,21 @@
-import { Pressable, StyleSheet, Text } from 'react-native'
+import { ImageBackground, View, Pressable, StyleSheet } from 'react-native'
+import { SerifText } from '../ui/SerifText'
+import { COLORS } from '../GlobalStyles'
 
 interface Props {
-  genre: string
+  label: string
+  image?: any
   onPress: () => void
 }
 
-export const GenreButton: React.FC<Props> = ({ genre, onPress }) => {
+export const GenreButton: React.FC<Props> = ({ label, image, onPress }) => {
   return (
     <Pressable onPress={onPress} style={styles.container}>
-      <Text style={styles.text}>{genre}</Text>
+      <ImageBackground style={styles.image} source={image} resizeMode='cover'>
+        <View style={styles.textContainer}>
+          <SerifText style={styles.text}>{label}</SerifText>
+        </View>
+      </ImageBackground>
     </Pressable>
   )
 }
@@ -17,14 +24,21 @@ const styles = StyleSheet.create({
   container: {
     width: '48%',
     height: 150,
-    backgroundColor: '#eee',
+    backgroundColor: COLORS.primary200,
     borderRadius: 10,
-    padding: 10,
+    overflow: 'hidden',
+  },
+  image: {
+    flex: 1,
+  },
+  textContainer: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
     justifyContent: 'center',
     alignItems: 'center',
   },
   text: {
-    fontSize: 16,
-    color: '#333',
+    color: COLORS.white,
+    fontSize: 18,
   },
 })

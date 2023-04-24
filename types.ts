@@ -1,4 +1,3 @@
-// Define the expected type for the recommendedBooks array
 export interface Book {
   id: string
   title: string

@@ -18,10 +18,10 @@ export const COLORS = {
 }
 
 // app-wide font / text style
+// FIXME: not working
 export const customTextProps = {
   style: {
-    // TODO: import and set custom font
-    // fontFamily: '',
+    fontFamily: 'Prata-Regular',
     color: COLORS.accentLight,
   },
 }

@@ -1,6 +1,5 @@
 import { Book } from '../types'
 
-// Update the recommendedBooks array to match the expected type
 export const recommendedBooks: Book[] = [
   {
     id: '1',

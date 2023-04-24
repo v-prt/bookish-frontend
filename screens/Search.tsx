@@ -10,6 +10,17 @@ import { sanitizeText } from '../utils'
 import { IconButton } from '../ui/IconButton'
 import { GenreButton } from '../components/GenreButton'
 
+// genre card images
+const fiction = require('../assets/images/fiction.jpg')
+const nonFiction = require('../assets/images/nonfiction.jpg')
+const romance = require('../assets/images/romance.jpg')
+const mystery = require('../assets/images/mystery.jpg')
+const thriller = require('../assets/images/thriller.jpg')
+const horror = require('../assets/images/horror.jpg')
+const scienceFiction = require('../assets/images/science-fiction.jpg')
+const fantasy = require('../assets/images/fantasy.jpg')
+// TODO: add more genres: kids, young adult, graphic novels, poetry, history, adventure, religion
+
 interface Props {}
 
 export const Search: React.FC<Props> = ({}) => {
@@ -17,7 +28,7 @@ export const Search: React.FC<Props> = ({}) => {
   const [searchResults, setSearchResults] = useState<any>(null)
   const [totalResults, setTotalResults] = useState<number | null>(null)
 
-  const { data, status, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery(
+  const { data, status, fetchNextPage, isFetchingNextPage } = useInfiniteQuery(
     ['books', searchText],
     async ({ pageParam = 0 }) => {
       if (searchText?.length > 0) {
@@ -76,14 +87,38 @@ export const Search: React.FC<Props> = ({}) => {
   }
 
   const genres = [
-    'Fiction',
-    'Nonfiction',
-    'Fantasy',
-    'Mystery',
-    'Romance',
-    'Science Fiction',
-    'Thriller',
-    'Young Adult',
+    {
+      label: 'Fiction',
+      image: fiction,
+    },
+    {
+      label: 'Non-Fiction',
+      image: nonFiction,
+    },
+    {
+      label: 'Romance',
+      image: romance,
+    },
+    {
+      label: 'Fantasy',
+      image: fantasy,
+    },
+    {
+      label: 'Mystery',
+      image: mystery,
+    },
+    {
+      label: 'Science Fiction',
+      image: scienceFiction,
+    },
+    {
+      label: 'Thriller',
+      image: thriller,
+    },
+    {
+      label: 'Horror',
+      image: horror,
+    },
   ]
 
   return (
@@ -152,7 +187,15 @@ export const Search: React.FC<Props> = ({}) => {
           <ScrollView keyboardDismissMode='on-drag'>
             <View style={styles.genres}>
               {genres.map(genre => (
-                <GenreButton key={genre} genre={genre} onPress={() => handleSearch(genre)} />
+                <GenreButton
+                  key={genre.label}
+                  label={genre.label}
+                  image={genre.image}
+                  onPress={() => {
+                    // FIXME: plus sign + shows in searchbar when selecting genres with white space
+                    handleSearch(genre.label)
+                  }}
+                />
               ))}
             </View>
           </ScrollView>
