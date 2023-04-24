@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text } from 'react-native'
+import { StyleSheet, View, Text, ActivityIndicator, Keyboard, ScrollView } from 'react-native'
 import { useInfiniteQuery } from 'react-query'
 import { COLORS } from '../GlobalStyles'
 import { BookList } from '../components/BookList'
@@ -7,6 +7,8 @@ import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { Formik } from 'formik'
 import { sanitizeText } from '../utils'
+import { IconButton } from '../ui/IconButton'
+import { GenreButton } from '../components/GenreButton'
 
 interface Props {}
 
@@ -68,58 +70,124 @@ export const Search: React.FC<Props> = ({}) => {
     fetchNextPage()
   }
 
-  const handleInput = (text: string) => {
+  const handleSearch = (text: string) => {
     const sanitizedText = sanitizeText(text)
     setSearchText(sanitizedText)
   }
 
+  const genres = [
+    'Fiction',
+    'Nonfiction',
+    'Fantasy',
+    'Mystery',
+    'Romance',
+    'Science Fiction',
+    'Thriller',
+    'Young Adult',
+  ]
+
   return (
     <View style={styles.screen}>
-      <View style={styles.searchBar}>
-        <Formik
-          initialValues={{ search: '' }}
-          onSubmit={values => {
-            handleInput(values.search)
-            // reset search results
-            setSearchResults(null)
-            setTotalResults(null)
-          }}>
-          {({ handleChange, handleBlur, handleSubmit, values }) => (
+      <Formik
+        initialValues={{ search: '' }}
+        onSubmit={values => {
+          handleSearch(values.search)
+          // reset search results
+          setSearchResults(null)
+          setTotalResults(null)
+        }}>
+        {({ handleChange, handleBlur, handleSubmit, values }) => (
+          <View style={styles.searchBar}>
             <Input
               config={{
                 // submit form on change
                 onChangeText: handleChange('search'),
-                onBlur: handleBlur('search'),
+                onBlur: () => {
+                  Keyboard.dismiss()
+                  handleBlur('search')
+                },
+                // FIXME: typescript error
                 onSubmitEditing: handleSubmit,
-                value: values.search,
-                placeholder: 'Search books by author, title, or subject',
+                keyboardType: 'web-search', // ios only
+                value: values.search || searchText,
+                placeholder: 'Search books',
+              }}
+              icon={values.search.length > 0 || searchText.length > 0 ? 'close' : 'search'}
+              onIconPress={() => {
+                if (values.search.length > 0 || searchText.length > 0) {
+                  handleChange('search')('')
+                  setSearchText('')
+                  setSearchResults(null)
+                  setTotalResults(null)
+                }
               }}
             />
-          )}
-        </Formik>
-      </View>
-      {status === 'success' && searchResults?.length > 0 && (
-        <>
-          <Text style={styles.text}>Total Results: {totalResults}</Text>
-          <BookList books={searchResults} infiniteScroll={handleLoadMore} />
-          {isFetchingNextPage && <Text style={styles.text}>Loading...</Text>}
-          {!hasNextPage && <Text style={styles.text}>End of Results</Text>}
-        </>
+            {/* TODO: animate button to appear when input is focused */}
+            <IconButton icon='arrow-forward' color={COLORS.accentLight} onPress={handleSubmit} />
+          </View>
+        )}
+      </Formik>
+
+      {status === 'loading' && (
+        <View style={styles.loading}>
+          <ActivityIndicator size='large' color={COLORS.primary300} />
+        </View>
       )}
+
+      {status === 'success' &&
+        (searchResults?.length > 0 ? (
+          <>
+            <Text style={styles.text}>Total Results: {totalResults}</Text>
+            <BookList
+              books={searchResults}
+              infiniteScroll={handleLoadMore}
+              isLoading={isFetchingNextPage}
+            />
+          </>
+        ) : searchText?.length > 0 ? (
+          <View style={styles.loading}>
+            <Text style={styles.text}>No Results</Text>
+          </View>
+        ) : (
+          <ScrollView keyboardDismissMode='on-drag'>
+            <View style={styles.genres}>
+              {genres.map(genre => (
+                <GenreButton key={genre} genre={genre} onPress={() => handleSearch(genre)} />
+              ))}
+            </View>
+          </ScrollView>
+        ))}
     </View>
   )
 }
 
 const styles = StyleSheet.create({
   screen: {
-    backgroundColor: COLORS.primary,
+    backgroundColor: COLORS.primary100,
     flex: 1,
+  },
+  loading: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 30,
+  },
+  genres: {
+    flex: 1,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 10,
+    margin: 10,
   },
   text: {
     fontSize: 12,
-    color: COLORS.accentDark,
+    color: COLORS.grey,
+    textAlign: 'center',
+    paddingBottom: 10,
   },
   searchBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
     margin: 10,
   },
 })

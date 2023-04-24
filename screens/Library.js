@@ -11,7 +11,7 @@ export const Library = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   screen: {
-    backgroundColor: COLORS.primary,
+    backgroundColor: COLORS.primary100,
     flex: 1,
   },
   text: {

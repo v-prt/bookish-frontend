@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { QueryClient, QueryClientProvider } from 'react-query'
-import { StyleSheet, View } from 'react-native'
+import { SafeAreaView, StyleSheet, View } from 'react-native'
 import { setCustomText } from 'react-native-global-props'
 import { NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
@@ -19,12 +19,12 @@ const Tab = createBottomTabNavigator()
 
 const screenOptions = {
   headerStyle: {
-    backgroundColor: COLORS.secondary,
+    backgroundColor: COLORS.primary300,
   },
   headerTintColor: COLORS.accentDark,
   headerShadowVisible: false,
   tabBarStyle: {
-    backgroundColor: COLORS.secondary,
+    backgroundColor: COLORS.primary300,
     borderTopWidth: 0,
   },
   tabBarInactiveTintColor: COLORS.grey,
@@ -63,22 +63,23 @@ const App: React.FC = () => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <View style={styles.app}>
+      <SafeAreaView style={styles.app}>
         <StatusBar style='dark' />
         <NavigationContainer>
           <Tab.Navigator screenOptions={screenOptions}>
             <Tab.Screen name='Home' component={Home} />
-            <Tab.Screen name='Search' component={Search} />
+            <Tab.Screen name='Search' component={Search} options={{ headerShown: false }} />
             <Tab.Screen name='Library' component={Library} />
           </Tab.Navigator>
         </NavigationContainer>
-      </View>
+      </SafeAreaView>
     </QueryClientProvider>
   )
 }
 
 const styles = StyleSheet.create({
   app: {
+    backgroundColor: COLORS.primary300,
     flex: 1,
   },
 })

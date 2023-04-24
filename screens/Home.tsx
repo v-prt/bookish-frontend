@@ -17,7 +17,7 @@ export const Home: React.FC<HomeProps> = ({}) => {
 
 const styles = StyleSheet.create({
   screen: {
-    backgroundColor: COLORS.primary,
+    backgroundColor: COLORS.primary100,
     flex: 1,
   },
   text: {
