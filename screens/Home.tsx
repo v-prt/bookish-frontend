@@ -1,7 +1,6 @@
 import { StyleSheet, View } from 'react-native'
 import { COLORS } from '../GlobalStyles'
 import { BookList } from '../components/BookList'
-import { recommendedBooks } from '../data/dummyData'
 import { SansSerifText } from '../ui/SansSerifText'
 
 interface HomeProps {}
@@ -13,7 +12,7 @@ export const Home: React.FC<HomeProps> = ({}) => {
       <SansSerifText style={styles.text} bold>
         Recommended for you
       </SansSerifText>
-      <BookList books={recommendedBooks} />
+      {/* <BookList books={recommendedBooks} /> */}
     </View>
   )
 }

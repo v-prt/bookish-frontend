@@ -1,4 +1,12 @@
-import { StyleSheet, View, Text, ActivityIndicator, Keyboard, ScrollView } from 'react-native'
+import {
+  StyleSheet,
+  View,
+  Text,
+  Pressable,
+  ActivityIndicator,
+  Keyboard,
+  ScrollView,
+} from 'react-native'
 import { useInfiniteQuery } from 'react-query'
 import { COLORS } from '../GlobalStyles'
 import { BookList } from '../components/BookList'
@@ -32,6 +40,7 @@ export const Search: React.FC<Props> = ({}) => {
   const [searchText, setSearchText] = useState<string>('')
   const [searchResults, setSearchResults] = useState<any>(null)
   const [totalResults, setTotalResults] = useState<number | null>(null)
+  const [selectedGenre, setSelectedGenre] = useState<string | null>(null)
 
   const { data, status, fetchNextPage, isFetchingNextPage } = useInfiniteQuery(
     ['books', searchText],
@@ -69,6 +78,7 @@ export const Search: React.FC<Props> = ({}) => {
         image: book.volumeInfo.imageLinks?.thumbnail,
         author: book.volumeInfo.authors?.[0],
         averageRating: book.volumeInfo.averageRating,
+        ratingsCount: book.volumeInfo.ratingsCount,
       }
     })
     const booksWithImages = uniqueBooks.filter((book: any) => book.image !== undefined)
@@ -92,6 +102,11 @@ export const Search: React.FC<Props> = ({}) => {
     setSearchText(sanitizedText)
   }
 
+  const handleGenreSearch = (genre: string) => {
+    setSearchText(`highly rated ${genre} books`)
+    setSelectedGenre(genre)
+  }
+
   const genres = [
     { label: 'Adventure', image: adventure },
     { label: 'Fantasy', image: fantasy },
@@ -110,16 +125,16 @@ export const Search: React.FC<Props> = ({}) => {
   ]
 
   return (
-    <View style={styles.screen}>
-      <Formik
-        initialValues={{ search: '' }}
-        onSubmit={values => {
-          handleSearch(values.search)
-          // reset search results
-          setSearchResults(null)
-          setTotalResults(null)
-        }}>
-        {({ handleChange, handleBlur, handleSubmit, values }) => (
+    <Formik
+      initialValues={{ search: '' }}
+      onSubmit={values => {
+        handleSearch(values.search)
+        // reset search results
+        setSearchResults(null)
+        setTotalResults(null)
+      }}>
+      {({ handleChange, handleBlur, handleSubmit, values }) => (
+        <View style={styles.screen}>
           <View style={styles.searchBar}>
             <Input
               config={{
@@ -132,7 +147,7 @@ export const Search: React.FC<Props> = ({}) => {
                 // FIXME: typescript error
                 onSubmitEditing: handleSubmit,
                 keyboardType: 'web-search', // ios only
-                value: values.search || searchText,
+                value: values.search,
                 placeholder: 'Search books',
               }}
               icon={values.search.length > 0 || searchText.length > 0 ? 'close' : 'search'}
@@ -146,49 +161,60 @@ export const Search: React.FC<Props> = ({}) => {
               }}
             />
             {/* TODO: animate button to appear when input is focused */}
-            <IconButton icon='arrow-forward' color={COLORS.accentLight} onPress={handleSubmit} />
+            {/* <IconButton icon='arrow-forward' color={COLORS.accentLight} onPress={handleSubmit} /> */}
           </View>
-        )}
-      </Formik>
 
-      {status === 'loading' && (
-        <View style={styles.loading}>
-          <ActivityIndicator size='large' color={COLORS.primary300} />
+          {status === 'loading' && (
+            <View style={styles.loading}>
+              <ActivityIndicator size='large' color={COLORS.primary300} />
+            </View>
+          )}
+
+          {status === 'success' &&
+            (searchResults?.length > 0 ? (
+              <>
+                <View style={styles.resultsHeader}>
+                  <Text style={styles.text}>
+                    Total Results: {totalResults?.toLocaleString()}
+                    {selectedGenre && ` (${selectedGenre})`}
+                  </Text>
+                  <Pressable
+                    onPress={() => {
+                      setSearchText('')
+                      handleSubmit()
+                    }}>
+                    <Text style={styles.resetBtnText}>Reset</Text>
+                  </Pressable>
+                </View>
+                <BookList
+                  books={searchResults}
+                  infiniteScroll={handleLoadMore}
+                  isLoading={isFetchingNextPage}
+                />
+              </>
+            ) : searchText?.length > 0 ? (
+              <View style={styles.loading}>
+                <Text style={styles.text}>No Results</Text>
+              </View>
+            ) : (
+              <ScrollView keyboardDismissMode='on-drag'>
+                <View style={styles.genres}>
+                  {genres.map(genre => (
+                    <GenreButton
+                      key={genre.label}
+                      label={genre.label}
+                      image={genre.image}
+                      onPress={() => {
+                        handleGenreSearch(genre.label)
+                      }}
+                    />
+                  ))}
+                </View>
+              </ScrollView>
+            ))}
         </View>
       )}
-
-      {status === 'success' &&
-        (searchResults?.length > 0 ? (
-          <>
-            <Text style={styles.text}>Total Results: {totalResults}</Text>
-            <BookList
-              books={searchResults}
-              infiniteScroll={handleLoadMore}
-              isLoading={isFetchingNextPage}
-            />
-          </>
-        ) : searchText?.length > 0 ? (
-          <View style={styles.loading}>
-            <Text style={styles.text}>No Results</Text>
-          </View>
-        ) : (
-          <ScrollView keyboardDismissMode='on-drag'>
-            <View style={styles.genres}>
-              {genres.map(genre => (
-                <GenreButton
-                  key={genre.label}
-                  label={genre.label}
-                  image={genre.image}
-                  onPress={() => {
-                    // FIXME: plus sign + shows in searchbar when selecting genres with white space
-                    handleSearch(genre.label)
-                  }}
-                />
-              ))}
-            </View>
-          </ScrollView>
-        ))}
-    </View>
+    </Formik>
   )
 }
 
@@ -210,11 +236,20 @@ const styles = StyleSheet.create({
     gap: 10,
     margin: 10,
   },
+  resultsHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginHorizontal: 10,
+    marginBottom: 10,
+  },
+  resetBtnText: {
+    fontFamily: 'Heebo-Bold',
+    color: COLORS.accentLight,
+  },
   text: {
     fontSize: 12,
     color: COLORS.grey,
-    textAlign: 'center',
-    paddingBottom: 10,
   },
   searchBar: {
     flexDirection: 'row',

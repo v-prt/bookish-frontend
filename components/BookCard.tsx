@@ -1,10 +1,8 @@
-import { StyleSheet, Pressable, View, Image } from 'react-native'
+import { StyleSheet, Pressable, View, Image, Text } from 'react-native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { useNavigation } from '@react-navigation/native'
 import { COLORS } from '../GlobalStyles'
 import { Book, RootStackParamList } from '../types'
-import { SerifText } from '../ui/SerifText'
-import { SansSerifText } from '../ui/SansSerifText'
 import { MaterialIcons } from '@expo/vector-icons'
 
 interface Props {
@@ -22,13 +20,18 @@ export const BookCard: React.FC<Props> = ({ book }) => {
     <Pressable style={styles.container} onPress={handlePress}>
       <Image style={styles.image} source={{ uri: book.image }} />
       <View style={styles.textContainer}>
-        <SerifText style={styles.title}>{book.title}</SerifText>
-        <SansSerifText style={styles.author}>by {book.author || 'Unknown Author'}</SansSerifText>
+        <Text style={styles.title} numberOfLines={2}>
+          {book.title}
+        </Text>
+        <Text style={styles.author}>by {book.author || 'Unknown Author'}</Text>
         <View style={styles.ratingContainer}>
           <MaterialIcons name='star' size={18} color={book.averageRating ? 'gold' : '#ccc'} />
-          <SansSerifText style={styles.rating} bold>
-            {book.averageRating || 'No rating'}
-          </SansSerifText>
+          <Text style={styles.rating}>{book.averageRating || 'No rating'}</Text>
+          {book.ratingsCount > 0 && (
+            <Text style={styles.ratingsCount}>
+              • ({book.ratingsCount.toLocaleString()} rating{book.ratingsCount > 1 && 's'})
+            </Text>
+          )}
         </View>
       </View>
     </Pressable>
@@ -42,9 +45,8 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   image: {
-    backgroundColor: COLORS.primary300,
-    borderRadius: 10,
-    height: 100,
+    borderRadius: 5,
+    height: 110,
     width: 75,
   },
   textContainer: {
@@ -52,10 +54,13 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   title: {
+    color: COLORS.primary900,
+    fontFamily: 'Prata-Regular',
     fontSize: 16,
   },
   author: {
     color: COLORS.primary500,
+    fontFamily: 'Heebo-Regular',
     fontSize: 14,
   },
   ratingContainer: {
@@ -64,6 +69,12 @@ const styles = StyleSheet.create({
     gap: 3,
   },
   rating: {
+    fontFamily: 'Heebo-Bold',
     color: COLORS.primary600,
+  },
+  ratingsCount: {
+    color: COLORS.primary500,
+    fontFamily: 'Heebo-Regular',
+    fontSize: 14,
   },
 })

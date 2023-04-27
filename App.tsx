@@ -32,7 +32,6 @@ const App: React.FC = () => {
 
     if (appReady) {
       prepare()
-      // FIXME: text styles not working
       setCustomText(customTextProps)
     }
   }, [appReady])
