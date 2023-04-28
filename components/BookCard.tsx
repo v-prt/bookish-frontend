@@ -2,7 +2,7 @@ import { StyleSheet, Pressable, View, Image, Text } from 'react-native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { useNavigation } from '@react-navigation/native'
 import { COLORS } from '../GlobalStyles'
-import { Book, RootStackParamList } from '../types'
+import { Book, RootStackParamList } from '../types/types'
 import { MaterialIcons } from '@expo/vector-icons'
 
 interface Props {

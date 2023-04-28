@@ -1,6 +1,6 @@
 import { StyleSheet, FlatList, View, ActivityIndicator } from 'react-native'
 import { BookCard } from './BookCard'
-import { Book } from '../types'
+import { Book } from '../types/types'
 import { COLORS } from '../GlobalStyles'
 
 interface Props {

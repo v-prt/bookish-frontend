@@ -1,16 +1,31 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { SafeAreaView, StyleSheet } from 'react-native'
 import { setCustomText } from 'react-native-global-props'
+import { NavigationContainer } from '@react-navigation/native'
 import { StatusBar } from 'expo-status-bar'
 import * as SplashScreen from 'expo-splash-screen'
 import { COLORS, customTextProps } from './GlobalStyles'
+import { UserContext, UserProvider } from './contexts/UserContext'
 import { useFonts } from './hooks/useFonts'
+import { UnauthenticatedStack } from './stacks/UnauthenticatedStack'
 import { AuthenticatedStack } from './stacks/AuthenticatedStack'
 
 const queryClient = new QueryClient()
 
 SplashScreen.preventAutoHideAsync()
+
+const Root = () => {
+  const { authenticated } = useContext(UserContext)
+
+  return (
+    <SafeAreaView style={styles.app}>
+      <NavigationContainer>
+        {authenticated ? <AuthenticatedStack /> : <UnauthenticatedStack />}
+      </NavigationContainer>
+    </SafeAreaView>
+  )
+}
 
 const App: React.FC = () => {
   const [appReady, setAppReady] = useState(false)
@@ -42,11 +57,10 @@ const App: React.FC = () => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <SafeAreaView style={styles.app}>
+      <UserProvider>
         <StatusBar style='dark' />
-        {/* TODO: add unauthenticated stack */}
-        <AuthenticatedStack />
-      </SafeAreaView>
+        <Root />
+      </UserProvider>
     </QueryClientProvider>
   )
 }

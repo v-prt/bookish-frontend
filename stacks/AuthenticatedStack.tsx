@@ -33,7 +33,7 @@ const SearchStack = () => {
   )
 }
 
-export const AuthenticatedStack = () => {
+export const AuthenticatedStack: React.FC = () => {
   return (
     <NavigationContainer>
       <Tab.Navigator screenOptions={screenOptions}>
