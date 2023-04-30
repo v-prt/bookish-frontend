@@ -15,6 +15,9 @@ export const COLORS = {
   black: '#363636',
   grey: '#9B9B9B',
   white: '#f9f9f9',
+
+  error: '#FF0000',
+  warning: '#FFC107',
 }
 
 // app-wide font / text style

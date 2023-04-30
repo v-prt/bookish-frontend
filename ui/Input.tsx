@@ -1,20 +1,19 @@
 import { StyleSheet, View, TextInput } from 'react-native'
 import { COLORS } from '../GlobalStyles'
 import { IconButton } from './IconButton'
+import { MaterialIcons } from '@expo/vector-icons'
 
 interface Props {
   config: TextInput['props']
-  icon?: string
-  onIconPress: () => void
+  icon?: keyof typeof MaterialIcons.glyphMap
+  onIconPress?: () => void
 }
 
 export const Input: React.FC<Props> = ({ config, icon, onIconPress }) => {
-  const inputStyles = [styles.input]
-
   return (
     <View style={styles.inputWrapper}>
-      <TextInput {...config} style={inputStyles} selectionColor={COLORS.accentLight} />
-      {icon && (
+      <TextInput {...config} style={styles.input} selectionColor={COLORS.accentLight} />
+      {icon && onIconPress && (
         <IconButton
           icon={icon}
           color={COLORS.grey}
@@ -29,9 +28,10 @@ export const Input: React.FC<Props> = ({ config, icon, onIconPress }) => {
 
 const styles = StyleSheet.create({
   inputWrapper: {
+    width: '100%',
+    height: 40,
     backgroundColor: COLORS.primary200,
     borderRadius: 20,
-    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',

@@ -2,7 +2,7 @@ import { StyleSheet, Pressable } from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons'
 
 interface Props {
-  icon: string
+  icon: keyof typeof MaterialIcons.glyphMap
   size?: number
   color: string
   onPress: () => void
@@ -28,7 +28,6 @@ export const IconButton: React.FC<Props> = ({
         pressed && styles.pressed,
         disabled && styles.disabled,
       ]}>
-      {/* FIXME: typescript error */}
       <MaterialIcons name={icon} size={size} color={disabled ? '#eee' : color} />
     </Pressable>
   )

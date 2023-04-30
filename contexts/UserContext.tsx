@@ -53,8 +53,8 @@ export const UserProvider: React.FC<Props> = ({ children }) => {
       storeToken('bookishToken', res.data.token)
       setToken(res.data.token)
       return res.data
-    } catch (err) {
-      return { error: err }
+    } catch (err: any) {
+      return { error: err.response.data }
     }
   }
 
@@ -67,8 +67,8 @@ export const UserProvider: React.FC<Props> = ({ children }) => {
       storeToken('bookishToken', res.data.token)
       setToken(res.data.token)
       return res.data
-    } catch (err) {
-      return { error: err }
+    } catch (err: any) {
+      return { error: err.response.data }
     }
   }
 
@@ -113,6 +113,7 @@ export const UserProvider: React.FC<Props> = ({ children }) => {
         handleSignup,
         handleLogin,
         handleLogout,
+        authenticated: !!userId,
       }}>
       {children}
     </UserContext.Provider>

@@ -35,12 +35,10 @@ const SearchStack = () => {
 
 export const AuthenticatedStack: React.FC = () => {
   return (
-    <NavigationContainer>
-      <Tab.Navigator screenOptions={screenOptions}>
-        <Tab.Screen name='Home' component={Home} />
-        <Tab.Screen name='SearchStack' component={SearchStack} options={{ headerShown: false }} />
-        <Tab.Screen name='Library' component={Library} />
-      </Tab.Navigator>
-    </NavigationContainer>
+    <Tab.Navigator screenOptions={screenOptions}>
+      <Tab.Screen name='Home' component={Home} />
+      <Tab.Screen name='SearchStack' component={SearchStack} options={{ headerShown: false }} />
+      <Tab.Screen name='Library' component={Library} />
+    </Tab.Navigator>
   )
 }

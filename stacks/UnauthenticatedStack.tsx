@@ -11,9 +11,9 @@ export const UnauthenticatedStack: React.FC = () => {
     <Stack.Navigator
       screenOptions={{
         headerStyle: {
-          backgroundColor: COLORS.primary800,
+          backgroundColor: COLORS.primary300,
         },
-        headerTintColor: COLORS.primary100,
+        headerTintColor: COLORS.primary900,
         headerShadowVisible: false,
         headerTitle: '',
       }}>

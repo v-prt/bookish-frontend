@@ -1,38 +1,46 @@
-import { StyleSheet, Pressable, Text } from 'react-native'
+import { StyleSheet, Pressable, Text, ActivityIndicator } from 'react-native'
 import { COLORS } from '../GlobalStyles'
 
 interface Props {
   type: 'primary' | 'secondary'
   label: string
   onPress: () => void
+  loading?: boolean
+  disabled?: boolean
 }
 
-export const CustomButton: React.FC<Props> = ({ type, label, onPress }) => {
+export const CustomButton: React.FC<Props> = ({ type, label, onPress, loading, disabled }) => {
   const buttonStyle = type === 'primary' ? styles.primaryBtn : styles.secondaryBtn
   const textStyle = type === 'primary' ? styles.primaryTxt : styles.secondaryTxt
 
   return (
-    <Pressable style={[styles.button, buttonStyle]} onPress={onPress}>
-      <Text style={[styles.text, textStyle]}>{label}</Text>
+    <Pressable
+      style={({ pressed }) => [styles.button, buttonStyle, pressed && styles.pressed]}
+      onPress={disabled ? null : onPress}>
+      <Text style={[styles.text, textStyle]}>
+        {loading ? <ActivityIndicator size='small' color={COLORS.primary300} /> : label}
+      </Text>
     </Pressable>
   )
 }
 
 const styles = StyleSheet.create({
   button: {
-    flex: 1,
-    height: 40,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 20,
     borderWidth: 1,
+    padding: 10,
+  },
+  pressed: {
+    opacity: 0.7,
   },
   primaryBtn: {
     backgroundColor: COLORS.accentLight,
     borderColor: COLORS.accentLight,
   },
   secondaryBtn: {
-    backgroundColor: COLORS.primary100,
+    backgroundColor: COLORS.primary200,
     borderColor: COLORS.accentLight,
   },
 
@@ -43,7 +51,7 @@ const styles = StyleSheet.create({
     letterSpacing: 1,
   },
   primaryTxt: {
-    color: COLORS.primary100,
+    color: COLORS.primary200,
     textAlign: 'center',
   },
   secondaryTxt: {

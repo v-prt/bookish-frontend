@@ -67,7 +67,6 @@ const styles = StyleSheet.create({
   },
   buttons: {
     width: '100%',
-    flexDirection: 'row',
     gap: 20,
   },
   terms: {
