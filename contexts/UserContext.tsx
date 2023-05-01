@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from 'react'
-import { useQuery } from 'react-query'
+import { useQuery, useQueryClient } from 'react-query'
 import axios from 'axios'
 import { API_URL } from '../constants'
 
@@ -21,6 +21,8 @@ interface Props {
 }
 
 export const UserProvider: React.FC<Props> = ({ children }) => {
+  const queryClient = useQueryClient()
+
   const [token, setToken] = useState<string | null>(null)
   const [userId, setUserId] = useState<string | null>(null)
 
@@ -96,6 +98,18 @@ export const UserProvider: React.FC<Props> = ({ children }) => {
     }
   }, [token])
 
+  // UPDATE CURRENT USER DATA
+  const updateUserData = async (data: any) => {
+    try {
+      const res = await axios.put(`${API_URL}/users/${userId}`, data)
+      queryClient.invalidateQueries('user')
+      return res.data
+    } catch (err: any) {
+      console.log(err)
+      return { error: err.response.data.message }
+    }
+  }
+
   // LOGOUT
   const handleLogout = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
@@ -112,6 +126,7 @@ export const UserProvider: React.FC<Props> = ({ children }) => {
         userStatus,
         handleSignup,
         handleLogin,
+        updateUserData,
         handleLogout,
         authenticated: !!userId,
       }}>

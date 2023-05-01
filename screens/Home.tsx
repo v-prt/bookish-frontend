@@ -1,18 +1,15 @@
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, View, Text } from 'react-native'
 import { COLORS } from '../GlobalStyles'
 import { BookList } from '../components/BookList'
-import { SansSerifText } from '../ui/SansSerifText'
 
-interface HomeProps {}
-
-export const Home: React.FC<HomeProps> = ({}) => {
+export const Home: React.FC = () => {
   return (
     <View style={styles.screen}>
       {/* TODO: design & styling, set recommended books based on user data, overview/stats, genre search buttons? */}
-      <SansSerifText style={styles.text} bold>
-        Recommended for you
-      </SansSerifText>
+      <Text style={styles.headerText}>Recommended for You</Text>
       {/* <BookList books={recommendedBooks} /> */}
+      <Text style={styles.headerText}>Your Reading Activity</Text>
+      <Text style={styles.headerText}>Explore by Genre</Text>
     </View>
   )
 }
@@ -21,9 +18,12 @@ const styles = StyleSheet.create({
   screen: {
     backgroundColor: COLORS.primary100,
     flex: 1,
+    padding: 20,
   },
-  text: {
+  headerText: {
+    fontFamily: 'Heebo-Bold',
     fontSize: 20,
-    margin: 10,
+    marginBottom: 16,
+    color: COLORS.accentDark,
   },
 })

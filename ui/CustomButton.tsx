@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     borderColor: COLORS.accentLight,
   },
   secondaryBtn: {
-    backgroundColor: COLORS.primary200,
+    backgroundColor: COLORS.primary100,
     borderColor: COLORS.accentLight,
   },
 
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
     letterSpacing: 1,
   },
   primaryTxt: {
-    color: COLORS.primary200,
+    color: COLORS.primary100,
     textAlign: 'center',
   },
   secondaryTxt: {
