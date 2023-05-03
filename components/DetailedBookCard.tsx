@@ -2,14 +2,15 @@ import { StyleSheet, Pressable, View, Image, Text } from 'react-native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { useNavigation } from '@react-navigation/native'
 import { COLORS } from '../GlobalStyles'
-import { Book, RootStackParamList } from '../types/types'
+import { Book } from '../Interfaces'
+import { RootStackParamList } from '../Types'
 import { MaterialIcons } from '@expo/vector-icons'
 
 interface Props {
   book: Book
 }
 
-export const BookCard: React.FC<Props> = ({ book }) => {
+export const DetailedBookCard: React.FC<Props> = ({ book }) => {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
 
   const handlePress = () => {

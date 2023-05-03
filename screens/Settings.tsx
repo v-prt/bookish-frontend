@@ -137,13 +137,18 @@ export const Settings: React.FC<Props> = ({ navigation }) => {
                 }}
               />
             </FormItem>
-            <CustomButton
-              type='primary'
-              label='Save'
-              onPress={handleSubmit}
-              loading={isSubmitting}
-              disabled={isSubmitting || values === accountInitialValues}
-            />
+            <FormItem name='faveGenres' label='Favorite genres'>
+              {/* TODO: select genres */}
+            </FormItem>
+            <View style={styles.saveBtn}>
+              <CustomButton
+                type='primary'
+                label='Save'
+                onPress={handleSubmit}
+                loading={isSubmitting}
+                disabled={isSubmitting || values === accountInitialValues}
+              />
+            </View>
           </View>
         )}
       </Formik>
@@ -320,6 +325,9 @@ const styles = StyleSheet.create({
     fontFamily: 'Heebo-Regular',
     fontSize: 16,
     color: COLORS.primary300,
+  },
+  saveBtn: {
+    marginTop: 20,
   },
   section: {
     flexDirection: 'row',

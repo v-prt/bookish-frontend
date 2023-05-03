@@ -18,7 +18,7 @@ const Stack = createNativeStackNavigator()
 const Tab = createBottomTabNavigator()
 
 const screenOptions = {
-  headerShown: false,
+  // headerShown: false,
   headerStyle: {
     backgroundColor: COLORS.primary300,
   },
@@ -33,11 +33,44 @@ const screenOptions = {
   tabBarLabel: () => null,
 }
 
+const HomeStack = () => {
+  return (
+    <Stack.Navigator screenOptions={screenOptions}>
+      <Stack.Screen
+        name='Home'
+        component={Home}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name='BookDetails'
+        component={BookDetails}
+        options={{
+          title: '',
+        }}
+      />
+    </Stack.Navigator>
+  )
+}
+
 const SearchStack = () => {
   return (
     <Stack.Navigator screenOptions={screenOptions}>
-      <Stack.Screen name='Search' component={Search} />
-      <Stack.Screen name='BookDetails' component={BookDetails} />
+      <Stack.Screen
+        name='Search'
+        component={Search}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name='BookDetails'
+        component={BookDetails}
+        options={{
+          title: '',
+        }}
+      />
     </Stack.Navigator>
   )
 }
@@ -45,7 +78,13 @@ const SearchStack = () => {
 const ProfileStack = () => {
   return (
     <Stack.Navigator screenOptions={screenOptions}>
-      <Stack.Screen name='Profile' component={Profile} />
+      <Stack.Screen
+        name='Profile'
+        component={Profile}
+        options={{
+          headerShown: false,
+        }}
+      />
       <Stack.Screen
         name='Settings'
         component={Settings}
@@ -62,9 +101,10 @@ export const AuthenticatedStack: React.FC = () => {
   return (
     <Tab.Navigator screenOptions={screenOptions}>
       <Tab.Screen
-        name='Home'
-        component={Home}
+        name='HomeStack'
+        component={HomeStack}
         options={{
+          headerShown: false,
           tabBarIcon: ({ focused }) => (
             <Image source={homeIcon} style={[styles.tabIcon, focused && styles.tabFocused]} />
           ),
@@ -74,6 +114,7 @@ export const AuthenticatedStack: React.FC = () => {
         name='SearchStack'
         component={SearchStack}
         options={{
+          headerShown: false,
           tabBarIcon: ({ focused }) => (
             <Image source={searchIcon} style={[styles.tabIcon, focused && styles.tabFocused]} />
           ),
@@ -92,6 +133,7 @@ export const AuthenticatedStack: React.FC = () => {
         name='ProfileStack'
         component={ProfileStack}
         options={{
+          headerShown: false,
           tabBarIcon: ({ focused }) => (
             <Image source={profileIcon} style={[styles.tabIcon, focused && styles.tabFocused]} />
           ),

@@ -9,13 +9,12 @@ import {
 } from 'react-native'
 import { useInfiniteQuery } from 'react-query'
 import { COLORS } from '../GlobalStyles'
-import { BookList } from '../components/BookList'
+import { DetailedBookList } from '../components/DetailedBookList'
 import { Input } from '../ui/Input'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { Formik } from 'formik'
 import { sanitizeText } from '../utils'
-import { IconButton } from '../ui/IconButton'
 import { GenreButton } from '../components/GenreButton'
 
 // genre images
@@ -38,7 +37,7 @@ interface Props {}
 
 export const Search: React.FC<Props> = ({}) => {
   const [searchText, setSearchText] = useState<string>('')
-  const [searchResults, setSearchResults] = useState<any>(null)
+  const [searchResults, setSearchResults] = useState<any>([])
   const [totalResults, setTotalResults] = useState<number | null>(null)
   const [selectedGenre, setSelectedGenre] = useState<string | null>(null)
 
@@ -186,7 +185,7 @@ export const Search: React.FC<Props> = ({}) => {
                     <Text style={styles.resetBtnText}>Reset</Text>
                   </Pressable>
                 </View>
-                <BookList
+                <DetailedBookList
                   books={searchResults}
                   infiniteScroll={handleLoadMore}
                   isLoading={isFetchingNextPage}

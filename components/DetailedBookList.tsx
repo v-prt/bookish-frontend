@@ -1,6 +1,6 @@
 import { StyleSheet, FlatList, View, ActivityIndicator } from 'react-native'
-import { BookCard } from './BookCard'
-import { Book } from '../types/types'
+import { DetailedBookCard } from './DetailedBookCard'
+import { Book } from '../Interfaces'
 import { COLORS } from '../GlobalStyles'
 
 interface Props {
@@ -9,12 +9,12 @@ interface Props {
   isLoading: boolean
 }
 
-export const BookList: React.FC<Props> = ({ books, infiniteScroll, isLoading }) => {
+export const DetailedBookList: React.FC<Props> = ({ books, infiniteScroll, isLoading }) => {
   return (
     <FlatList
       data={books}
       keyExtractor={book => book.id}
-      renderItem={({ item }) => <BookCard book={item} />}
+      renderItem={({ item }) => <DetailedBookCard book={item} />}
       contentContainerStyle={{ paddingBottom: 10 }}
       onEndReachedThreshold={0.5}
       onEndReached={infiniteScroll}

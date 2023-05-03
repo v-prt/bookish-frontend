@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   input: {
-    color: COLORS.primary800,
+    color: COLORS.primary900,
     fontSize: 16,
     opacity: 0.9,
     flex: 1,

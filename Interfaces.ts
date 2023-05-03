@@ -1,7 +1,3 @@
-export type RootStackParamList = {
-  BookDetails: { id: string }
-}
-
 export interface Book {
   id: string
   title: string

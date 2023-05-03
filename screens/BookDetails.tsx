@@ -60,6 +60,7 @@ export const BookDetails = ({
       {status === 'success' && book && (
         <ScrollView style={styles.book} contentContainerStyle={{ paddingBottom: 40 }}>
           <View style={styles.basicInfo}>
+            {/* TODO: add smooth image loader */}
             <Image source={{ uri: book.imageLinks?.thumbnail }} style={styles.image} />
             <View style={styles.text}>
               <Text style={styles.title}>{book.title}</Text>

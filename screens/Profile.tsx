@@ -29,7 +29,7 @@ export const Profile: React.FC<Props> = ({ navigation }) => {
           }}
         />
       </View>
-      {/* TODO: user's favorite genres, reading activity, etc. ? */}
+      {/* TODO: user's favorite genres, bookshelves & num books (overview), reading/rating activity, etc. ? */}
       <View style={styles.profileWrapper}>
         <Text style={styles.headerText}>Favorite Genres</Text>
       </View>
