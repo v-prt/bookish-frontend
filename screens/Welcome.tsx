@@ -18,7 +18,6 @@ export const Welcome: React.FC<Props> = ({ navigation }) => {
       <Text style={styles.subtitle}>Your bookshelf, in your pocket.</Text>
       <ImageLoader style={styles.image} source={books} borderRadius={20} />
       <View style={styles.buttons}>
-        {/* TODO: navigation to login/signup */}
         <CustomButton
           type='primary'
           label='Sign Up'

@@ -105,7 +105,7 @@ export const Settings: React.FC<Props> = ({ navigation }) => {
                 subtitle={status}
               />
             )}
-            {/* TODO: avatar picker, fave genre selection */}
+            {/* TODO: avatar selection, favorite genres selection */}
             <View style={styles.formRow}>
               <FormItem name='firstName' label='First name' style={styles.rowItem}>
                 <Input
@@ -136,9 +136,6 @@ export const Settings: React.FC<Props> = ({ navigation }) => {
                   autoCapitalize: 'none',
                 }}
               />
-            </FormItem>
-            <FormItem name='faveGenres' label='Favorite genres'>
-              {/* TODO: select genres */}
             </FormItem>
             <View style={styles.saveBtn}>
               <CustomButton
