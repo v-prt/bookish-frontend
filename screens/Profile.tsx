@@ -58,8 +58,8 @@ const styles = StyleSheet.create({
   },
   name: {
     fontFamily: 'Prata-Regular',
-    fontSize: 20,
-    color: COLORS.accentDark,
+    fontSize: 22,
+    color: COLORS.accentLight,
   },
   dateJoined: {
     fontFamily: 'Heebo-Regular',

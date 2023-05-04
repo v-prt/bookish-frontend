@@ -25,5 +25,6 @@ export const SimpleBookList: React.FC<Props> = ({ books }) => {
 const styles = StyleSheet.create({
   wrapper: {
     gap: 10,
+    marginBottom: 25,
   },
 })

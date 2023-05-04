@@ -249,7 +249,12 @@ export const Settings: React.FC<Props> = ({ navigation }) => {
                   <AlertText type='error' icon='error' title={`Couldn't save`} subtitle={status} />
                 )}
                 <View style={styles.formWrapper}>
-                  <FormItem name='faveGenres'>
+                  <FormItem
+                    name='faveGenres'
+                    label={
+                      // indicate number of genres selected
+                      `${values.faveGenres.length} / 6 selected`
+                    }>
                     <ScrollView
                       style={styles.genreList}
                       showsVerticalScrollIndicator={false}
@@ -258,6 +263,11 @@ export const Settings: React.FC<Props> = ({ navigation }) => {
                         <Pressable
                           key={genre}
                           onPress={() => {
+                            if (
+                              values.faveGenres.length === 6 &&
+                              !values.faveGenres.includes(genre)
+                            )
+                              return // prevent selecting more than 6 genres
                             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
                             if (values.faveGenres.includes(genre)) {
                               setValues({

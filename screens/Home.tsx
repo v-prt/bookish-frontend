@@ -15,17 +15,13 @@ export const Home: React.FC<Props> = ({ navigation }) => {
 
   return (
     <ScrollView style={styles.screen}>
-      <View style={styles.header}>
-        <Text style={styles.logo}>
-          book
-          <Text style={styles.italic}>ish</Text>
-        </Text>
-      </View>
       <View style={styles.main}>
         <Text style={styles.headerText}>Recommended for you</Text>
         <View style={styles.divider}></View>
         {faveGenres?.length > 0 ? (
-          <RecommendedBooks genres={faveGenres} />
+          faveGenres.map((genre: string, index: number) => (
+            <RecommendedBooks genre={genre} key={index} />
+          ))
         ) : (
           <View style={styles.noRecommendations}>
             <Text style={styles.infoText}>
@@ -52,22 +48,8 @@ export const Home: React.FC<Props> = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   screen: {
-    backgroundColor: COLORS.primary300,
+    backgroundColor: COLORS.primary100,
     flex: 1,
-  },
-  header: {
-    backgroundColor: COLORS.primary300,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-  },
-  logo: {
-    color: COLORS.accentDark,
-    fontFamily: 'Prata-Regular',
-    fontSize: 40,
-  },
-  italic: {
-    fontFamily: 'CormorantGaramond-LightItalic',
-    fontSize: 52,
   },
   main: {
     backgroundColor: COLORS.primary100,

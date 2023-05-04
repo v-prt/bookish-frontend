@@ -115,7 +115,7 @@ export const AuthenticatedStack: React.FC = () => {
         name='HomeStack'
         component={HomeStack}
         options={{
-          headerShown: false,
+          headerTitle: () => <Text style={styles.logo}>bookish</Text>,
           tabBarIcon: ({ focused }) => (
             <Image source={homeIcon} style={[styles.tabIcon, focused && styles.tabFocused]} />
           ),
@@ -135,6 +135,7 @@ export const AuthenticatedStack: React.FC = () => {
         name='Library'
         component={Library}
         options={{
+          headerTitle: () => <Text style={styles.headerTitle}>My Library</Text>,
           tabBarIcon: ({ focused }) => (
             <Image source={libraryIcon} style={[styles.tabIcon, focused && styles.tabFocused]} />
           ),
@@ -155,6 +156,11 @@ export const AuthenticatedStack: React.FC = () => {
 }
 
 const styles = StyleSheet.create({
+  logo: {
+    fontFamily: 'Prata-Regular',
+    fontSize: 26,
+    color: COLORS.accentDark,
+  },
   headerTitle: {
     fontSize: 18,
     fontFamily: 'Heebo-Bold',

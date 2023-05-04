@@ -1,36 +1,29 @@
 import { useState, useEffect } from 'react'
 import { useQuery } from 'react-query'
-import { ScrollView, View, StyleSheet } from 'react-native'
+import { ScrollView, View, Text, StyleSheet } from 'react-native'
 import { SimpleBookList } from '../components/SimpleBookList'
 import { COLORS } from '../GlobalStyles'
 import axios from 'axios'
 
 interface Props {
-  genres: string[]
+  genre: string
 }
 
-export const RecommendedBooks: React.FC<Props> = ({ genres }) => {
+export const RecommendedBooks: React.FC<Props> = ({ genre }) => {
   const [recommendedBooks, setRecommendedBooks] = useState<any>([])
 
-  const fetchRecommendedBooks = async (genres: string[]) => {
-    let books = []
+  const fetchRecommendedBooks = async (genre: string) => {
+    let searchText = `highly rated ${genre} books`
+    let pageParam = 0
+    let maxResults = 6
 
-    // for each genre, send a request to google books api for 3 books of that genre
-    for (let i = 0; i < genres.length; i++) {
-      let searchText = `highly rated ${genres[i]} books`
-      let pageParam = 0
-      let maxResults = 3
-      const res = await axios.get(
-        `https://www.googleapis.com/books/v1/volumes?q=${searchText}&startIndex=${pageParam}&maxResults=${maxResults}`
-      )
-      books.push(res.data.items)
-    }
-    return books.flat()
+    const res = await axios.get(
+      `https://www.googleapis.com/books/v1/volumes?q=${searchText}&startIndex=${pageParam}&maxResults=${maxResults}`
+    )
+    return res.data.items
   }
 
-  const { data, status } = useQuery(['recommendedBooks', genres], () =>
-    fetchRecommendedBooks(genres)
-  )
+  const { data, status } = useQuery(['recommendedBooks', genre], () => fetchRecommendedBooks(genre))
 
   useEffect(() => {
     if (status === 'success' && data) {
@@ -50,6 +43,7 @@ export const RecommendedBooks: React.FC<Props> = ({ genres }) => {
 
   return (
     <View>
+      <Text style={styles.label}>{genre}</Text>
       {status === 'loading' && (
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.loading}>
           {[...Array(6)].map((_, i) => (
@@ -79,5 +73,12 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.primary200,
     borderRadius: 5,
     marginLeft: 20,
+  },
+  label: {
+    color: COLORS.primary900,
+    fontSize: 18,
+    fontFamily: 'Prata-Regular',
+    marginHorizontal: 20,
+    marginBottom: 20,
   },
 })
