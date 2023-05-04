@@ -11,8 +11,7 @@ interface Props {
 
 export const Home: React.FC<Props> = ({ navigation }) => {
   const { userData } = useContext(UserContext)
-  const faveGenres = userData?.favoriteGenres
-  // const faveGenres = ['Fantasy', 'Horror', 'Historical Fiction'] // for testing
+  const faveGenres = userData?.faveGenres
 
   return (
     <ScrollView style={styles.screen}>

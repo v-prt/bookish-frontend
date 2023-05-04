@@ -1,6 +1,6 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { StyleSheet, Image } from 'react-native'
+import { StyleSheet, Image, Text } from 'react-native'
 import { COLORS } from '../GlobalStyles'
 import { Home } from '../screens/Home'
 import { Search } from '../screens/Search'
@@ -8,6 +8,7 @@ import { BookDetails } from '../screens/BookDetails'
 import { Library } from '../screens/Library'
 import { Profile } from '../screens/Profile'
 import { Settings } from '../screens/Settings'
+import { IconButton } from '../ui/IconButton'
 
 const homeIcon = require('../assets/icons/home.png')
 const searchIcon = require('../assets/icons/search.png')
@@ -81,15 +82,25 @@ const ProfileStack = () => {
       <Stack.Screen
         name='Profile'
         component={Profile}
-        options={{
-          headerShown: false,
-        }}
+        options={({ navigation }) => ({
+          headerTitle: () => <Text style={styles.headerTitle}>My Profile</Text>,
+          headerRight: () => (
+            <IconButton
+              icon='settings'
+              color={COLORS.primary600}
+              onPress={() => {
+                navigation.navigate('Settings')
+              }}
+            />
+          ),
+        })}
       />
       <Stack.Screen
         name='Settings'
         component={Settings}
         options={{
           headerShown: true,
+          title: 'My Settings',
           presentation: 'modal',
         }}
       />
@@ -144,6 +155,11 @@ export const AuthenticatedStack: React.FC = () => {
 }
 
 const styles = StyleSheet.create({
+  headerTitle: {
+    fontSize: 18,
+    fontFamily: 'Heebo-Bold',
+    color: COLORS.primary700,
+  },
   tabIcon: {
     height: 25,
     width: 25,

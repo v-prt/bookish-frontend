@@ -16,16 +16,15 @@ export const Avatar: React.FC<Props> = ({ initials }) => {
 
 const styles = StyleSheet.create({
   wrapper: {
+    backgroundColor: COLORS.primary300,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: COLORS.accentLight,
     borderRadius: 50,
-    height: 45,
-    width: 45,
+    padding: 15,
   },
   text: {
-    color: COLORS.white,
-    fontFamily: 'Heebo-Bold',
-    fontSize: 20,
+    color: COLORS.accentDark,
+    fontFamily: 'Prata-Regular',
+    fontSize: 24,
   },
 })

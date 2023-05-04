@@ -1,5 +1,14 @@
 import { useState, useContext, useEffect } from 'react'
-import { StyleSheet, Pressable, Text, View, Modal, Alert, SafeAreaView } from 'react-native'
+import {
+  StyleSheet,
+  Pressable,
+  Text,
+  ScrollView,
+  View,
+  Modal,
+  Alert,
+  SafeAreaView,
+} from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { UserContext } from '../contexts/UserContext'
 import { COLORS } from '../GlobalStyles'
@@ -20,6 +29,7 @@ interface Props {
 export const Settings: React.FC<Props> = ({ navigation }) => {
   const { userData, updateUserData, handleLogout, handleDeleteAccount } = useContext(UserContext)
 
+  const [genreModalVisible, setGenreModalVisible] = useState(false)
   const [passwordModalVisible, setPasswordModalVisible] = useState(false)
   const [deleteAccountModalVisible, setDeleteAccountModalVisible] = useState(false)
 
@@ -34,11 +44,51 @@ export const Settings: React.FC<Props> = ({ navigation }) => {
     })
   })
 
+  const genres = [
+    'Action',
+    'Adventure',
+    'Children',
+    'Classics',
+    'Comics',
+    'Contemporary',
+    'Crime',
+    'Drama',
+    'Fantasy',
+    'Fiction',
+    'Historical Fiction',
+    'Horror',
+    'Humor and Comedy',
+    'Manga',
+    'Memoir',
+    'Music',
+    'Mystery',
+    'Nonfiction',
+    'Paranormal',
+    'Philosophy',
+    'Poetry',
+    'Psychology',
+    'Religion',
+    'Romance',
+    'Science',
+    'Science Fiction',
+    'Self Help',
+    'Suspense',
+    'Spirituality',
+    'Sports',
+    'Thriller',
+    'Travel',
+    'Young Adult',
+  ]
+
   // #region Initial Values
   const accountInitialValues = {
     firstName: userData?.firstName,
     lastName: userData?.lastName,
     email: userData?.email,
+  }
+
+  const genresInitialValues = {
+    faveGenres: userData?.faveGenres || [],
   }
 
   const passwordInitialValues = {
@@ -52,6 +102,14 @@ export const Settings: React.FC<Props> = ({ navigation }) => {
     firstName: yup.string().min(2, `That's too short`).required('Required'),
     lastName: yup.string().min(2, `That's too short`).required('Required'),
     email: yup.string().email('Invalid email').required('Required'),
+  })
+
+  const genresSchema = yup.object().shape({
+    faveGenres: yup
+      .array()
+      .min(1, 'Select at least one genre')
+      .required('Required')
+      .max(6, 'Select up to 6'),
   })
 
   const passwordSchema = yup.object().shape({
@@ -69,6 +127,18 @@ export const Settings: React.FC<Props> = ({ navigation }) => {
       setStatus(result.error)
     } else {
       Alert.alert('Success', 'Your account has been updated')
+    }
+  }
+
+  const handleGenresUpdate = async (values: any, { setStatus }: any) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
+    setStatus(undefined)
+    const result = await updateUserData(values)
+    if (result.error) {
+      setStatus(result.error)
+    } else {
+      Alert.alert('Success', 'Your favorite genres have been updated')
+      setGenreModalVisible(false)
     }
   }
 
@@ -91,6 +161,7 @@ export const Settings: React.FC<Props> = ({ navigation }) => {
       style={styles.screen}
       showsVerticalScrollIndicator={false}
       contentContainerStyle={{ paddingBottom: 60 }}>
+      {/* ACCOUNT SETTINGS */}
       <Formik
         initialValues={accountInitialValues}
         validationSchema={accountSchema}
@@ -105,7 +176,7 @@ export const Settings: React.FC<Props> = ({ navigation }) => {
                 subtitle={status}
               />
             )}
-            {/* TODO: avatar selection, favorite genres selection */}
+            {/* TODO: avatar selection */}
             <View style={styles.formRow}>
               <FormItem name='firstName' label='First name' style={styles.rowItem}>
                 <Input
@@ -150,6 +221,100 @@ export const Settings: React.FC<Props> = ({ navigation }) => {
         )}
       </Formik>
 
+      {/* FAVE GENRE SELECTION */}
+      <View style={styles.section}>
+        <Text style={styles.sectionLabel}>Edit Favorite Genres...</Text>
+        <Pressable onPress={() => setGenreModalVisible(true)}>
+          <MaterialIcons name='edit' size={24} color={COLORS.primary600} />
+        </Pressable>
+      </View>
+
+      <Modal visible={genreModalVisible} animationType='slide'>
+        <SafeAreaView style={styles.modalWrapper}>
+          <Formik
+            initialValues={genresInitialValues}
+            validationSchema={genresSchema}
+            onSubmit={handleGenresUpdate}>
+            {({ handleSubmit, values, setValues, isSubmitting, status }) => (
+              <View style={styles.modalInner}>
+                <View style={styles.modalHeader}>
+                  <Text style={styles.modalTitle}>Edit Favorite Genres</Text>
+                  <IconButton
+                    icon='close'
+                    color={COLORS.primary600}
+                    onPress={() => setGenreModalVisible(false)}
+                  />
+                </View>
+                {status && (
+                  <AlertText type='error' icon='error' title={`Couldn't save`} subtitle={status} />
+                )}
+                <View style={styles.formWrapper}>
+                  <FormItem name='faveGenres'>
+                    <ScrollView
+                      style={styles.genreList}
+                      showsVerticalScrollIndicator={false}
+                      contentContainerStyle={{ paddingBottom: 10 }}>
+                      {genres.map(genre => (
+                        <Pressable
+                          key={genre}
+                          onPress={() => {
+                            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+                            if (values.faveGenres.includes(genre)) {
+                              setValues({
+                                ...values,
+                                faveGenres: values.faveGenres.filter((g: string) => g !== genre),
+                              })
+                            } else {
+                              setValues({
+                                ...values,
+                                faveGenres: [...values.faveGenres, genre],
+                              })
+                            }
+                          }}
+                          style={[
+                            styles.genreItem,
+                            values.faveGenres.includes(genre) && styles.genreItemActive,
+                          ]}>
+                          <Text
+                            style={[
+                              styles.genreItemText,
+                              values.faveGenres.includes(genre) && styles.genreItemActiveText,
+                            ]}>
+                            {genre}
+                          </Text>
+                          {values.faveGenres.includes(genre) && (
+                            <MaterialIcons
+                              name='check-circle-outline'
+                              color={COLORS.accentDark}
+                              size={18}
+                            />
+                          )}
+                        </Pressable>
+                      ))}
+                    </ScrollView>
+                  </FormItem>
+                </View>
+                <View style={styles.buttons}>
+                  <CustomButton
+                    type='primary'
+                    label='Submit'
+                    onPress={handleSubmit}
+                    loading={isSubmitting}
+                    disabled={isSubmitting}
+                  />
+                  <CustomButton
+                    type='secondary'
+                    label='Cancel'
+                    onPress={() => setPasswordModalVisible(false)}
+                  />
+                </View>
+              </View>
+            )}
+          </Formik>
+        </SafeAreaView>
+      </Modal>
+
+      {/* CHANGE PASSWORD */}
       <View style={styles.section}>
         <Text style={styles.sectionLabel}>Change Password...</Text>
         <Pressable onPress={() => setPasswordModalVisible(true)}>
@@ -231,6 +396,7 @@ export const Settings: React.FC<Props> = ({ navigation }) => {
         </SafeAreaView>
       </Modal>
 
+      {/* SIGN OUT */}
       <View style={styles.section}>
         <Text style={styles.sectionLabel}>Sign Out</Text>
         <Pressable onPress={handleLogout}>
@@ -238,6 +404,7 @@ export const Settings: React.FC<Props> = ({ navigation }) => {
         </Pressable>
       </View>
 
+      {/* DELETE ACCOUNT */}
       <View style={styles.section}>
         <Text style={styles.sectionLabel}>Delete Account...</Text>
         <Pressable onPress={() => setDeleteAccountModalVisible(true)}>
@@ -271,23 +438,6 @@ export const Settings: React.FC<Props> = ({ navigation }) => {
           </View>
         </SafeAreaView>
       </Modal>
-
-      {/* <View style={styles.footer}>
-        <Text style={styles.link} onPress={() => Linking.openURL('https://www.plantgeek.co/about')}>
-          About
-        </Text>
-        <Text style={styles.divider}>•</Text>
-        <Text style={styles.link} onPress={() => Linking.openURL('https://www.plantgeek.co/terms')}>
-          Terms of Service
-        </Text>
-        <Text style={styles.divider}>•</Text>
-        <Text
-          style={styles.link}
-          onPress={() => Linking.openURL('https://www.plantgeek.co/privacy')}>
-          Privacy Policy
-        </Text>
-      </View>
-      <Text style={styles.logo}>plantgeek</Text> */}
     </KeyboardAwareScrollView>
   )
 }
@@ -373,28 +523,33 @@ const styles = StyleSheet.create({
   buttons: {
     gap: 16,
   },
-  footer: {
-    marginTop: 20,
-    borderTopWidth: 1,
-    borderTopColor: 'rgba(255, 255, 255, 0.2)',
-    paddingTop: 20,
+  genreList: {
+    backgroundColor: COLORS.primary300,
+    padding: 10,
+    borderRadius: 10,
+    // FIXME: make this fill up the rest of the space while still keeping buttons visible
+    maxHeight: 400,
+  },
+  genreItem: {
+    backgroundColor: COLORS.primary200,
+    padding: 5,
+    borderWidth: 1,
+    borderColor: COLORS.primary500,
+    borderRadius: 10,
+    marginBottom: 10,
     flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    justifyContent: 'center',
   },
-  link: {
-    fontFamily: 'Heebo-Bold',
-    color: COLORS.primary400,
+  genreItemActive: {
+    borderColor: COLORS.accentDark,
   },
-  divider: {
-    marginHorizontal: 10,
-    opacity: 0.5,
+  genreItemText: {
+    fontFamily: 'Heebo-Regular',
+    fontSize: 16,
+    color: COLORS.primary600,
   },
-  logo: {
-    fontFamily: 'LobsterTwo-Bold',
-    fontSize: 40,
-    opacity: 0.5,
-    textAlign: 'center',
-    marginVertical: 10,
+  genreItemActiveText: {
+    color: COLORS.accentDark,
   },
 })
