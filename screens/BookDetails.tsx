@@ -12,6 +12,7 @@ import { useQuery } from 'react-query'
 import { COLORS } from '../GlobalStyles'
 // import HTMLView from 'react-native-htmlview'
 import { MaterialIcons } from '@expo/vector-icons'
+import { ImageLoader } from '../components/ImageLoader'
 
 export const BookDetails = ({
   route: {
@@ -60,8 +61,11 @@ export const BookDetails = ({
       {status === 'success' && book && (
         <ScrollView style={styles.book} contentContainerStyle={{ paddingBottom: 40 }}>
           <View style={styles.basicInfo}>
-            {/* TODO: add smooth image loader */}
-            <Image source={{ uri: book.imageLinks?.thumbnail }} style={styles.image} />
+            <ImageLoader
+              style={styles.image}
+              source={{ uri: book.imageLinks?.thumbnail }}
+              borderRadius={10}
+            />
             <View style={styles.text}>
               <Text style={styles.title}>{book.title}</Text>
               {book.subtitle && <Text style={styles.subtitle}>{book.subtitle}</Text>}
@@ -124,9 +128,10 @@ const styles = StyleSheet.create({
     maxWidth: '60%',
   },
   image: {
+    backgroundColor: COLORS.primary200,
     borderRadius: 10,
     height: 150,
-    width: 100,
+    aspectRatio: 2 / 3,
   },
   title: {
     color: COLORS.primary900,

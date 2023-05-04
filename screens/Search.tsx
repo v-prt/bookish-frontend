@@ -16,6 +16,7 @@ import axios from 'axios'
 import { Formik } from 'formik'
 import { sanitizeText } from '../utils'
 import { GenreButton } from '../components/GenreButton'
+import * as Haptics from 'expo-haptics'
 
 // genre images
 const adventure = require('../assets/images/adventure.jpg')
@@ -152,6 +153,7 @@ export const Search: React.FC<Props> = ({}) => {
               icon={values.search.length > 0 || searchText.length > 0 ? 'close' : 'search'}
               onIconPress={() => {
                 if (values.search.length > 0 || searchText.length > 0) {
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
                   handleChange('search')('')
                   setSearchText('')
                   setSearchResults(null)
@@ -179,6 +181,7 @@ export const Search: React.FC<Props> = ({}) => {
                   </Text>
                   <Pressable
                     onPress={() => {
+                      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
                       setSearchText('')
                       handleSubmit()
                     }}>

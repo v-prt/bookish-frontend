@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react'
 import { useQuery } from 'react-query'
-import { ScrollView, View, Text, StyleSheet, ActivityIndicator } from 'react-native'
+import { ScrollView, View, StyleSheet } from 'react-native'
 import { SimpleBookList } from '../components/SimpleBookList'
 import { COLORS } from '../GlobalStyles'
+import axios from 'axios'
 
 interface Props {
   genres: string[]
@@ -12,22 +13,19 @@ export const RecommendedBooks: React.FC<Props> = ({ genres }) => {
   const [recommendedBooks, setRecommendedBooks] = useState<any>([])
 
   const fetchRecommendedBooks = async (genres: string[]) => {
+    let books = []
+
     // for each genre, send a request to google books api for 3 books of that genre
-    const results = await Promise.all(
-      genres.map(genre =>
-        fetch(`https://www.googleapis.com/books/v1/volumes?q=subject:${genre}&maxResults=3`)
-          .then(response => response.json())
-          .then(data => {
-            if (data.error) {
-              console.log('ERROR', data.error) // catch query limit error
-              return
-            }
-            return data.items
-          })
-          .catch(err => console.log(err))
+    for (let i = 0; i < genres.length; i++) {
+      let searchText = `highly rated ${genres[i]} books`
+      let pageParam = 0
+      let maxResults = 3
+      const res = await axios.get(
+        `https://www.googleapis.com/books/v1/volumes?q=${searchText}&startIndex=${pageParam}&maxResults=${maxResults}`
       )
-    )
-    return results.flat()
+      books.push(res.data.items)
+    }
+    return books.flat()
   }
 
   const { data, status } = useQuery(['recommendedBooks', genres], () =>

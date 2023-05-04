@@ -36,7 +36,7 @@ export const Home: React.FC<Props> = ({ navigation }) => {
             <CustomButton
               type='secondary'
               label='Choose Genres'
-              onPress={() => navigation.navigate('Profile')}
+              onPress={() => navigation.navigate('ProfileStack')}
             />
           </View>
         )}

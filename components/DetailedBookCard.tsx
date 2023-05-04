@@ -5,6 +5,7 @@ import { COLORS } from '../GlobalStyles'
 import { Book } from '../Interfaces'
 import { RootStackParamList } from '../Types'
 import { MaterialIcons } from '@expo/vector-icons'
+import { ImageLoader } from './ImageLoader'
 
 interface Props {
   book: Book
@@ -19,7 +20,7 @@ export const DetailedBookCard: React.FC<Props> = ({ book }) => {
 
   return (
     <Pressable style={styles.container} onPress={handlePress}>
-      <Image style={styles.image} source={{ uri: book.image }} />
+      <ImageLoader style={styles.image} source={{ uri: book.image }} borderRadius={5} />
       <View style={styles.textContainer}>
         <Text style={styles.title} numberOfLines={2}>
           {book.title}
@@ -46,9 +47,10 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   image: {
+    backgroundColor: COLORS.primary200,
     borderRadius: 5,
     height: 110,
-    width: 75,
+    aspectRatio: 2 / 3,
   },
   textContainer: {
     maxWidth: '70%',
