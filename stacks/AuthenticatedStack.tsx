@@ -41,7 +41,7 @@ const HomeStack = () => {
         name='Home'
         component={Home}
         options={{
-          headerShown: false,
+          headerTitle: () => <Text style={styles.logo}>bookish</Text>,
         }}
       />
       <Stack.Screen
@@ -99,7 +99,6 @@ const ProfileStack = () => {
         name='Settings'
         component={Settings}
         options={{
-          headerShown: true,
           title: 'My Settings',
           presentation: 'modal',
         }}
@@ -115,7 +114,7 @@ export const AuthenticatedStack: React.FC = () => {
         name='HomeStack'
         component={HomeStack}
         options={{
-          headerTitle: () => <Text style={styles.logo}>bookish</Text>,
+          headerShown: false,
           tabBarIcon: ({ focused }) => (
             <Image source={homeIcon} style={[styles.tabIcon, focused && styles.tabFocused]} />
           ),

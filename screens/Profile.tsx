@@ -28,11 +28,13 @@ export const Profile: React.FC<Props> = ({ navigation }) => {
         <Text style={styles.headerText}>Favorite Genres</Text>
         <View style={styles.divider}></View>
         {userData?.faveGenres?.length > 0 ? (
-          <View style={styles.genresWrapper}>
+          <View style={styles.genresContainer}>
             {userData.faveGenres.map((genre: string, index: number) => (
-              <Text key={index} style={styles.genre}>
-                {genre}
-              </Text>
+              <View style={styles.genreWrapper} key={index}>
+                <Text key={index} style={styles.genreLabel}>
+                  {genre}
+                </Text>
+              </View>
             ))}
           </View>
         ) : (
@@ -82,19 +84,21 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     opacity: 0.6,
   },
-  genresWrapper: {
+  genresContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 10,
   },
-  genre: {
+  genreWrapper: {
+    backgroundColor: COLORS.primary200,
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    borderRadius: 10,
+  },
+  genreLabel: {
+    color: COLORS.primary700,
     fontFamily: 'Heebo-Bold',
     fontSize: 14,
-    padding: 5,
-    borderWidth: 1,
-    borderColor: COLORS.primary600,
-    borderRadius: 10,
-    color: COLORS.primary700,
   },
   infoText: {
     fontFamily: 'Heebo-Regular',

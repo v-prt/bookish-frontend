@@ -5,14 +5,14 @@ import {
   Text,
   ActivityIndicator,
   ScrollView,
-  Image,
-  Pressable,
+  useWindowDimensions,
 } from 'react-native'
 import { useQuery } from 'react-query'
 import { COLORS } from '../GlobalStyles'
-// import HTMLView from 'react-native-htmlview'
+import RenderHtml from 'react-native-render-html'
 import { MaterialIcons } from '@expo/vector-icons'
 import { ImageLoader } from '../components/ImageLoader'
+import * as Haptics from 'expo-haptics'
 
 export const BookDetails = ({
   route: {
@@ -20,8 +20,7 @@ export const BookDetails = ({
   },
 }: any) => {
   const [book, setBook] = useState<any>(null)
-  const [bookDescription, setBookDescription] = useState<string>('')
-  const [expandDescription, setExpandDescription] = useState<boolean>(false)
+  const { width } = useWindowDimensions()
 
   const { data, status } = useQuery(['book', id], () =>
     fetch(`https://www.googleapis.com/books/v1/volumes/${id}`).then(res => res.json())
@@ -33,23 +32,6 @@ export const BookDetails = ({
     }
   })
 
-  const parseDescription = (description: string) => {
-    const regex = /(<([^>]+)>)/gi
-    return description.replace(regex, '')
-  }
-
-  // useEffect(() => {
-  //   if (book?.description) {
-  //     setBookDescription(
-  //       book.description
-  //         // replace <br> tags with line breaks
-  //         ?.replace(/<br\s*\/?>/gi, '\n')
-  //         // remove excess whitespace
-  //         .replace(/\s+/g, ' ')
-  //     )
-  //   }
-  // })
-
   return (
     <View style={styles.screen}>
       {(status === 'loading' || !book) && (
@@ -59,7 +41,7 @@ export const BookDetails = ({
       )}
 
       {status === 'success' && book && (
-        <ScrollView style={styles.book} contentContainerStyle={{ paddingBottom: 40 }}>
+        <ScrollView style={styles.book} contentContainerStyle={{ paddingBottom: 20 }}>
           <View style={styles.basicInfo}>
             <ImageLoader
               style={styles.image}
@@ -83,18 +65,7 @@ export const BookDetails = ({
           </View>
 
           <View style={styles.details}>
-            {expandDescription ? (
-              <Text style={styles.description}>{parseDescription(book.description)}</Text>
-            ) : (
-              <View style={styles.descriptionCollapsed}>
-                <Text style={styles.description} numberOfLines={5}>
-                  {parseDescription(book.description)}
-                </Text>
-                <Pressable onPress={() => setExpandDescription(true)}>
-                  <Text style={styles.readMoreText}>Read More</Text>
-                </Pressable>
-              </View>
-            )}
+            <RenderHtml contentWidth={width} source={{ html: book.description }} />
           </View>
         </ScrollView>
       )}
@@ -174,7 +145,7 @@ const styles = StyleSheet.create({
     // justifyContent: 'space-between',
   },
   readMoreText: {
-    color: COLORS.primary500,
+    color: COLORS.accentLight,
     fontFamily: 'Heebo-Bold',
     fontSize: 14,
   },

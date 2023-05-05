@@ -6,6 +6,8 @@ import {
   ActivityIndicator,
   Keyboard,
   ScrollView,
+  NativeSyntheticEvent,
+  TextInputSubmitEditingEventData,
 } from 'react-native'
 import { useInfiniteQuery } from 'react-query'
 import { COLORS } from '../GlobalStyles'
@@ -133,7 +135,7 @@ export const Search: React.FC<Props> = ({}) => {
         setSearchResults(null)
         setTotalResults(null)
       }}>
-      {({ handleChange, handleBlur, handleSubmit, values }) => (
+      {({ handleChange, handleBlur, handleSubmit, values, setValues }) => (
         <View style={styles.screen}>
           <View style={styles.searchBar}>
             <Input
@@ -144,8 +146,10 @@ export const Search: React.FC<Props> = ({}) => {
                   Keyboard.dismiss()
                   handleBlur('search')
                 },
-                // FIXME: typescript error
-                onSubmitEditing: handleSubmit,
+                onSubmitEditing: (e: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => {
+                  setSelectedGenre(null)
+                  handleSubmit()
+                },
                 keyboardType: 'web-search', // ios only
                 value: values.search,
                 placeholder: 'Search books',
@@ -182,7 +186,9 @@ export const Search: React.FC<Props> = ({}) => {
                   <Pressable
                     onPress={() => {
                       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+                      setValues({ search: '' })
                       setSearchText('')
+                      setSelectedGenre(null)
                       handleSubmit()
                     }}>
                     <Text style={styles.resetBtnText}>Reset</Text>
@@ -238,12 +244,19 @@ const styles = StyleSheet.create({
     gap: 10,
     margin: 10,
   },
+  searchBar: {
+    backgroundColor: COLORS.primary300,
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 15,
+  },
   resultsHeader: {
+    backgroundColor: COLORS.primary300,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginHorizontal: 10,
-    marginBottom: 10,
+    paddingHorizontal: 15,
+    paddingBottom: 10,
   },
   resetBtnText: {
     fontFamily: 'Heebo-Bold',
@@ -251,11 +264,6 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 12,
-    color: COLORS.grey,
-  },
-  searchBar: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    margin: 10,
+    color: COLORS.primary800,
   },
 })

@@ -28,6 +28,7 @@
     "react-native-htmlview": "^0.16.0",
     "react-native-keyboard-aware-scroll-view": "^0.9.5",
     "react-native-keyboard-aware-scrollview": "^2.1.0",
+    "react-native-render-html": "^6.3.4",
     "react-query": "^3.39.3",
     "typescript": "^4.9.4",
     "yup": "^1.1.1"
