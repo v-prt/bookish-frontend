@@ -315,7 +315,7 @@ export const Settings: React.FC<Props> = ({ navigation }) => {
                   <CustomButton
                     type='secondary'
                     label='Cancel'
-                    onPress={() => setPasswordModalVisible(false)}
+                    onPress={() => setGenreModalVisible(false)}
                   />
                 </View>
               </View>

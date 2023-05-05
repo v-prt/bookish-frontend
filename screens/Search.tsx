@@ -213,6 +213,7 @@ export const Search: React.FC<Props> = ({}) => {
                       label={genre.label}
                       image={genre.image}
                       onPress={() => {
+                        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
                         handleGenreSearch(genre.label)
                       }}
                     />
