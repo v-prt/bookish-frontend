@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useContext } from 'react'
 import {
   StyleSheet,
   View,
@@ -6,30 +6,54 @@ import {
   ActivityIndicator,
   ScrollView,
   useWindowDimensions,
+  Pressable,
 } from 'react-native'
 import { useQuery } from 'react-query'
+import { UserContext } from '../contexts/UserContext'
 import { COLORS } from '../GlobalStyles'
 import RenderHtml from 'react-native-render-html'
 import { MaterialIcons } from '@expo/vector-icons'
 import { ImageLoader } from '../components/ImageLoader'
 import moment from 'moment'
+import axios from 'axios'
+import { API_URL } from '../constants'
 
-export const BookDetails = ({
+interface Props {
+  navigation: any
+  route: any
+}
+
+export const BookDetails: React.FC<Props> = ({
+  navigation,
   route: {
     params: { id },
   },
 }: any) => {
+  const { userId } = useContext(UserContext)
   const [book, setBook] = useState<any>(null)
   const { width } = useWindowDimensions()
   const [genres, setGenres] = useState<string | null>(null)
 
-  const { data, status } = useQuery(['book', id], () =>
+  const { data: googleBookData, status: googleBookStatus } = useQuery(['google-book', id], () =>
     fetch(`https://www.googleapis.com/books/v1/volumes/${id}`).then(res => res.json())
   )
 
+  const { data: userBookData } = useQuery(['user-book', id], async () => {
+    const { data } = await axios.get(`${API_URL}/books/${userId}/${id}`)
+    return data.book
+  })
+
+  const actionBtnStyles = userBookData
+    ? [styles.actionBtn, styles.primaryActionBtn]
+    : [styles.actionBtn, styles.secondaryActionBtn]
+
+  const actionTextStyles = userBookData
+    ? [styles.actionText, styles.primaryActionText]
+    : [styles.actionText, styles.secondaryActionText]
+
   useEffect(() => {
-    if (data) {
-      setBook(data.volumeInfo)
+    if (googleBookData) {
+      setBook(googleBookData.volumeInfo)
     }
   })
 
@@ -47,16 +71,37 @@ export const BookDetails = ({
     }
   }, [book])
 
+  const renderStars = () => {
+    let stars = []
+    for (let i = 0; i < 5; i++) {
+      stars.push(
+        <MaterialIcons
+          key={i}
+          name={
+            book.averageRating > i + 0.5
+              ? 'star'
+              : book.averageRating > i && book.averageRating < i + 1
+              ? 'star-half'
+              : 'star-border'
+          }
+          size={18}
+          color={book.averageRating > i ? 'gold' : '#ccc'}
+        />
+      )
+    }
+    return stars
+  }
+
   return (
     <View style={styles.screen}>
-      {(status === 'loading' || !book) && (
+      {(googleBookStatus === 'loading' || !book) && (
         <View style={styles.loading}>
           <ActivityIndicator size='large' color={COLORS.primary300} />
         </View>
       )}
 
-      {status === 'success' && book && (
-        <ScrollView style={styles.book} contentContainerStyle={{ paddingBottom: 20 }}>
+      {googleBookStatus === 'success' && book && (
+        <ScrollView style={styles.book}>
           <View style={styles.basicInfo}>
             <ImageLoader
               style={styles.image}
@@ -67,17 +112,37 @@ export const BookDetails = ({
               <Text style={styles.title}>{book.title}</Text>
               {book.subtitle && <Text style={styles.subtitle}>{book.subtitle}</Text>}
               <Text style={styles.author}>by {book.authors?.join(', ')}</Text>
-
-              <View style={styles.ratingContainer}>
-                <MaterialIcons name='star' size={18} color={book.averageRating ? 'gold' : '#ccc'} />
-                <Text style={styles.rating}>{book.averageRating || 'No rating'}</Text>
-                {book.ratingsCount > 0 && (
-                  <Text style={styles.ratingsCount}>
-                    • ({book.ratingsCount.toLocaleString()} rating{book.ratingsCount > 1 && 's'})
-                  </Text>
-                )}
-              </View>
             </View>
+          </View>
+
+          <View style={styles.ratingContainer}>
+            <View style={styles.stars}>
+              {renderStars()}
+              <Text style={styles.rating}>{book.averageRating || 'No rating'}</Text>
+            </View>
+            {book.ratingsCount > 0 && (
+              <Text style={styles.ratingsCount}>
+                ({book.ratingsCount.toLocaleString()} rating{book.ratingsCount > 1 && 's'})
+              </Text>
+            )}
+          </View>
+
+          <View style={styles.actions}>
+            <Pressable
+              onPress={() =>
+                navigation.navigate('ManageBook', {
+                  volumeId: id,
+                  existingBook: userBookData,
+                })
+              }
+              style={actionBtnStyles}>
+              <Text style={actionTextStyles}>{userBookData?.bookshelf || 'Add to Library'}</Text>
+              <MaterialIcons
+                name={userBookData ? 'edit' : 'add'}
+                size={24}
+                color={userBookData ? COLORS.white : COLORS.accentLight}
+              />
+            </Pressable>
           </View>
 
           <View style={styles.details}>
@@ -99,7 +164,7 @@ export const BookDetails = ({
             </Text>
             <Text style={styles.detailsText}>
               <Text style={styles.label}>Published: </Text>
-              {book.publishedData ? moment(book.publishedDate).format('LL') : 'Unknown'}
+              {book.publishedDate ? moment(book.publishedDate).format('LL') : 'Unknown'}
             </Text>
             <Text style={styles.detailsText}>
               <Text style={styles.label}>Pages: </Text>
@@ -114,7 +179,7 @@ export const BookDetails = ({
 
 const styles = StyleSheet.create({
   screen: {
-    backgroundColor: COLORS.primary200,
+    backgroundColor: COLORS.primary100,
     flex: 1,
   },
   loading: {
@@ -126,7 +191,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   basicInfo: {
-    backgroundColor: COLORS.primary100,
+    backgroundColor: COLORS.white,
     flexDirection: 'row',
     alignItems: 'center',
     gap: 20,
@@ -151,23 +216,33 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     color: COLORS.accentDark,
-    fontSize: 15,
+    fontSize: 16,
     fontStyle: 'italic',
   },
   author: {
-    fontFamily: 'Heebo-Bold',
+    fontFamily: 'Heebo-Regular',
     color: COLORS.primary600,
-    fontSize: 16,
+    fontSize: 18,
     marginTop: 5,
   },
   ratingContainer: {
-    marginTop: 20,
+    backgroundColor: COLORS.white,
+    padding: 20,
     flexDirection: 'row',
+    justifyContent: 'space-between',
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.primary300,
+  },
+  stars: {
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 3,
   },
   rating: {
     fontFamily: 'Heebo-Bold',
     color: COLORS.primary600,
+    marginLeft: 5,
+    fontSize: 16,
   },
   ratingsCount: {
     color: COLORS.primary500,
@@ -201,5 +276,42 @@ const styles = StyleSheet.create({
   },
   label: {
     fontFamily: 'Heebo-Bold',
+  },
+  actions: {
+    backgroundColor: COLORS.white,
+    padding: 20,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.primary300,
+  },
+  actionBtn: {
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 5,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    borderWidth: 1,
+  },
+  primaryActionBtn: {
+    backgroundColor: COLORS.accentLight,
+    borderColor: COLORS.accentLight,
+  },
+  secondaryActionBtn: {
+    backgroundColor: COLORS.white,
+    borderColor: COLORS.accentLight,
+  },
+  actionText: {
+    fontFamily: 'Heebo-Bold',
+    fontSize: 16,
+  },
+  primaryActionText: {
+    color: COLORS.white,
+  },
+  secondaryActionText: {
+    color: COLORS.accentLight,
   },
 })

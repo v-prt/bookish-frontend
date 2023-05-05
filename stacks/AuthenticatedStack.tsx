@@ -9,6 +9,7 @@ import { Library } from '../screens/Library'
 import { Profile } from '../screens/Profile'
 import { Settings } from '../screens/Settings'
 import { IconButton } from '../ui/IconButton'
+import { ManageBook } from '../screens/ManageBook'
 
 const homeIcon = require('../assets/icons/home.png')
 const searchIcon = require('../assets/icons/search.png')
@@ -51,6 +52,14 @@ const HomeStack = () => {
           title: '',
         }}
       />
+      <Stack.Screen
+        name='ManageBook'
+        component={ManageBook}
+        options={{
+          title: 'Manage Book',
+          presentation: 'modal',
+        }}
+      />
     </Stack.Navigator>
   )
 }
@@ -70,6 +79,14 @@ const SearchStack = () => {
         component={BookDetails}
         options={{
           title: '',
+        }}
+      />
+      <Stack.Screen
+        name='ManageBook'
+        component={ManageBook}
+        options={{
+          title: 'Manage Book',
+          presentation: 'modal',
         }}
       />
     </Stack.Navigator>

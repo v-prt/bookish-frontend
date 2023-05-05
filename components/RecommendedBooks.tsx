@@ -65,11 +65,12 @@ export const RecommendedBooks: React.FC<Props> = ({ genre }) => {
 const styles = StyleSheet.create({
   loading: {
     gap: 10,
+    marginBottom: 25,
   },
   skelement: {
     // TODO: add shine animation for background color
-    height: 200,
-    width: 150,
+    height: 150,
+    aspectRatio: 2 / 3,
     backgroundColor: COLORS.primary200,
     borderRadius: 5,
     marginLeft: 20,

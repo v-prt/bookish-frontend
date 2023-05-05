@@ -5,11 +5,7 @@ import { COLORS } from '../GlobalStyles'
 import { Avatar } from '../components/Avatar'
 import moment from 'moment'
 
-interface Props {
-  navigation: any
-}
-
-export const Profile: React.FC<Props> = ({ navigation }) => {
+export const Profile: React.FC = () => {
   const { userData } = useContext(UserContext)
 
   return (
