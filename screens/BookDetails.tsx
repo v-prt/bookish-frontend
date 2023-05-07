@@ -133,7 +133,10 @@ export const BookDetails: React.FC<Props> = ({
                 })
               }
               style={actionBtnStyles}>
-              <Text style={actionTextStyles}>{userBookData?.bookshelf || 'Add to Library'}</Text>
+              <Text style={actionTextStyles}>
+                {userBookData?.bookshelf || 'Add to Library'}
+                {userBookData?.owned && ' (Owned)'}
+              </Text>
               <MaterialIcons
                 name={userBookData ? 'edit' : 'add'}
                 size={24}
@@ -277,8 +280,6 @@ const styles = StyleSheet.create({
   actions: {
     backgroundColor: COLORS.white,
     padding: 20,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
     borderBottomWidth: 1,
     borderBottomColor: COLORS.primary300,
   },

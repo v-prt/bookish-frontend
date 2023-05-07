@@ -1,32 +1,61 @@
-import { useContext, useState } from 'react'
-import { StyleSheet, View, Text, Pressable } from 'react-native'
+import { useContext, useEffect, useState } from 'react'
+import { StyleSheet, View, Text, Pressable, Alert } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { UserContext } from '../contexts/UserContext'
 import { BookContext } from '../contexts/BookContext'
 import { Formik } from 'formik'
 import { AlertText } from '../ui/AlertText'
 import { CustomButton } from '../ui/CustomButton'
+import { Input } from '../ui/Input'
 import { FormItem } from '../ui/FormItem'
 import { COLORS } from '../GlobalStyles'
 import { MaterialIcons } from '@expo/vector-icons'
 import DateTimePicker from '@react-native-community/datetimepicker'
+import { RatingButtons } from '../components/RatingButtons'
+import * as Haptics from 'expo-haptics'
+import * as yup from 'yup'
 
 interface Props {
   route: any
+  navigation: any
 }
 
 export const ManageBook: React.FC<Props> = ({
   route: {
     params: { volumeId, existingBook },
   },
+  navigation,
 }) => {
-  console.log(volumeId, existingBook)
   const { userId } = useContext(UserContext)
   const { addBook, updateBook } = useContext(BookContext)
 
   const bookshelfOptions = ['Want to read', 'Currently reading', 'Read']
   const ownedOptions = [true, false]
   const [selectedDate, setSelectedDate] = useState(new Date())
+
+  useEffect(() => {
+    if (existingBook?.dateRead) {
+      setSelectedDate(new Date(existingBook.dateRead))
+    }
+  }, [])
+
+  useEffect(() => {
+    if (existingBook) {
+      navigation.setOptions({ title: 'Manage Book' })
+    } else {
+      navigation.setOptions({ title: 'Add Book' })
+    }
+  })
+
+  const validationSchema = yup.object().shape({
+    owned: yup.boolean().required('Required'),
+    bookshelf: yup.string().required('Required'),
+
+    // not required (for "Read" books only)
+    dateRead: yup.date().nullable(),
+    rating: yup.number().nullable(),
+    review: yup.string().nullable(),
+  })
 
   const initialValues = existingBook
     ? {
@@ -35,42 +64,52 @@ export const ManageBook: React.FC<Props> = ({
     : {
         volumeId,
         userId,
-        bookshelf: '',
-        owned: false,
-        dateRead: '',
-        rating: '',
-        review: '',
+        bookshelf: null,
+        owned: null,
+        dateRead: null,
+        rating: null,
+        review: null,
       }
 
-  const handleSubmit = async (values: any, { setStatus }: any) => {
-    console.log(values)
-    // if (existingBook) {
-    //   const result = await updateBook(values)
-    //   if (result.error) {
-    //     setStatus(result.error.message)
-    //   }
-    // } else {
-    //   const result = await addBook(values)
-    //   if (result.error) {
-    //     setStatus(result.error.message)
-    //   }
-    // }
+  const handleSubmit = async (values: any) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
+    let result
+
+    try {
+      if (existingBook) {
+        result = await updateBook(existingBook._id, values)
+      } else {
+        result = await addBook(values)
+      }
+      // close modal on success
+      navigation.goBack()
+    } catch (err) {
+      Alert.alert('Error', 'Something went wrong. Please try again later.')
+    }
   }
 
   return (
-    <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+    <Formik
+      initialValues={initialValues}
+      validationSchema={validationSchema}
+      onSubmit={handleSubmit}>
       {({ values, setFieldValue, status, submitForm, isSubmitting }) => (
-        <KeyboardAwareScrollView style={styles.screen}>
+        <KeyboardAwareScrollView
+          style={styles.screen}
+          contentContainerStyle={{
+            paddingBottom: 40,
+          }}>
           {status && (
             <AlertText type='error' icon='error' title={`Couldn't save book`} subtitle={status} />
           )}
-          <View>
+          <>
             <FormItem name='owned' label='Owned'>
               <View style={styles.options}>
                 {ownedOptions.map((owned, i) => (
                   <Pressable
                     key={i}
                     onPress={() => {
+                      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
                       setFieldValue('owned', owned)
                     }}
                     style={[styles.optionButton, values.owned === owned && styles.selectedButton]}>
@@ -94,6 +133,12 @@ export const ManageBook: React.FC<Props> = ({
                   <Pressable
                     key={bookshelf}
                     onPress={() => {
+                      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+                      if (bookshelf !== 'Read') {
+                        setFieldValue('dateRead', null)
+                        setFieldValue('rating', null)
+                        setFieldValue('review', null)
+                      }
                       setFieldValue('bookshelf', bookshelf)
                     }}
                     style={[
@@ -141,14 +186,40 @@ export const ManageBook: React.FC<Props> = ({
                   </View>
                 </FormItem>
 
-                {/* TODO: 
-                - add/delete rating (stars with haptic feedback)
-                - add/delete review (text input) */}
+                <FormItem name='rating' label='Rating'>
+                  <RatingButtons
+                    rating={values.rating}
+                    setRating={rating => {
+                      setFieldValue('rating', rating)
+                    }}
+                  />
+                </FormItem>
+
+                <FormItem name='review' label='Review'>
+                  <Input
+                    config={{
+                      onChangeText: (text: string) => setFieldValue('review', text),
+                      value: values.review,
+                      placeholder: 'Write a review',
+                      multiline: true,
+                      numberOfLines: 4,
+                    }}
+                    style={{ height: 100, alignItems: 'flex-start' }}
+                  />
+                </FormItem>
               </>
             )}
 
-            <CustomButton type='primary' label='Save' onPress={submitForm} loading={isSubmitting} />
-          </View>
+            <View style={styles.buttons}>
+              <CustomButton
+                type='primary'
+                label='Save'
+                onPress={submitForm}
+                loading={isSubmitting}
+              />
+              <CustomButton type='secondary' label='Cancel' onPress={() => navigation.goBack()} />
+            </View>
+          </>
         </KeyboardAwareScrollView>
       )}
     </Formik>
@@ -160,7 +231,6 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.primary100,
     flex: 1,
     padding: 20,
-    gap: 20,
   },
   options: {
     gap: 10,
@@ -187,6 +257,7 @@ const styles = StyleSheet.create({
     color: COLORS.accentDark,
   },
   datePicker: {
+    backgroundColor: COLORS.white,
     flexDirection: 'row',
     alignItems: 'center',
     borderRadius: 10,
@@ -203,5 +274,9 @@ const styles = StyleSheet.create({
     fontFamily: 'Heebo-Bold',
     fontSize: 16,
     color: COLORS.primary600,
+  },
+  buttons: {
+    marginVertical: 20,
+    gap: 16,
   },
 })

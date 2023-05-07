@@ -7,11 +7,12 @@ interface Props {
   config: TextInput['props']
   icon?: keyof typeof MaterialIcons.glyphMap
   onIconPress?: () => void
+  style?: any
 }
 
-export const Input: React.FC<Props> = ({ config, icon, onIconPress }) => {
+export const Input: React.FC<Props> = ({ config, icon, onIconPress, style }) => {
   return (
-    <View style={styles.inputWrapper}>
+    <View style={[styles.inputWrapper, style]}>
       <TextInput {...config} style={styles.input} selectionColor={COLORS.accentLight} />
       {icon && onIconPress && (
         <IconButton

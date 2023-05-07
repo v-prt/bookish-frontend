@@ -1,5 +1,5 @@
-import { createContext } from 'react'
-import { useQuery, useQueryClient } from 'react-query'
+import { createContext, FC, ReactNode } from 'react'
+import { useQueryClient } from 'react-query'
 
 import axios from 'axios'
 import { API_URL } from '../constants'
@@ -7,10 +7,10 @@ import { API_URL } from '../constants'
 export const BookContext = createContext<any>(null)
 
 interface Props {
-  children: React.ReactNode
+  children: ReactNode
 }
 
-export const BookProvider: React.FC<Props> = ({ children }) => {
+export const BookProvider: FC<Props> = ({ children }) => {
   const queryClient = useQueryClient()
 
   const fetchBook = async (userId: string, volumeId: string) => {
@@ -19,5 +19,21 @@ export const BookProvider: React.FC<Props> = ({ children }) => {
     return data.book
   }
 
-  return <BookContext.Provider value={{ fetchBook }}>{children}</BookContext.Provider>
+  const addBook = async (book: any) => {
+    const { data } = await axios.post(`${API_URL}/books`, book)
+    queryClient.invalidateQueries('user-book')
+    return data.newBook
+  }
+
+  const updateBook = async (bookId: any, book: any) => {
+    const { data } = await axios.put(`${API_URL}/books/${bookId}`, book)
+    queryClient.invalidateQueries('user-book')
+    return data.updatedBook
+  }
+
+  return (
+    <BookContext.Provider value={{ fetchBook, addBook, updateBook }}>
+      {children}
+    </BookContext.Provider>
+  )
 }
