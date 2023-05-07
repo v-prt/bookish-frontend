@@ -55,10 +55,19 @@ const HomeStack = () => {
       <Stack.Screen
         name='ManageBook'
         component={ManageBook}
-        options={{
+        options={({ navigation }) => ({
           title: 'Manage Book',
           presentation: 'modal',
-        }}
+          headerLeft: () => (
+            <IconButton
+              icon='close'
+              color={COLORS.primary600}
+              onPress={() => {
+                navigation.goBack()
+              }}
+            />
+          ),
+        })}
       />
     </Stack.Navigator>
   )
@@ -84,10 +93,19 @@ const SearchStack = () => {
       <Stack.Screen
         name='ManageBook'
         component={ManageBook}
-        options={{
+        options={({ navigation }) => ({
           title: 'Manage Book',
           presentation: 'modal',
-        }}
+          headerLeft: () => (
+            <IconButton
+              icon='close'
+              color={COLORS.primary600}
+              onPress={() => {
+                navigation.goBack()
+              }}
+            />
+          ),
+        })}
       />
     </Stack.Navigator>
   )

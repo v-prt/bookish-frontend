@@ -73,13 +73,20 @@ export const ManageBook: React.FC<Props> = ({
 
   const handleSubmit = async (values: any) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
-    let result
+
+    const data = {
+      ...values,
+      review: values.review && {
+        date: new Date(),
+        text: values.review,
+      },
+    }
 
     try {
       if (existingBook) {
-        result = await updateBook(existingBook._id, values)
+        await updateBook(existingBook._id, data)
       } else {
-        result = await addBook(values)
+        await addBook(data)
       }
       // close modal on success
       navigation.goBack()

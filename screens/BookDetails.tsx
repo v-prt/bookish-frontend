@@ -16,6 +16,8 @@ import RenderHtml from 'react-native-render-html'
 import { MaterialIcons } from '@expo/vector-icons'
 import { ImageLoader } from '../components/ImageLoader'
 import moment from 'moment'
+import { Avatar } from '../components/Avatar'
+import { IconButton } from '../ui/IconButton'
 
 interface Props {
   navigation: any
@@ -28,7 +30,7 @@ export const BookDetails: React.FC<Props> = ({
     params: { id },
   },
 }: any) => {
-  const { userId } = useContext(UserContext)
+  const { userData, userId } = useContext(UserContext)
   const { fetchBook } = useContext(BookContext)
   const [book, setBook] = useState<any>(null)
   const { width } = useWindowDimensions()
@@ -68,21 +70,17 @@ export const BookDetails: React.FC<Props> = ({
     }
   }, [book])
 
-  const renderStars = () => {
+  const renderStars = (rating: number) => {
     let stars = []
     for (let i = 0; i < 5; i++) {
       stars.push(
         <MaterialIcons
           key={i}
           name={
-            book.averageRating > i + 0.5
-              ? 'star'
-              : book.averageRating > i && book.averageRating < i + 1
-              ? 'star-half'
-              : 'star-border'
+            rating > i + 0.5 ? 'star' : rating > i && rating < i + 1 ? 'star-half' : 'star-border'
           }
           size={18}
-          color={book.averageRating > i ? 'gold' : '#ccc'}
+          color={rating > i ? 'gold' : '#ccc'}
         />
       )
     }
@@ -112,18 +110,6 @@ export const BookDetails: React.FC<Props> = ({
             </View>
           </View>
 
-          <View style={styles.ratingContainer}>
-            <View style={styles.stars}>
-              {renderStars()}
-              <Text style={styles.rating}>{book.averageRating || 'No rating'}</Text>
-            </View>
-            {book.ratingsCount > 0 && (
-              <Text style={styles.ratingsCount}>
-                ({book.ratingsCount.toLocaleString()} rating{book.ratingsCount > 1 && 's'})
-              </Text>
-            )}
-          </View>
-
           <View style={styles.actions}>
             <Pressable
               onPress={() =>
@@ -138,14 +124,80 @@ export const BookDetails: React.FC<Props> = ({
                 {userBookData?.owned && ' (Owned)'}
               </Text>
               <MaterialIcons
-                name={userBookData ? 'edit' : 'add'}
-                size={24}
+                name='expand-more'
                 color={userBookData ? COLORS.white : COLORS.accentLight}
+                size={24}
               />
             </Pressable>
           </View>
 
+          <View style={styles.ratings}>
+            <View style={styles.ratingGroup}>
+              <MaterialIcons
+                name={book.averageRating ? 'star' : 'star-border'}
+                color={book.averageRating ? 'gold' : '#ccc'}
+                size={20}
+              />
+              <Text style={styles.ratingValue}>
+                {book.averageRating ? `${book.averageRating}/5` : '-'}
+              </Text>
+              <Text style={styles.ratingsSublabel}>
+                ({book.ratingsCount?.toLocaleString() || 0} rating{book.ratingsCount !== 1 && 's'})
+              </Text>
+            </View>
+            <View style={styles.ratingGroup}>
+              <MaterialIcons
+                name={userBookData?.rating ? 'star' : 'star-border'}
+                color={userBookData?.rating ? COLORS.accentLight : '#ccc'}
+                size={20}
+              />
+              <Text style={styles.ratingValue}>
+                {userBookData?.rating ? `${userBookData?.rating}/5` : '-'}
+              </Text>
+              <Text style={styles.ratingsSublabel}>(Your rating)</Text>
+            </View>
+          </View>
+
           <View style={styles.details}>
+            {userBookData?.review && (
+              <>
+                {/* TODO: fetch all books from db with this volumeId and display other users' reviews (use FlatList and paginate), keep current user's own review at top */}
+                <Text style={styles.headerText}>Reviews</Text>
+                <View style={styles.divider}></View>
+                <View style={styles.reviewSection}>
+                  <Avatar
+                    initials={`${userData.firstName[0]}${userData.lastName[0]}`}
+                    size='small'
+                  />
+                  <View>
+                    <View style={styles.reviewHeader}>
+                      <Text style={styles.name}>
+                        {userData.firstName} {userData.lastName}
+                      </Text>
+                      <View style={styles.stars}>{renderStars(userBookData.rating)}</View>
+                    </View>
+                    <Text style={styles.reviewDate}>
+                      {moment(userBookData?.review?.date).format('lll')}
+                    </Text>
+                    <Text style={styles.reviewText}>{userBookData?.review?.text}</Text>
+                  </View>
+                  <View style={styles.editReviewBtn}>
+                    <IconButton
+                      icon='edit'
+                      size={20}
+                      color={COLORS.primary600}
+                      onPress={() =>
+                        navigation.navigate('ManageBook', {
+                          volumeId: id,
+                          existingBook: userBookData,
+                        })
+                      }
+                    />
+                  </View>
+                </View>
+              </>
+            )}
+
             <Text style={styles.headerText}>Description</Text>
             <View style={styles.divider}></View>
             <View style={styles.description}>
@@ -191,7 +243,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   basicInfo: {
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.primary100,
     flexDirection: 'row',
     alignItems: 'center',
     gap: 20,
@@ -225,26 +277,26 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginTop: 5,
   },
-  ratingContainer: {
+  ratings: {
     backgroundColor: COLORS.white,
     padding: 20,
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
+    gap: 20,
     borderBottomWidth: 1,
     borderBottomColor: COLORS.primary300,
   },
-  stars: {
-    flexDirection: 'row',
+  ratingGroup: {
     alignItems: 'center',
-    gap: 3,
   },
-  rating: {
+  ratingValue: {
     fontFamily: 'Heebo-Bold',
     color: COLORS.primary600,
-    marginLeft: 5,
-    fontSize: 16,
+    fontSize: 22,
+    height: 24,
   },
-  ratingsCount: {
+  ratingsSublabel: {
     color: COLORS.primary500,
     fontFamily: 'Heebo-Regular',
     fontSize: 14,
@@ -280,8 +332,7 @@ const styles = StyleSheet.create({
   actions: {
     backgroundColor: COLORS.white,
     padding: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: COLORS.primary300,
+    paddingBottom: 0,
   },
   actionBtn: {
     width: '100%',
@@ -311,5 +362,43 @@ const styles = StyleSheet.create({
   },
   secondaryActionText: {
     color: COLORS.accentLight,
+  },
+  reviewSection: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 12,
+    marginBottom: 20,
+    paddingBottom: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.primary300,
+  },
+  reviewHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+  name: {
+    fontFamily: 'Heebo-Bold',
+    fontSize: 16,
+    color: COLORS.accentLight,
+  },
+  stars: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 3,
+  },
+  reviewDate: {
+    fontFamily: 'Heebo-Regular',
+    fontSize: 14,
+    color: COLORS.primary500,
+    marginBottom: 8,
+  },
+  reviewText: {
+    fontFamily: 'Heebo-Regular',
+    fontSize: 16,
+    color: COLORS.primary700,
+  },
+  editReviewBtn: {
+    marginLeft: 'auto',
   },
 })
