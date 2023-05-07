@@ -292,13 +292,15 @@ export const Settings: React.FC<Props> = ({ navigation }) => {
                             ]}>
                             {genre}
                           </Text>
-                          {values.faveGenres.includes(genre) && (
-                            <MaterialIcons
-                              name='check-circle-outline'
-                              color={COLORS.accentDark}
-                              size={18}
-                            />
-                          )}
+                          <MaterialIcons
+                            name={values.faveGenres.includes(genre) ? 'check-circle' : 'circle'}
+                            color={
+                              values.faveGenres.includes(genre)
+                                ? COLORS.accentDark
+                                : COLORS.primary400
+                            }
+                            size={18}
+                          />
                         </Pressable>
                       ))}
                     </ScrollView>

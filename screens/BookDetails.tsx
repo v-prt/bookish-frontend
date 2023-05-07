@@ -10,13 +10,12 @@ import {
 } from 'react-native'
 import { useQuery } from 'react-query'
 import { UserContext } from '../contexts/UserContext'
+import { BookContext } from '../contexts/BookContext'
 import { COLORS } from '../GlobalStyles'
 import RenderHtml from 'react-native-render-html'
 import { MaterialIcons } from '@expo/vector-icons'
 import { ImageLoader } from '../components/ImageLoader'
 import moment from 'moment'
-import axios from 'axios'
-import { API_URL } from '../constants'
 
 interface Props {
   navigation: any
@@ -30,6 +29,7 @@ export const BookDetails: React.FC<Props> = ({
   },
 }: any) => {
   const { userId } = useContext(UserContext)
+  const { fetchBook } = useContext(BookContext)
   const [book, setBook] = useState<any>(null)
   const { width } = useWindowDimensions()
   const [genres, setGenres] = useState<string | null>(null)
@@ -38,10 +38,7 @@ export const BookDetails: React.FC<Props> = ({
     fetch(`https://www.googleapis.com/books/v1/volumes/${id}`).then(res => res.json())
   )
 
-  const { data: userBookData } = useQuery(['user-book', id], async () => {
-    const { data } = await axios.get(`${API_URL}/books/${userId}/${id}`)
-    return data.book
-  })
+  const { data: userBookData } = useQuery(['user-book', id], () => fetchBook(userId, id))
 
   const actionBtnStyles = userBookData
     ? [styles.actionBtn, styles.primaryActionBtn]

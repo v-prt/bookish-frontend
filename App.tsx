@@ -10,6 +10,7 @@ import { UserContext, UserProvider } from './contexts/UserContext'
 import { useFonts } from './hooks/useFonts'
 import { UnauthenticatedStack } from './stacks/UnauthenticatedStack'
 import { AuthenticatedStack } from './stacks/AuthenticatedStack'
+import { BookProvider } from './contexts/BookContext'
 
 const queryClient = new QueryClient()
 
@@ -58,8 +59,10 @@ const App: React.FC = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <UserProvider>
-        <StatusBar style='dark' />
-        <Root />
+        <BookProvider>
+          <StatusBar style='dark' />
+          <Root />
+        </BookProvider>
       </UserProvider>
     </QueryClientProvider>
   )
