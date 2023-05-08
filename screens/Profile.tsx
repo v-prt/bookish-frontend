@@ -22,7 +22,7 @@ export const Profile: React.FC = () => {
       {/* TODO: overview of bookshelves, ratings, reading activity, etc. ? */}
       <View style={styles.profileWrapper}>
         <Text style={styles.headerText}>Favorite Genres</Text>
-        <View style={styles.divider}></View>
+        <View style={styles.divider} />
         {userData?.faveGenres?.length > 0 ? (
           <View style={styles.genresContainer}>
             {userData.faveGenres.map((genre: string, index: number) => (
@@ -92,8 +92,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   genreLabel: {
-    color: COLORS.primary700,
-    fontFamily: 'Heebo-Bold',
+    color: COLORS.primary800,
+    fontFamily: 'Heebo-Regular',
     fontSize: 14,
   },
   infoText: {

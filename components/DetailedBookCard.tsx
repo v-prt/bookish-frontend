@@ -20,7 +20,7 @@ export const DetailedBookCard: React.FC<Props> = ({ book }) => {
 
   return (
     <Pressable style={styles.container} onPress={handlePress}>
-      <ImageLoader style={styles.image} source={{ uri: book.image }} borderRadius={5} />
+      <ImageLoader style={styles.image} source={{ uri: book.image }} borderRadius={10} />
       <View style={styles.textContainer}>
         <Text style={styles.title} numberOfLines={2}>
           {book.title}
@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
   },
   image: {
     backgroundColor: COLORS.primary200,
-    borderRadius: 5,
+    borderRadius: 10,
     height: 110,
     aspectRatio: 2 / 3,
   },

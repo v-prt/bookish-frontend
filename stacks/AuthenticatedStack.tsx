@@ -119,7 +119,7 @@ const ProfileStack = () => {
         component={Profile}
         options={({ navigation }) => ({
           headerTitle: () => <Text style={styles.headerTitle}>My Profile</Text>,
-          headerRight: () => (
+          headerLeft: () => (
             <IconButton
               icon='settings'
               color={COLORS.primary600}

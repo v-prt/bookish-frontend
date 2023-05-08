@@ -163,7 +163,7 @@ export const BookDetails: React.FC<Props> = ({
               <>
                 {/* TODO: fetch all books from db with this volumeId and display other users' reviews (use FlatList and paginate), keep current user's own review at top */}
                 <Text style={styles.headerText}>Reviews</Text>
-                <View style={styles.divider}></View>
+                <View style={styles.divider} />
                 <View style={styles.reviewSection}>
                   <Avatar
                     initials={`${userData.firstName[0]}${userData.lastName[0]}`}
@@ -199,13 +199,13 @@ export const BookDetails: React.FC<Props> = ({
             )}
 
             <Text style={styles.headerText}>Description</Text>
-            <View style={styles.divider}></View>
+            <View style={styles.divider} />
             <View style={styles.description}>
               <RenderHtml contentWidth={width} source={{ html: book.description }} />
             </View>
 
             <Text style={styles.headerText}>Details</Text>
-            <View style={styles.divider}></View>
+            <View style={styles.divider} />
             <Text style={styles.detailsText}>
               <Text style={styles.label}>Genres: </Text>
               {genres || ' Unknown'}

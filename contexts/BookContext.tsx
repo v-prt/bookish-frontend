@@ -22,17 +22,30 @@ export const BookProvider: FC<Props> = ({ children }) => {
   const addBook = async (book: any) => {
     const { data } = await axios.post(`${API_URL}/books`, book)
     queryClient.invalidateQueries('user-book')
+    queryClient.invalidateQueries('currently-reading')
+    queryClient.invalidateQueries('want-to-read')
+    queryClient.invalidateQueries('read')
     return data.newBook
   }
 
   const updateBook = async (bookId: any, book: any) => {
     const { data } = await axios.put(`${API_URL}/books/${bookId}`, book)
     queryClient.invalidateQueries('user-book')
+    queryClient.invalidateQueries('currently-reading')
+    queryClient.invalidateQueries('want-to-read')
+    queryClient.invalidateQueries('read')
     return data.updatedBook
   }
 
+  const fetchBookshelf = async (userId: string, bookshelf: string) => {
+    const { data } = await axios.get(`${API_URL}/bookshelf/${userId}`, {
+      params: { bookshelf },
+    })
+    return data
+  }
+
   return (
-    <BookContext.Provider value={{ fetchBook, addBook, updateBook }}>
+    <BookContext.Provider value={{ fetchBook, addBook, updateBook, fetchBookshelf }}>
       {children}
     </BookContext.Provider>
   )

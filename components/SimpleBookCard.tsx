@@ -19,8 +19,7 @@ export const SimpleBookCard: React.FC<Props> = ({ book, lastChild }) => {
 
   return (
     <Pressable style={[styles.wrapper, lastChild && styles.lastChild]} onPress={handlePress}>
-      <ImageLoader style={styles.image} source={{ uri: book.image }} borderRadius={5} />
-      {/* TODO: add actions (rate / add to "want to read") */}
+      <ImageLoader style={styles.image} source={{ uri: book.image }} borderRadius={10} />
     </Pressable>
   )
 }
@@ -34,7 +33,7 @@ const styles = StyleSheet.create({
     marginRight: 20,
   },
   image: {
-    borderRadius: 5,
+    borderRadius: 10,
     height: 150,
     aspectRatio: 2 / 3,
   },

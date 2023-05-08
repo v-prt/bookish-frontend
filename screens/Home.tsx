@@ -15,33 +15,31 @@ export const Home: React.FC<Props> = ({ navigation }) => {
 
   return (
     <ScrollView style={styles.screen}>
-      <View style={styles.main}>
-        <Text style={styles.headerText}>Recommended for you</Text>
-        <View style={styles.divider}></View>
-        {faveGenres?.length > 0 ? (
-          faveGenres.map((genre: string, index: number) => (
-            <RecommendedBooks genre={genre} key={index} />
-          ))
-        ) : (
-          <View style={styles.noRecommendations}>
-            <Text style={styles.infoText}>
-              Add your favorite genres in your profile to get recommendations for books you might
-              like.
-            </Text>
-            <CustomButton
-              type='secondary'
-              label='Choose Genres'
-              onPress={() => navigation.navigate('ProfileStack')}
-            />
-          </View>
-        )}
-        {/* TODO: reading activity / stats, genre search buttons */}
-        <Text style={styles.headerText}>Your reading activity</Text>
-        <View style={styles.divider}></View>
+      <Text style={styles.headerText}>Recommended for you</Text>
+      <View style={styles.divider} />
+      {faveGenres?.length > 0 ? (
+        faveGenres.map((genre: string, index: number) => (
+          <RecommendedBooks genre={genre} key={index} />
+        ))
+      ) : (
+        <View style={styles.noRecommendations}>
+          <Text style={styles.infoText}>
+            Add your favorite genres in your profile to get recommendations for books you might
+            like.
+          </Text>
+          <CustomButton
+            type='secondary'
+            label='Choose Genres'
+            onPress={() => navigation.navigate('ProfileStack')}
+          />
+        </View>
+      )}
+      {/* TODO: reading activity / stats, genre search buttons */}
+      <Text style={styles.headerText}>Your reading activity</Text>
+      <View style={styles.divider} />
 
-        <Text style={styles.headerText}>Explore by genre</Text>
-        <View style={styles.divider}></View>
-      </View>
+      <Text style={styles.headerText}>Explore by genre</Text>
+      <View style={styles.divider} />
     </ScrollView>
   )
 }
@@ -50,9 +48,6 @@ const styles = StyleSheet.create({
   screen: {
     backgroundColor: COLORS.primary100,
     flex: 1,
-  },
-  main: {
-    backgroundColor: COLORS.primary100,
   },
   headerText: {
     fontFamily: 'Heebo-Bold',
