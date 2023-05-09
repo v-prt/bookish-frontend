@@ -10,6 +10,7 @@ interface Props {
 }
 
 export const RecommendedBooks: React.FC<Props> = ({ genre }) => {
+  // TODO: get user's books to compare with results and ignore books they already have in any bookshelf (create endpoint in backend to handle this logic)
   const [recommendedBooks, setRecommendedBooks] = useState<any>([])
 
   const fetchRecommendedBooks = async (genre: string) => {
@@ -70,16 +71,16 @@ const styles = StyleSheet.create({
   },
   skelement: {
     // TODO: add shine animation for background color
-    height: 150,
+    height: 170,
     aspectRatio: 2 / 3,
     backgroundColor: COLORS.primary200,
     borderRadius: 5,
     marginLeft: 20,
   },
   label: {
-    color: COLORS.primary900,
-    fontSize: 18,
     fontFamily: 'Prata-Regular',
+    fontSize: 18,
+    color: COLORS.primary900,
     marginHorizontal: 20,
     marginBottom: 20,
   },

@@ -217,6 +217,7 @@ export const ManageBook: React.FC<Props> = ({
               </>
             )}
 
+            {/* TODO: delete book */}
             <View style={styles.buttons}>
               <CustomButton
                 type='primary'
