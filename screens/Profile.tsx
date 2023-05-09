@@ -21,15 +21,13 @@ export const Profile: React.FC = () => {
       </View>
       {/* TODO: overview of bookshelves, ratings, reading activity, etc. ? */}
       <View style={styles.profileWrapper}>
-        <Text style={styles.headerText}>Favorite Genres</Text>
+        <Text style={styles.headerText}>Favorite genres</Text>
         <View style={styles.divider} />
         {userData?.faveGenres?.length > 0 ? (
           <View style={styles.genresContainer}>
-            {userData.faveGenres.map((genre: string, index: number) => (
-              <View style={styles.genreWrapper} key={index}>
-                <Text key={index} style={styles.genreLabel}>
-                  {genre}
-                </Text>
+            {userData.faveGenres.map((genre: string, i: number) => (
+              <View style={styles.genreWrapper} key={i}>
+                <Text style={styles.genreLabel}>{genre}</Text>
               </View>
             ))}
           </View>

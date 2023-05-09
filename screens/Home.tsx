@@ -18,9 +18,7 @@ export const Home: React.FC<Props> = ({ navigation }) => {
       <Text style={styles.headerText}>Recommended for you</Text>
       <View style={styles.divider} />
       {faveGenres?.length > 0 ? (
-        faveGenres.map((genre: string, index: number) => (
-          <RecommendedBooks genre={genre} key={index} />
-        ))
+        faveGenres.map((genre: string, i: number) => <RecommendedBooks genre={genre} key={i} />)
       ) : (
         <View style={styles.noRecommendations}>
           <Text style={styles.infoText}>

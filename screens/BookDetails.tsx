@@ -27,7 +27,7 @@ interface Props {
 export const BookDetails: React.FC<Props> = ({
   navigation,
   route: {
-    params: { id },
+    params: { volumeId },
   },
 }: any) => {
   const { userData, userId } = useContext(UserContext)
@@ -36,11 +36,14 @@ export const BookDetails: React.FC<Props> = ({
   const { width } = useWindowDimensions()
   const [genres, setGenres] = useState<string | null>(null)
 
-  const { data: googleBookData, status: googleBookStatus } = useQuery(['google-book', id], () =>
-    fetch(`https://www.googleapis.com/books/v1/volumes/${id}`).then(res => res.json())
+  const { data: googleBookData, status: googleBookStatus } = useQuery(
+    ['google-book', volumeId],
+    () => fetch(`https://www.googleapis.com/books/v1/volumes/${volumeId}`).then(res => res.json())
   )
 
-  const { data: userBookData } = useQuery(['user-book', id], () => fetchBook(userId, id))
+  const { data: userBookData } = useQuery(['user-book', volumeId], () =>
+    fetchBook(userId, volumeId)
+  )
 
   const actionBtnStyles = userBookData
     ? [styles.actionBtn, styles.primaryActionBtn]
@@ -114,7 +117,7 @@ export const BookDetails: React.FC<Props> = ({
             <Pressable
               onPress={() =>
                 navigation.navigate('ManageBook', {
-                  volumeId: id,
+                  volumeId,
                   existingBook: userBookData,
                 })
               }
@@ -188,7 +191,7 @@ export const BookDetails: React.FC<Props> = ({
                       color={COLORS.primary600}
                       onPress={() =>
                         navigation.navigate('ManageBook', {
-                          volumeId: id,
+                          volumeId,
                           existingBook: userBookData,
                         })
                       }

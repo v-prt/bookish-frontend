@@ -105,7 +105,6 @@ export const UserProvider: React.FC<Props> = ({ children }) => {
       queryClient.invalidateQueries('user')
       return res.data
     } catch (err: any) {
-      console.log(err)
       return { error: err.response.data.message }
     }
   }

@@ -29,7 +29,7 @@ export const RecommendedBooks: React.FC<Props> = ({ genre }) => {
     if (status === 'success' && data) {
       const structuredBooks = data.map((book: any) => {
         return {
-          id: book.id,
+          volumeId: book.id,
           title: book.volumeInfo.title,
           image: book.volumeInfo.imageLinks?.thumbnail,
           author: book.volumeInfo.authors?.[0],
@@ -53,7 +53,8 @@ export const RecommendedBooks: React.FC<Props> = ({ genre }) => {
                 // if last child, add marginRight
                 i === 5 && { marginRight: 20 },
               ]}
-              key={i}></View>
+              key={i}
+            />
           ))}
         </ScrollView>
       )}

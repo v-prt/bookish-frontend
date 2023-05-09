@@ -75,7 +75,7 @@ export const Search: React.FC<Props> = ({}) => {
       const filteredBooks = books.filter(book => book.id === id)
       const book = filteredBooks[0]
       return {
-        id: book.id,
+        volumeId: book.id,
         title: book.volumeInfo.title,
         image: book.volumeInfo.imageLinks?.thumbnail,
         author: book.volumeInfo.authors?.[0],
@@ -207,9 +207,9 @@ export const Search: React.FC<Props> = ({}) => {
             ) : (
               <ScrollView keyboardDismissMode='on-drag'>
                 <View style={styles.genres}>
-                  {genres.map(genre => (
+                  {genres.map((genre, i) => (
                     <GenreButton
-                      key={genre.label}
+                      key={i}
                       label={genre.label}
                       image={genre.image}
                       onPress={() => {

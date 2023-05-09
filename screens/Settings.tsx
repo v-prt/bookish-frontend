@@ -259,9 +259,9 @@ export const Settings: React.FC<Props> = ({ navigation }) => {
                       style={styles.genreList}
                       showsVerticalScrollIndicator={false}
                       contentContainerStyle={{ paddingBottom: 10 }}>
-                      {genres.map(genre => (
+                      {genres.map((genre, i) => (
                         <Pressable
-                          key={genre}
+                          key={i}
                           onPress={() => {
                             if (
                               values.faveGenres.length === 6 &&

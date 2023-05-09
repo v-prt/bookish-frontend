@@ -1,3 +1,3 @@
 export type RootStackParamList = {
-  BookDetails: { id: string }
+  BookDetails: { volumeId: string }
 }

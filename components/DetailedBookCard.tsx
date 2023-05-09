@@ -15,7 +15,7 @@ export const DetailedBookCard: React.FC<Props> = ({ book }) => {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
 
   const handlePress = () => {
-    navigation.navigate('BookDetails', { id: book.id })
+    navigation.navigate('BookDetails', { volumeId: book.volumeId })
   }
 
   return (

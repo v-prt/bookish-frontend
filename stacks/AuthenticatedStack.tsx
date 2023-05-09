@@ -111,6 +111,44 @@ const SearchStack = () => {
   )
 }
 
+const LibraryStack = () => {
+  return (
+    <Stack.Navigator screenOptions={screenOptions}>
+      <Stack.Screen
+        name='Library'
+        component={Library}
+        options={{
+          headerTitle: () => <Text style={styles.headerTitle}>My Library</Text>,
+        }}
+      />
+      <Stack.Screen
+        name='BookDetails'
+        component={BookDetails}
+        options={{
+          title: '',
+        }}
+      />
+      <Stack.Screen
+        name='ManageBook'
+        component={ManageBook}
+        options={({ navigation }) => ({
+          title: 'Manage Book',
+          presentation: 'modal',
+          headerLeft: () => (
+            <IconButton
+              icon='close'
+              color={COLORS.primary600}
+              onPress={() => {
+                navigation.goBack()
+              }}
+            />
+          ),
+        })}
+      />
+    </Stack.Navigator>
+  )
+}
+
 const ProfileStack = () => {
   return (
     <Stack.Navigator screenOptions={screenOptions}>
@@ -166,10 +204,10 @@ export const AuthenticatedStack: React.FC = () => {
         }}
       />
       <Tab.Screen
-        name='Library'
-        component={Library}
+        name='LibraryStack'
+        component={LibraryStack}
         options={{
-          headerTitle: () => <Text style={styles.headerTitle}>My Library</Text>,
+          headerShown: false,
           tabBarIcon: ({ focused }) => (
             <Image source={libraryIcon} style={[styles.tabIcon, focused && styles.tabFocused]} />
           ),

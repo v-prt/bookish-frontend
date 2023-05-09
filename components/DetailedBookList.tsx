@@ -13,7 +13,7 @@ export const DetailedBookList: React.FC<Props> = ({ books, infiniteScroll, isLoa
   return (
     <FlatList
       data={books}
-      keyExtractor={book => book.id}
+      keyExtractor={book => book.volumeId}
       renderItem={({ item }) => <DetailedBookCard book={item} />}
       contentContainerStyle={{ paddingBottom: 10 }}
       onEndReachedThreshold={0.5}

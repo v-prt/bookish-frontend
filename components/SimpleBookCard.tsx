@@ -14,7 +14,7 @@ export const SimpleBookCard: React.FC<Props> = ({ book, lastChild }) => {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
 
   const handlePress = () => {
-    navigation.navigate('BookDetails', { id: book.id })
+    navigation.navigate('BookDetails', { volumeId: book.volumeId })
   }
 
   return (
@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
   },
   image: {
     borderRadius: 10,
-    height: 150,
+    height: 170,
     aspectRatio: 2 / 3,
   },
 })

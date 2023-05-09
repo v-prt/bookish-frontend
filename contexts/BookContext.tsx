@@ -14,7 +14,6 @@ export const BookProvider: FC<Props> = ({ children }) => {
   const queryClient = useQueryClient()
 
   const fetchBook = async (userId: string, volumeId: string) => {
-    console.log(userId, volumeId)
     const { data } = await axios.get(`${API_URL}/books/${userId}/${volumeId}`)
     return data.book
   }

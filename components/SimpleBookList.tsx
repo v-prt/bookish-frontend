@@ -1,7 +1,6 @@
 import { StyleSheet, ScrollView } from 'react-native'
 import { SimpleBookCard } from './SimpleBookCard'
 import { Book } from '../Interfaces'
-import { COLORS } from '../GlobalStyles'
 
 interface Props {
   books: Book[]
@@ -10,12 +9,12 @@ interface Props {
 export const SimpleBookList: React.FC<Props> = ({ books }) => {
   return (
     <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.wrapper}>
-      {books.map(book => (
+      {books.map((book, i) => (
         <SimpleBookCard
-          key={book.id}
+          key={i}
           book={book}
           // if book is last in list, pass true to lastChild prop to add margin to right side
-          lastChild={book.id === books[books.length - 1].id ? true : false}
+          lastChild={i === books.length - 1}
         />
       ))}
     </ScrollView>
