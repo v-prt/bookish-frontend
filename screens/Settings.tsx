@@ -50,14 +50,13 @@ export const Settings: React.FC<Props> = ({ navigation }) => {
     'Children',
     'Classics',
     'Comics',
-    'Contemporary',
     'Crime',
     'Drama',
     'Fantasy',
     'Fiction',
-    'Historical Fiction',
+    'History',
     'Horror',
-    'Humor and Comedy',
+    'Humor',
     'Manga',
     'Memoir',
     'Music',
@@ -70,8 +69,7 @@ export const Settings: React.FC<Props> = ({ navigation }) => {
     'Religion',
     'Romance',
     'Science',
-    'Science Fiction',
-    'Self Help',
+    'Sci-Fi',
     'Suspense',
     'Spirituality',
     'Sports',
@@ -223,7 +221,7 @@ export const Settings: React.FC<Props> = ({ navigation }) => {
 
       {/* FAVE GENRE SELECTION */}
       <View style={styles.section}>
-        <Text style={styles.sectionLabel}>Edit Favorite Genres...</Text>
+        <Text style={styles.sectionLabel}>Favorite Genres</Text>
         <Pressable onPress={() => setGenreModalVisible(true)}>
           <MaterialIcons name='edit' size={24} color={COLORS.primary600} />
         </Pressable>
@@ -238,7 +236,7 @@ export const Settings: React.FC<Props> = ({ navigation }) => {
             {({ handleSubmit, values, setValues, isSubmitting, status }) => (
               <View style={styles.modalInner}>
                 <View style={styles.modalHeader}>
-                  <Text style={styles.modalTitle}>Edit Favorite Genres</Text>
+                  <Text style={styles.modalTitle}>Favorite Genres</Text>
                   <IconButton
                     icon='close'
                     color={COLORS.primary600}
@@ -328,7 +326,7 @@ export const Settings: React.FC<Props> = ({ navigation }) => {
 
       {/* CHANGE PASSWORD */}
       <View style={styles.section}>
-        <Text style={styles.sectionLabel}>Change Password...</Text>
+        <Text style={styles.sectionLabel}>Password</Text>
         <Pressable onPress={() => setPasswordModalVisible(true)}>
           <MaterialIcons name='edit' size={24} color={COLORS.primary600} />
         </Pressable>
@@ -461,12 +459,12 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   buttonText: {
-    fontFamily: 'Heebo-Bold',
+    fontFamily: 'RobotoMono-Bold',
     color: COLORS.primary600,
     fontSize: 16,
   },
   dangerButtonText: {
-    fontFamily: 'Heebo-Bold',
+    fontFamily: 'RobotoMono-Bold',
     color: COLORS.error,
     fontSize: 16,
   },
@@ -481,7 +479,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   flatButtonText: {
-    fontFamily: 'Heebo-Regular',
+    fontFamily: 'RobotoMono-Regular',
     fontSize: 16,
     color: COLORS.primary300,
   },
@@ -502,7 +500,7 @@ const styles = StyleSheet.create({
     borderColor: COLORS.error,
   },
   sectionLabel: {
-    fontFamily: 'Heebo-Bold',
+    fontFamily: 'RobotoMono-Bold',
     fontSize: 16,
     color: COLORS.primary600,
   },
@@ -521,7 +519,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   modalTitle: {
-    fontFamily: 'Heebo-Bold',
+    fontFamily: 'RobotoMono-Bold',
     fontSize: 20,
     color: COLORS.accentDark,
   },
@@ -529,6 +527,8 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   confirmationText: {
+    fontFamily: 'RobotoMono-Regular',
+    color: COLORS.primary800,
     marginVertical: 30,
     fontSize: 18,
   },
@@ -557,7 +557,7 @@ const styles = StyleSheet.create({
     borderColor: COLORS.accentDark,
   },
   genreItemText: {
-    fontFamily: 'Heebo-Regular',
+    fontFamily: 'RobotoMono-Regular',
     fontSize: 16,
     color: COLORS.primary600,
   },

@@ -58,12 +58,12 @@ const styles = StyleSheet.create({
   },
   title: {
     color: COLORS.primary900,
-    fontFamily: 'Prata-Regular',
+    fontFamily: 'RobotoMono-Bold',
     fontSize: 16,
   },
   author: {
     color: COLORS.primary500,
-    fontFamily: 'Heebo-Regular',
+    fontFamily: 'RobotoMono-Regular',
     fontSize: 14,
   },
   ratingContainer: {
@@ -72,12 +72,12 @@ const styles = StyleSheet.create({
     gap: 3,
   },
   rating: {
-    fontFamily: 'Heebo-Bold',
+    fontFamily: 'RobotoMono-Bold',
     color: COLORS.primary600,
   },
   ratingsCount: {
     color: COLORS.primary500,
-    fontFamily: 'Heebo-Regular',
+    fontFamily: 'RobotoMono-Regular',
     fontSize: 14,
   },
 })

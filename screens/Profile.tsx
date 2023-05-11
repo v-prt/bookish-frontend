@@ -53,12 +53,12 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   name: {
-    fontFamily: 'Prata-Regular',
+    fontFamily: 'RobotoMono-Medium',
     fontSize: 22,
     color: COLORS.accentLight,
   },
   dateJoined: {
-    fontFamily: 'Heebo-Regular',
+    fontFamily: 'RobotoMono-Regular',
     fontSize: 14,
     color: COLORS.grey,
   },
@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   headerText: {
-    fontFamily: 'Heebo-Bold',
+    fontFamily: 'RobotoMono-Bold',
     fontSize: 20,
     color: COLORS.accentDark,
     marginBottom: 8,
@@ -91,11 +91,11 @@ const styles = StyleSheet.create({
   },
   genreLabel: {
     color: COLORS.primary800,
-    fontFamily: 'Heebo-Regular',
+    fontFamily: 'RobotoMono-Regular',
     fontSize: 14,
   },
   infoText: {
-    fontFamily: 'Heebo-Regular',
+    fontFamily: 'RobotoMono-Regular',
     fontSize: 16,
     color: COLORS.grey,
   },

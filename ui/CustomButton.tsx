@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
   },
 
   text: {
-    fontFamily: 'Heebo-Bold',
+    fontFamily: 'RobotoMono-Bold',
     fontSize: 16,
     textTransform: 'uppercase',
     letterSpacing: 1,

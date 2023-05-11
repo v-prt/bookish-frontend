@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from 'react'
+import { useEffect, useState, useContext, memo } from 'react'
 import {
   StyleSheet,
   View,
@@ -33,7 +33,6 @@ export const BookDetails: React.FC<Props> = ({
   const { userData, userId } = useContext(UserContext)
   const { fetchBook } = useContext(BookContext)
   const [book, setBook] = useState<any>(null)
-  const { width } = useWindowDimensions()
   const [genres, setGenres] = useState<string | null>(null)
 
   const { data: googleBookData, status: googleBookStatus } = useQuery(
@@ -66,8 +65,8 @@ export const BookDetails: React.FC<Props> = ({
         ...new Set(book.categories.map((string: string) => string.split(' / ')).flat()),
       ] as string[]
 
-      // create a text string with all categories separated by a bullet
-      let text = cats.map((string: string) => string).join(' • ') as string
+      // create a text string with all categories separated by a comma
+      let text = cats.map((string: string) => string).join(', ') as string
 
       setGenres(text)
     }
@@ -89,6 +88,26 @@ export const BookDetails: React.FC<Props> = ({
     }
     return stars
   }
+
+  const DescriptionDisplay = memo(function DescriptionDisplay() {
+    // using memo to prevent re-rendering unnecessarily (warning occurs from RenderHtml)
+    const { width: contentWidth } = useWindowDimensions()
+    const baseStyle = {
+      fontFamily: 'RobotoMono-Regular',
+      fontSize: 14,
+      color: COLORS.primary700,
+      marginBottom: 10,
+    }
+    const systemFonts = ['RobotoMono-Regular']
+    return (
+      <RenderHtml
+        contentWidth={contentWidth}
+        source={{ html: book.description }}
+        baseStyle={baseStyle}
+        systemFonts={systemFonts}
+      />
+    )
+  })
 
   return (
     <View style={styles.screen}>
@@ -204,7 +223,7 @@ export const BookDetails: React.FC<Props> = ({
             <Text style={styles.headerText}>Description</Text>
             <View style={styles.divider} />
             <View style={styles.description}>
-              <RenderHtml contentWidth={width} source={{ html: book.description }} />
+              <DescriptionDisplay />
             </View>
 
             <Text style={styles.headerText}>Details</Text>
@@ -265,19 +284,18 @@ const styles = StyleSheet.create({
   },
   title: {
     color: COLORS.accentDark,
-    fontFamily: 'Prata-Regular',
-    fontSize: 18,
-    fontWeight: 'bold',
+    fontFamily: 'RobotoMono-Bold',
+    fontSize: 20,
   },
   subtitle: {
     color: COLORS.accentDark,
     fontSize: 16,
-    fontStyle: 'italic',
+    fontFamily: 'RobotoMono-Italic',
   },
   author: {
-    fontFamily: 'Heebo-Regular',
+    fontFamily: 'RobotoMono-Regular',
     color: COLORS.primary600,
-    fontSize: 18,
+    fontSize: 17,
     marginTop: 5,
   },
   ratings: {
@@ -294,21 +312,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   ratingValue: {
-    fontFamily: 'Heebo-Bold',
+    fontFamily: 'RobotoMono-Bold',
     color: COLORS.primary600,
     fontSize: 22,
     height: 24,
   },
   ratingsSublabel: {
     color: COLORS.primary500,
-    fontFamily: 'Heebo-Regular',
+    fontFamily: 'RobotoMono-Regular',
     fontSize: 14,
   },
   details: {
     padding: 20,
   },
   headerText: {
-    fontFamily: 'Heebo-Bold',
+    fontFamily: 'RobotoMono-Bold',
     fontSize: 20,
     color: COLORS.accentDark,
     marginBottom: 8,
@@ -324,13 +342,14 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   detailsText: {
-    fontFamily: 'Heebo-Regular',
+    fontFamily: 'RobotoMono-Regular',
     fontSize: 16,
     color: COLORS.primary700,
     marginBottom: 10,
   },
   label: {
-    fontFamily: 'Heebo-Bold',
+    fontFamily: 'RobotoMono-Bold',
+    fontSize: 16,
   },
   actions: {
     backgroundColor: COLORS.white,
@@ -357,7 +376,7 @@ const styles = StyleSheet.create({
     borderColor: COLORS.accentLight,
   },
   actionText: {
-    fontFamily: 'Heebo-Bold',
+    fontFamily: 'RobotoMono-Bold',
     fontSize: 16,
   },
   primaryActionText: {
@@ -381,7 +400,7 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   name: {
-    fontFamily: 'Heebo-Bold',
+    fontFamily: 'RobotoMono-Bold',
     fontSize: 16,
     color: COLORS.accentLight,
   },
@@ -391,13 +410,13 @@ const styles = StyleSheet.create({
     gap: 3,
   },
   reviewDate: {
-    fontFamily: 'Heebo-Regular',
+    fontFamily: 'RobotoMono-Regular',
     fontSize: 14,
     color: COLORS.primary500,
     marginBottom: 8,
   },
   reviewText: {
-    fontFamily: 'Heebo-Regular',
+    fontFamily: 'RobotoMono-Regular',
     fontSize: 16,
     color: COLORS.primary700,
   },

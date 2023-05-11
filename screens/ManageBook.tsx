@@ -257,7 +257,7 @@ const styles = StyleSheet.create({
     borderColor: COLORS.accentDark,
   },
   optionText: {
-    fontFamily: 'Heebo-Regular',
+    fontFamily: 'RobotoMono-Regular',
     fontSize: 16,
     color: COLORS.primary600,
   },
@@ -279,7 +279,7 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   labelText: {
-    fontFamily: 'Heebo-Bold',
+    fontFamily: 'RobotoMono-Bold',
     fontSize: 16,
     color: COLORS.primary600,
   },

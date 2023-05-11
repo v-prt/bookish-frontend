@@ -52,31 +52,30 @@ const styles = StyleSheet.create({
   },
   logo: {
     color: COLORS.accentDark,
-    fontFamily: 'Prata-Regular',
-    fontSize: 70,
+    fontFamily: 'RobotoMono-Bold',
+    fontSize: 60,
   },
   italic: {
-    fontFamily: 'CormorantGaramond-LightItalic',
-    fontSize: 90,
+    fontFamily: 'RobotoMono-Italic',
   },
   subtitle: {
-    color: COLORS.primary800,
-    fontFamily: 'Prata-Regular',
-    fontSize: 20,
+    color: COLORS.accentDark,
+    fontFamily: 'RobotoMono-Regular',
+    fontSize: 16,
   },
   buttons: {
     width: '100%',
     gap: 20,
   },
   terms: {
-    width: 250,
+    width: '85%',
     color: COLORS.primary700,
-    fontFamily: 'Heebo-Regular',
+    fontFamily: 'RobotoMono-Regular',
     fontSize: 14,
     marginTop: 20,
     textAlign: 'center',
   },
   bold: {
-    fontFamily: 'Heebo-Bold',
+    fontFamily: 'RobotoMono-Bold',
   },
 })

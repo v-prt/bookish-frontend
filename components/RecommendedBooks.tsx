@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
     marginLeft: 20,
   },
   label: {
-    fontFamily: 'Prata-Regular',
+    fontFamily: 'RobotoMono-Regular',
     fontSize: 18,
     color: COLORS.primary900,
     marginHorizontal: 20,

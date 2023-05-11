@@ -155,12 +155,12 @@ export const styles = StyleSheet.create({
   },
   logo: {
     color: COLORS.accentDark,
-    fontFamily: 'Prata-Regular',
+    fontFamily: 'RobotoMono-Bold',
     fontSize: 50,
+    marginBottom: 20,
   },
   italic: {
-    fontFamily: 'CormorantGaramond-LightItalic',
-    fontSize: 65,
+    fontFamily: 'RobotoMono-Italic',
   },
   formRow: {
     flexDirection: 'row',

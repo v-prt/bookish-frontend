@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     color: COLORS.primary900,
     marginBottom: 5,
     fontSize: 16,
-    fontFamily: 'Heebo-Bold',
+    fontFamily: 'RobotoMono-Bold',
     opacity: 0.7,
   },
   sublabel: {

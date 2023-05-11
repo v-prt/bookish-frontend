@@ -23,7 +23,7 @@ export const COLORS = {
 // app-wide font / text style
 export const customTextProps = {
   style: {
-    fontFamily: 'Heebo-Regular',
-    color: COLORS.black,
+    fontFamily: 'RobotoMono-Regular',
+    color: COLORS.primary700,
   },
 }

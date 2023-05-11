@@ -42,7 +42,8 @@ const HomeStack = () => {
         name='Home'
         component={Home}
         options={{
-          headerTitle: () => <Text style={styles.logo}>bookish</Text>,
+          headerShown: false,
+          // headerTitle: () => <Text style={styles.logo}>bookish</Text>,
         }}
       />
       <Stack.Screen
@@ -229,13 +230,13 @@ export const AuthenticatedStack: React.FC = () => {
 
 const styles = StyleSheet.create({
   logo: {
-    fontFamily: 'Prata-Regular',
+    fontFamily: 'RobotoMono-Bold',
     fontSize: 26,
     color: COLORS.accentDark,
   },
   headerTitle: {
     fontSize: 18,
-    fontFamily: 'Heebo-Bold',
+    fontFamily: 'RobotoMono-Bold',
     color: COLORS.primary700,
   },
   tabIcon: {

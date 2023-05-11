@@ -2,16 +2,10 @@ import * as Font from 'expo-font'
 
 export const useFonts = async () => {
   await Font.loadAsync({
-    // LOGO / HEADER TEXT
-    'Prata-Regular': require('../assets/fonts/Prata-Regular.ttf'),
-
-    // STYLIZED LOGO TEXT
-    'CormorantGaramond-LightItalic': require('../assets/fonts/CormorantGaramond-LightItalic.ttf'),
-
-    // SUBHEADER / BODY / BUTTON TEXT
-    'Heebo-Regular': require('../assets/fonts/Heebo-Regular.ttf'),
-    'Heebo-Bold': require('../assets/fonts/Heebo-Bold.ttf'),
-    'FragmentMono-Regular': require('../assets/fonts/FragmentMono-Regular.ttf'),
-    'FragmentMono-Italic': require('../assets/fonts/FragmentMono-Italic.ttf'),
+    'RobotoMono-Italic': require('../assets/fonts/RobotoMono-Italic.ttf'),
+    'RobotoMono-Light': require('../assets/fonts/RobotoMono-Light.ttf'),
+    'RobotoMono-Regular': require('../assets/fonts/RobotoMono-Regular.ttf'),
+    'RobotoMono-Medium': require('../assets/fonts/RobotoMono-Medium.ttf'),
+    'RobotoMono-Bold': require('../assets/fonts/RobotoMono-Bold.ttf'),
   })
 }

@@ -41,8 +41,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   text: {
-    fontFamily: 'Prata-Regular',
+    fontFamily: 'RobotoMono-Bold',
     color: COLORS.white,
-    fontSize: 18,
+    fontSize: 20,
   },
 })

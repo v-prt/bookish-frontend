@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   headerText: {
-    fontFamily: 'Heebo-Bold',
+    fontFamily: 'RobotoMono-Bold',
     fontSize: 20,
     color: COLORS.accentDark,
     marginTop: 20,
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
     opacity: 0.6,
   },
   infoText: {
-    fontFamily: 'Heebo-Regular',
+    fontFamily: 'RobotoMono-Regular',
     fontSize: 16,
     color: COLORS.primary600,
     marginBottom: 16,

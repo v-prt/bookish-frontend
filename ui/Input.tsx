@@ -38,6 +38,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   input: {
+    fontFamily: 'RobotoMono-Regular',
     color: COLORS.primary900,
     fontSize: 16,
     opacity: 0.9,

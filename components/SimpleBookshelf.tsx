@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     paddingBottom: 8,
   },
   headerText: {
-    fontFamily: 'Prata-Regular',
+    fontFamily: 'RobotoMono-Regular',
     fontSize: 18,
     color: COLORS.primary900,
   },
@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
     marginLeft: 20,
   },
   infoText: {
-    fontFamily: 'Heebo-Regular',
+    fontFamily: 'RobotoMono-Regular',
     fontSize: 16,
     color: COLORS.grey,
     marginHorizontal: 20,
@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
     opacity: 0.6,
   },
   totalResults: {
-    fontFamily: 'Heebo-Bold',
+    fontFamily: 'RobotoMono-Bold',
     fontSize: 16,
     color: COLORS.accentLight,
     marginLeft: 10,

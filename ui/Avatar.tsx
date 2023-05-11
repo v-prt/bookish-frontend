@@ -8,8 +8,8 @@ interface Props {
 
 export const Avatar: React.FC<Props> = ({ initials, size }) => {
   // TODO: cute animal icons (allow user to choose one)
-  const wrapperStyle = size === 'small' ? { padding: 10 } : { padding: 20 }
-  const textStyle = size === 'small' ? { fontSize: 12 } : { fontSize: 20 }
+  const wrapperStyle = size === 'small' ? { padding: 8 } : { padding: 15 }
+  const textStyle = size === 'small' ? { fontSize: 16 } : { fontSize: 22 }
 
   return (
     <View style={[styles.wrapper, wrapperStyle]}>
@@ -20,15 +20,15 @@ export const Avatar: React.FC<Props> = ({ initials, size }) => {
 
 const styles = StyleSheet.create({
   wrapper: {
-    backgroundColor: COLORS.primary200,
-    borderWidth: 1,
-    borderColor: COLORS.primary500,
+    backgroundColor: COLORS.accentLight,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 50,
+    opacity: 0.5,
+    aspectRatio: 1,
   },
   text: {
-    color: COLORS.primary600,
-    fontFamily: 'Prata-Regular',
+    color: COLORS.white,
+    fontFamily: 'RobotoMono-Bold',
   },
 })
