@@ -5,7 +5,7 @@ import { COLORS } from '../GlobalStyles'
 import { Book } from '../Interfaces'
 import { RootStackParamList } from '../Types'
 import { MaterialIcons } from '@expo/vector-icons'
-import { ImageLoader } from './ImageLoader'
+import { ImageLoader } from '../ui/ImageLoader'
 
 interface Props {
   book: Book

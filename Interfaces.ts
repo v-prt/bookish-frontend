@@ -1,4 +1,5 @@
 export interface Book {
+  // google books api data
   volumeId: string
   title: string
   author: string
@@ -6,6 +7,8 @@ export interface Book {
   ratingsCount: number
   pagesCount: number
   image: string
-  isbn: string
-  isbn13: string
+
+  // custom data
+  owned: boolean
+  bookshelf: string
 }

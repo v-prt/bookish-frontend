@@ -3,7 +3,7 @@ import { ScrollView, Pressable, View, Text, StyleSheet, ActivityIndicator } from
 import { UserContext } from '../contexts/UserContext'
 import { BookContext } from '../contexts/BookContext'
 import { useQuery } from 'react-query'
-import { SimpleBookList } from '../components/SimpleBookList'
+import { SimpleBookList } from './SimpleBookList'
 import { COLORS } from '../GlobalStyles'
 import { MaterialIcons } from '@expo/vector-icons'
 import * as Haptics from 'expo-haptics'
@@ -15,7 +15,7 @@ interface Props {
   }
 }
 
-export const Bookshelf: FC<Props> = ({ bookshelf }) => {
+export const SimpleBookshelf: FC<Props> = ({ bookshelf }) => {
   const { userId } = useContext(UserContext)
   const { fetchBookshelf } = useContext(BookContext)
 

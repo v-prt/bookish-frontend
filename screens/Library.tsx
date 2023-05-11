@@ -1,7 +1,7 @@
 import { FC } from 'react'
 import { StyleSheet, ScrollView } from 'react-native'
 import { COLORS } from '../GlobalStyles'
-import { Bookshelf } from '../components/Bookshelf'
+import { SimpleBookshelf } from '../components/SimpleBookshelf'
 
 export const Library: FC = () => {
   const bookshelves = [
@@ -17,7 +17,7 @@ export const Library: FC = () => {
         paddingBottom: 20,
       }}>
       {bookshelves.map((bookshelf: { title: string; id: string }, i: number) => (
-        <Bookshelf bookshelf={bookshelf} key={i} />
+        <SimpleBookshelf bookshelf={bookshelf} key={i} />
       ))}
     </ScrollView>
   )

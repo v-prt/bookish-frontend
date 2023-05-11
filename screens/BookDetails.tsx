@@ -14,9 +14,9 @@ import { BookContext } from '../contexts/BookContext'
 import { COLORS } from '../GlobalStyles'
 import RenderHtml from 'react-native-render-html'
 import { MaterialIcons } from '@expo/vector-icons'
-import { ImageLoader } from '../components/ImageLoader'
+import { ImageLoader } from '../ui/ImageLoader'
 import moment from 'moment'
-import { Avatar } from '../components/Avatar'
+import { Avatar } from '../ui/Avatar'
 import { IconButton } from '../ui/IconButton'
 
 interface Props {

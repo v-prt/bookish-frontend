@@ -2,7 +2,7 @@ import { useContext } from 'react'
 import { StyleSheet, ScrollView, View, Text } from 'react-native'
 import { UserContext } from '../contexts/UserContext'
 import { COLORS } from '../GlobalStyles'
-import { Avatar } from '../components/Avatar'
+import { Avatar } from '../ui/Avatar'
 import moment from 'moment'
 
 export const Profile: React.FC = () => {

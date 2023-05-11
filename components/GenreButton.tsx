@@ -1,7 +1,6 @@
-import { ImageBackground, View, Pressable, StyleSheet } from 'react-native'
-import { SerifText } from '../ui/SerifText'
+import { View, Pressable, StyleSheet, Text } from 'react-native'
 import { COLORS } from '../GlobalStyles'
-import { ImageLoader } from './ImageLoader'
+import { ImageLoader } from '../ui/ImageLoader'
 
 interface Props {
   label: string
@@ -16,7 +15,7 @@ export const GenreButton: React.FC<Props> = ({ label, image, onPress }) => {
         <ImageLoader source={image} borderRadius={10} />
       </View>
       <View style={styles.textContainer}>
-        <SerifText style={styles.text}>{label}</SerifText>
+        <Text style={styles.text}>{label}</Text>
       </View>
     </Pressable>
   )
@@ -42,6 +41,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   text: {
+    fontFamily: 'Prata-Regular',
     color: COLORS.white,
     fontSize: 18,
   },
