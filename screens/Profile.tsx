@@ -1,12 +1,50 @@
-import { useContext } from 'react'
+import { FC, useContext, useEffect, useState } from 'react'
 import { StyleSheet, ScrollView, View, Text } from 'react-native'
 import { UserContext } from '../contexts/UserContext'
 import { COLORS } from '../GlobalStyles'
 import { Avatar } from '../ui/Avatar'
 import moment from 'moment'
+import axios from 'axios'
+import { IconButton } from '../ui/IconButton'
 
-export const Profile: React.FC = () => {
+interface Props {
+  navigation: any
+}
+
+export const Profile: FC<Props> = ({ navigation }) => {
   const { userData } = useContext(UserContext)
+  const books = userData.books
+  const numOwned = books?.filter((book: any) => book.owned).length
+  const numWantToRead = books?.filter((book: any) => book.bookshelf === 'Want to read').length
+  const numRead = books?.filter((book: any) => book.bookshelf === 'Read').length
+  const [currentlyReading, setCurrentlyReading] = useState<any>(null)
+
+  const setBooksReading = async (books: any[]) => {
+    const data = await Promise.all(
+      books.map(async book => {
+        const { data } = await axios.get(
+          `https://www.googleapis.com/books/v1/volumes/${book.volumeId}`
+        )
+        return {
+          title: data.volumeInfo.title,
+          image: data.volumeInfo.imageLinks?.thumbnail,
+          author: data.volumeInfo.authors?.[0],
+          averageRating: data.volumeInfo.averageRating,
+          ratingsCount: data.volumeInfo.ratingsCount,
+          ...book,
+        }
+      })
+    )
+    setCurrentlyReading(data)
+  }
+
+  useEffect(() => {
+    const reading = books?.filter((book: any) => book.bookshelf === 'Currently reading')
+
+    if (reading.length) {
+      setBooksReading(reading)
+    }
+  }, [userData])
 
   return (
     <ScrollView style={styles.screen}>
@@ -18,9 +56,43 @@ export const Profile: React.FC = () => {
           </Text>
           <Text style={styles.dateJoined}>Joined {moment(userData.joined).format('ll')}</Text>
         </View>
+        <View style={styles.settingsBtn}>
+          <IconButton
+            icon='settings'
+            color={COLORS.primary600}
+            onPress={() => {
+              navigation.navigate('Settings')
+            }}
+          />
+        </View>
       </View>
-      {/* TODO: overview of bookshelves, ratings, reading activity, etc. ? */}
+      {/* TODO: ratings, reading activity, etc. ? */}
       <View style={styles.profileWrapper}>
+        <Text style={styles.headerText}>Books</Text>
+        <View style={styles.divider} />
+        <View style={styles.bookshelvesContainer}>
+          {!!currentlyReading?.length && (
+            <Text style={styles.currentlyReadingText}>
+              Currently reading{' '}
+              <Text style={styles.currentlyReadingTitle}>"{currentlyReading?.[0].title}"</Text>{' '}
+              {currentlyReading?.length > 1 && `+ ${currentlyReading.length - 1} more`}
+            </Text>
+          )}
+
+          <View style={styles.bookshelfWrapper}>
+            <Text style={styles.bookshelfLabel}>Owned</Text>
+            <Text style={styles.bookshelfCount}>{numOwned}</Text>
+          </View>
+          <View style={styles.bookshelfWrapper}>
+            <Text style={styles.bookshelfLabel}>Want to read</Text>
+            <Text style={styles.bookshelfCount}>{numWantToRead}</Text>
+          </View>
+          <View style={styles.bookshelfWrapper}>
+            <Text style={styles.bookshelfLabel}>Read</Text>
+            <Text style={styles.bookshelfCount}>{numRead}</Text>
+          </View>
+        </View>
+
         <Text style={styles.headerText}>Favorite genres</Text>
         <View style={styles.divider} />
         {userData?.faveGenres?.length > 0 ? (
@@ -41,10 +113,11 @@ export const Profile: React.FC = () => {
 
 const styles = StyleSheet.create({
   screen: {
-    backgroundColor: COLORS.primary100,
+    backgroundColor: COLORS.primary300,
     flex: 1,
   },
   basicInfo: {
+    backgroundColor: COLORS.primary300,
     flexDirection: 'row',
     alignItems: 'center',
     padding: 20,
@@ -53,8 +126,8 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   name: {
-    fontFamily: 'RobotoMono-Medium',
-    fontSize: 22,
+    fontFamily: 'RobotoMono-Bold',
+    fontSize: 18,
     color: COLORS.accentLight,
   },
   dateJoined: {
@@ -62,8 +135,13 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: COLORS.grey,
   },
+  settingsBtn: {
+    marginLeft: 'auto',
+  },
   profileWrapper: {
+    backgroundColor: COLORS.primary100,
     padding: 20,
+    minHeight: '100%',
   },
   headerText: {
     fontFamily: 'RobotoMono-Bold',
@@ -77,6 +155,38 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.accentDark,
     marginBottom: 20,
     opacity: 0.6,
+  },
+  currentlyReadingText: {
+    fontFamily: 'RobotoMono-Italic',
+    fontSize: 16,
+    color: COLORS.grey,
+    marginBottom: 20,
+  },
+  currentlyReadingTitle: {
+    color: COLORS.accentDark,
+  },
+  bookshelvesContainer: {
+    marginBottom: 20,
+  },
+  bookshelfWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: COLORS.primary200,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    marginBottom: 10,
+  },
+  bookshelfLabel: {
+    fontFamily: 'RobotoMono-Regular',
+    fontSize: 16,
+    color: COLORS.primary900,
+  },
+  bookshelfCount: {
+    fontFamily: 'RobotoMono-Bold',
+    fontSize: 16,
+    color: COLORS.accentDark,
   },
   genresContainer: {
     flexDirection: 'row',

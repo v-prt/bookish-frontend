@@ -156,18 +156,9 @@ const ProfileStack = () => {
       <Stack.Screen
         name='Profile'
         component={Profile}
-        options={({ navigation }) => ({
-          headerTitle: () => <Text style={styles.headerTitle}>My Profile</Text>,
-          headerLeft: () => (
-            <IconButton
-              icon='settings'
-              color={COLORS.primary600}
-              onPress={() => {
-                navigation.navigate('Settings')
-              }}
-            />
-          ),
-        })}
+        options={{
+          headerShown: false,
+        }}
       />
       <Stack.Screen
         name='Settings'

@@ -20,6 +20,7 @@ export const BookProvider: FC<Props> = ({ children }) => {
 
   const addBook = async (book: any) => {
     const { data } = await axios.post(`${API_URL}/books`, book)
+    queryClient.invalidateQueries('user')
     queryClient.invalidateQueries('user-book')
     queryClient.invalidateQueries('currently-reading')
     queryClient.invalidateQueries('want-to-read')
@@ -29,6 +30,7 @@ export const BookProvider: FC<Props> = ({ children }) => {
 
   const updateBook = async (bookId: any, book: any) => {
     const { data } = await axios.put(`${API_URL}/books/${bookId}`, book)
+    queryClient.invalidateQueries('user')
     queryClient.invalidateQueries('user-book')
     queryClient.invalidateQueries('currently-reading')
     queryClient.invalidateQueries('want-to-read')
