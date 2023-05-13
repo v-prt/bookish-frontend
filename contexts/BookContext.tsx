@@ -12,30 +12,11 @@ interface Props {
 
 export const BookProvider: FC<Props> = ({ children }) => {
   const queryClient = useQueryClient()
+  const queryKeys = ['user', 'user-book', 'currently-reading', 'want-to-read', 'read']
 
   const fetchBook = async (userId: string, volumeId: string) => {
     const { data } = await axios.get(`${API_URL}/books/${userId}/${volumeId}`)
     return data.book
-  }
-
-  const addBook = async (book: any) => {
-    const { data } = await axios.post(`${API_URL}/books`, book)
-    queryClient.invalidateQueries('user')
-    queryClient.invalidateQueries('user-book')
-    queryClient.invalidateQueries('currently-reading')
-    queryClient.invalidateQueries('want-to-read')
-    queryClient.invalidateQueries('read')
-    return data.newBook
-  }
-
-  const updateBook = async (bookId: any, book: any) => {
-    const { data } = await axios.put(`${API_URL}/books/${bookId}`, book)
-    queryClient.invalidateQueries('user')
-    queryClient.invalidateQueries('user-book')
-    queryClient.invalidateQueries('currently-reading')
-    queryClient.invalidateQueries('want-to-read')
-    queryClient.invalidateQueries('read')
-    return data.updatedBook
   }
 
   const fetchBookshelf = async (userId: string, bookshelf: string) => {
@@ -45,18 +26,26 @@ export const BookProvider: FC<Props> = ({ children }) => {
     return data
   }
 
+  const addBook = async (book: any) => {
+    const { data } = await axios.post(`${API_URL}/books`, book)
+    queryKeys.forEach(key => queryClient.invalidateQueries(key))
+    return data.newBook
+  }
+
+  const updateBook = async (bookId: any, book: any) => {
+    const { data } = await axios.put(`${API_URL}/books/${bookId}`, book)
+    queryKeys.forEach(key => queryClient.invalidateQueries(key))
+    return data.updatedBook
+  }
+
   const deleteBook = async (bookId: string) => {
     const { data } = await axios.delete(`${API_URL}/books/${bookId}`)
-    queryClient.invalidateQueries('user')
-    queryClient.invalidateQueries('user-book')
-    queryClient.invalidateQueries('currently-reading')
-    queryClient.invalidateQueries('want-to-read')
-    queryClient.invalidateQueries('read')
+    queryKeys.forEach(key => queryClient.invalidateQueries(key))
     return data
   }
 
   return (
-    <BookContext.Provider value={{ fetchBook, addBook, updateBook, fetchBookshelf, deleteBook }}>
+    <BookContext.Provider value={{ fetchBook, fetchBookshelf, addBook, updateBook, deleteBook }}>
       {children}
     </BookContext.Provider>
   )

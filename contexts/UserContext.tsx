@@ -41,7 +41,6 @@ export const UserProvider: React.FC<Props> = ({ children }) => {
     getToken()
   }, [])
 
-  // SIGNUP
   const handleSignup = async (
     firstName: string,
     lastName: string,
@@ -60,7 +59,6 @@ export const UserProvider: React.FC<Props> = ({ children }) => {
     }
   }
 
-  // LOGIN
   const handleLogin = async (email: string, password: string) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
     try {
@@ -98,8 +96,13 @@ export const UserProvider: React.FC<Props> = ({ children }) => {
     }
   }, [token])
 
-  // UPDATE CURRENT USER DATA
-  const updateUserData = async (data: any) => {
+  const handleLogout = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
+    deleteToken('bookishToken')
+    setUserId(null)
+  }
+
+  const updateUser = async (data: any) => {
     try {
       const res = await axios.put(`${API_URL}/users/${userId}`, data)
       queryClient.invalidateQueries('user')
@@ -109,11 +112,13 @@ export const UserProvider: React.FC<Props> = ({ children }) => {
     }
   }
 
-  // LOGOUT
-  const handleLogout = () => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
-    deleteToken('bookishToken')
-    setUserId(null)
+  const deleteAccount = async () => {
+    try {
+      await axios.delete(`${API_URL}/users/${userId}`)
+      return true
+    } catch (err: any) {
+      return { error: err.response.data.message }
+    }
   }
 
   return (
@@ -125,8 +130,9 @@ export const UserProvider: React.FC<Props> = ({ children }) => {
         userStatus,
         handleSignup,
         handleLogin,
-        updateUserData,
         handleLogout,
+        updateUser,
+        deleteAccount,
         authenticated: !!userId,
       }}>
       {children}

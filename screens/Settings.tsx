@@ -27,7 +27,7 @@ interface Props {
 }
 
 export const Settings: React.FC<Props> = ({ navigation }) => {
-  const { userData, updateUserData, handleLogout, handleDeleteAccount } = useContext(UserContext)
+  const { userData, updateUser, handleLogout, deleteAccount } = useContext(UserContext)
 
   const [genreModalVisible, setGenreModalVisible] = useState(false)
   const [passwordModalVisible, setPasswordModalVisible] = useState(false)
@@ -35,6 +35,7 @@ export const Settings: React.FC<Props> = ({ navigation }) => {
 
   const [currentPasswordVisible, setCurrentPasswordVisible] = useState(false)
   const [newPasswordVisible, setNewPasswordVisible] = useState(false)
+  const [isDeleting, setIsDeleting] = useState(false)
 
   useEffect(() => {
     navigation.setOptions({
@@ -120,7 +121,7 @@ export const Settings: React.FC<Props> = ({ navigation }) => {
   const handleAccountUpdate = async (values: any, { setStatus }: any) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
     setStatus(undefined)
-    const result = await updateUserData(values)
+    const result = await updateUser(values)
     if (result.error) {
       setStatus(result.error)
     } else {
@@ -131,7 +132,7 @@ export const Settings: React.FC<Props> = ({ navigation }) => {
   const handleGenresUpdate = async (values: any, { setStatus }: any) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
     setStatus(undefined)
-    const result = await updateUserData(values)
+    const result = await updateUser(values)
     if (result.error) {
       setStatus(result.error)
     } else {
@@ -140,16 +141,37 @@ export const Settings: React.FC<Props> = ({ navigation }) => {
     }
   }
 
-  // TODO: test changing password
   const handlePasswordUpdate = async (values: any, { setStatus }: any) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
     setStatus(undefined)
-    const result = await updateUserData(values)
+    const result = await updateUser(values)
     if (result.error) {
       setStatus(result.error)
     } else {
       Alert.alert('Success', 'Your password has been changed')
       setPasswordModalVisible(false)
+    }
+  }
+
+  const handleDeleteAccount = async () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
+    setIsDeleting(true)
+    const result = await deleteAccount()
+    if (result?.error) {
+      Alert.alert('Error', result.error)
+      setIsDeleting(false)
+    } else {
+      setIsDeleting(false)
+      Alert.alert('Success', 'Your account has been deleted', [
+        {
+          text: 'OK',
+          onPress: () => {
+            // FIXME: welcome screen shows twice upon logout
+            setDeleteAccountModalVisible(false)
+            handleLogout()
+          },
+        },
+      ])
     }
   }
   // #endregion Functions
@@ -438,7 +460,12 @@ export const Settings: React.FC<Props> = ({ navigation }) => {
             </Text>
             <View style={styles.buttons}>
               {/* TODO: test deleting account */}
-              <CustomButton type='primary' label='Delete' onPress={handleDeleteAccount} />
+              <CustomButton
+                type='primary'
+                label='Delete'
+                onPress={handleDeleteAccount}
+                loading={isDeleting}
+              />
               <CustomButton
                 type='secondary'
                 label='Cancel'

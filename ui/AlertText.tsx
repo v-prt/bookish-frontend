@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontFamily: 'RobotoMono-Bold',
-    fontSize: '18px',
+    fontSize: 18,
     marginBottom: 5,
   },
 })
