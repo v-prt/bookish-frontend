@@ -59,6 +59,10 @@ Contributions are welcome! If you would like to contribute to Bookish, please fo
 
 Please ensure that your code adheres to the existing code style and includes appropriate tests.
 
+## Server Setup
+
+The server and API for Bookish is available in the [bookish-backend](https://github.com/v-prt/bookish-backend) repository. Make sure to set up the backend before running the frontend application.
+
 ## License
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
