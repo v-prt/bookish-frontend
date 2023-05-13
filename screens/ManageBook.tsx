@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react'
-import { StyleSheet, View, Text, Pressable, Alert } from 'react-native'
+import { StyleSheet, View, Text, Pressable, Alert, SafeAreaView, Modal } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { UserContext } from '../contexts/UserContext'
 import { BookContext } from '../contexts/BookContext'
@@ -14,6 +14,7 @@ import DateTimePicker from '@react-native-community/datetimepicker'
 import { RatingButtons } from '../components/RatingButtons'
 import * as Haptics from 'expo-haptics'
 import * as yup from 'yup'
+import { IconButton } from '../ui/IconButton'
 
 interface Props {
   route: any
@@ -27,7 +28,8 @@ export const ManageBook: React.FC<Props> = ({
   navigation,
 }) => {
   const { userId } = useContext(UserContext)
-  const { addBook, updateBook } = useContext(BookContext)
+  const { addBook, updateBook, deleteBook } = useContext(BookContext)
+  const [removeBookModalVisible, setRemoveBookModalVisible] = useState(false)
 
   const bookshelfOptions = ['Want to read', 'Currently reading', 'Read']
   const ownedOptions = [true, false]
@@ -41,9 +43,13 @@ export const ManageBook: React.FC<Props> = ({
 
   useEffect(() => {
     if (existingBook) {
-      navigation.setOptions({ title: 'Manage Book' })
+      navigation.setOptions({
+        headerTitle: () => <Text style={styles.headerTitle}>Manage Book</Text>,
+      })
     } else {
-      navigation.setOptions({ title: 'Add Book' })
+      navigation.setOptions({
+        headerTitle: () => <Text style={styles.headerTitle}>Add Book</Text>,
+      })
     }
   })
 
@@ -60,6 +66,7 @@ export const ManageBook: React.FC<Props> = ({
   const initialValues = existingBook
     ? {
         ...existingBook,
+        review: existingBook.review?.text,
       }
     : {
         volumeId,
@@ -95,21 +102,33 @@ export const ManageBook: React.FC<Props> = ({
     }
   }
 
+  const handleDeleteBook = async () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
+
+    try {
+      await deleteBook(existingBook._id)
+      setRemoveBookModalVisible(false)
+      navigation.goBack()
+    } catch (err) {
+      Alert.alert('Error', 'Something went wrong. Please try again later.')
+    }
+  }
+
   return (
-    <Formik
-      initialValues={initialValues}
-      validationSchema={validationSchema}
-      onSubmit={handleSubmit}>
-      {({ values, setFieldValue, status, submitForm, isSubmitting }) => (
-        <KeyboardAwareScrollView
-          style={styles.screen}
-          contentContainerStyle={{
-            paddingBottom: 40,
-          }}>
-          {status && (
-            <AlertText type='error' icon='error' title={`Couldn't save book`} subtitle={status} />
-          )}
+    <KeyboardAwareScrollView
+      style={styles.screen}
+      contentContainerStyle={{
+        paddingBottom: 40,
+      }}>
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        onSubmit={handleSubmit}>
+        {({ values, setFieldValue, status, submitForm, isSubmitting }) => (
           <>
+            {status && (
+              <AlertText type='error' icon='error' title={`Couldn't save book`} subtitle={status} />
+            )}
             <FormItem name='owned' label='Owned'>
               <View style={styles.options}>
                 {ownedOptions.map((owned, i) => (
@@ -217,7 +236,6 @@ export const ManageBook: React.FC<Props> = ({
               </>
             )}
 
-            {/* TODO: delete book */}
             <View style={styles.buttons}>
               <CustomButton
                 type='primary'
@@ -225,16 +243,58 @@ export const ManageBook: React.FC<Props> = ({
                 onPress={submitForm}
                 loading={isSubmitting}
               />
-              <CustomButton type='secondary' label='Cancel' onPress={() => navigation.goBack()} />
             </View>
           </>
-        </KeyboardAwareScrollView>
+        )}
+      </Formik>
+
+      {existingBook && (
+        <>
+          <View style={styles.section}>
+            <Text style={styles.sectionLabel}>Remove Book...</Text>
+            <Pressable onPress={() => setRemoveBookModalVisible(true)}>
+              <MaterialIcons name='delete' size={24} color={COLORS.accentLight} />
+            </Pressable>
+          </View>
+
+          <Modal visible={removeBookModalVisible} animationType='slide'>
+            <SafeAreaView style={styles.modalWrapper}>
+              <View style={styles.modalInner}>
+                <View style={styles.modalHeader}>
+                  <Text style={styles.modalTitle}>Remove Book</Text>
+                  <IconButton
+                    icon='close'
+                    color={COLORS.primary600}
+                    onPress={() => setRemoveBookModalVisible(false)}
+                  />
+                </View>
+                <Text style={styles.confirmationText}>
+                  Are you sure you want to remove this book from your library? Any related data
+                  including your rating will be permanently deleted.
+                </Text>
+                <View style={styles.buttons}>
+                  <CustomButton type='primary' label='Remove' onPress={handleDeleteBook} />
+                  <CustomButton
+                    type='secondary'
+                    label='Cancel'
+                    onPress={() => setRemoveBookModalVisible(false)}
+                  />
+                </View>
+              </View>
+            </SafeAreaView>
+          </Modal>
+        </>
       )}
-    </Formik>
+    </KeyboardAwareScrollView>
   )
 }
 
 const styles = StyleSheet.create({
+  headerTitle: {
+    fontSize: 18,
+    fontFamily: 'RobotoMono-Bold',
+    color: COLORS.primary700,
+  },
   screen: {
     backgroundColor: COLORS.primary100,
     flex: 1,
@@ -286,5 +346,46 @@ const styles = StyleSheet.create({
   buttons: {
     marginVertical: 20,
     gap: 16,
+  },
+  section: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 30,
+    padding: 10,
+    borderRadius: 10,
+    borderColor: COLORS.accentLight,
+    borderWidth: 1,
+  },
+  sectionLabel: {
+    fontFamily: 'RobotoMono-Bold',
+    fontSize: 16,
+    color: COLORS.accentLight,
+  },
+
+  modalWrapper: {
+    backgroundColor: COLORS.primary100,
+    padding: 20,
+    flex: 1,
+  },
+  modalInner: {
+    padding: 20,
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  modalTitle: {
+    fontFamily: 'RobotoMono-Bold',
+    fontSize: 20,
+    color: COLORS.accentDark,
+  },
+  confirmationText: {
+    fontFamily: 'RobotoMono-Regular',
+    color: COLORS.primary800,
+    marginVertical: 30,
+    fontSize: 18,
   },
 })

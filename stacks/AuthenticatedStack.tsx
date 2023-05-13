@@ -20,7 +20,6 @@ const Stack = createNativeStackNavigator()
 const Tab = createBottomTabNavigator()
 
 const screenOptions = {
-  // headerShown: false,
   headerStyle: {
     backgroundColor: COLORS.primary300,
   },
@@ -43,7 +42,6 @@ const HomeStack = () => {
         component={Home}
         options={{
           headerShown: false,
-          // headerTitle: () => <Text style={styles.logo}>bookish</Text>,
         }}
       />
       <Stack.Screen
@@ -57,7 +55,6 @@ const HomeStack = () => {
         name='ManageBook'
         component={ManageBook}
         options={({ navigation }) => ({
-          title: 'Manage Book',
           presentation: 'modal',
           headerLeft: () => (
             <IconButton
@@ -95,7 +92,6 @@ const SearchStack = () => {
         name='ManageBook'
         component={ManageBook}
         options={({ navigation }) => ({
-          title: 'Manage Book',
           presentation: 'modal',
           headerLeft: () => (
             <IconButton
@@ -133,7 +129,6 @@ const LibraryStack = () => {
         name='ManageBook'
         component={ManageBook}
         options={({ navigation }) => ({
-          title: 'Manage Book',
           presentation: 'modal',
           headerLeft: () => (
             <IconButton
@@ -164,7 +159,7 @@ const ProfileStack = () => {
         name='Settings'
         component={Settings}
         options={{
-          title: 'My Settings',
+          headerTitle: () => <Text style={styles.headerTitle}>My Settings</Text>,
           presentation: 'modal',
         }}
       />

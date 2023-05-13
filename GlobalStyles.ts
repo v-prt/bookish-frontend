@@ -10,7 +10,7 @@ export const COLORS = {
   primary900: '#7A6946',
 
   accentLight: '#EA5455',
-  accentDark: '#002B5B',
+  accentDark: '#003C80',
 
   black: '#363636',
   grey: '#9B9B9B',

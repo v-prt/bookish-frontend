@@ -45,8 +45,18 @@ export const BookProvider: FC<Props> = ({ children }) => {
     return data
   }
 
+  const deleteBook = async (bookId: string) => {
+    const { data } = await axios.delete(`${API_URL}/books/${bookId}`)
+    queryClient.invalidateQueries('user')
+    queryClient.invalidateQueries('user-book')
+    queryClient.invalidateQueries('currently-reading')
+    queryClient.invalidateQueries('want-to-read')
+    queryClient.invalidateQueries('read')
+    return data
+  }
+
   return (
-    <BookContext.Provider value={{ fetchBook, addBook, updateBook, fetchBookshelf }}>
+    <BookContext.Provider value={{ fetchBook, addBook, updateBook, fetchBookshelf, deleteBook }}>
       {children}
     </BookContext.Provider>
   )

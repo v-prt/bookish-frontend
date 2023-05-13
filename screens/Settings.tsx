@@ -223,7 +223,7 @@ export const Settings: React.FC<Props> = ({ navigation }) => {
       <View style={styles.section}>
         <Text style={styles.sectionLabel}>Favorite Genres</Text>
         <Pressable onPress={() => setGenreModalVisible(true)}>
-          <MaterialIcons name='edit' size={24} color={COLORS.primary600} />
+          <MaterialIcons name='edit' size={24} color={COLORS.accentLight} />
         </Pressable>
       </View>
 
@@ -328,7 +328,7 @@ export const Settings: React.FC<Props> = ({ navigation }) => {
       <View style={styles.section}>
         <Text style={styles.sectionLabel}>Password</Text>
         <Pressable onPress={() => setPasswordModalVisible(true)}>
-          <MaterialIcons name='edit' size={24} color={COLORS.primary600} />
+          <MaterialIcons name='edit' size={24} color={COLORS.accentLight} />
         </Pressable>
       </View>
 
@@ -410,7 +410,7 @@ export const Settings: React.FC<Props> = ({ navigation }) => {
       <View style={styles.section}>
         <Text style={styles.sectionLabel}>Sign Out</Text>
         <Pressable onPress={handleLogout}>
-          <MaterialIcons name='logout' size={24} color={COLORS.primary600} />
+          <MaterialIcons name='logout' size={24} color={COLORS.accentLight} />
         </Pressable>
       </View>
 
@@ -418,7 +418,7 @@ export const Settings: React.FC<Props> = ({ navigation }) => {
       <View style={styles.section}>
         <Text style={styles.sectionLabel}>Delete Account...</Text>
         <Pressable onPress={() => setDeleteAccountModalVisible(true)}>
-          <MaterialIcons name='delete' size={24} color={COLORS.primary600} />
+          <MaterialIcons name='delete' size={24} color={COLORS.accentLight} />
         </Pressable>
       </View>
 
@@ -490,19 +490,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginVertical: 15,
+    marginVertical: 10,
     padding: 10,
     borderRadius: 10,
-    borderColor: COLORS.primary300,
+    borderColor: COLORS.accentLight,
     borderWidth: 1,
-  },
-  dangerSection: {
-    borderColor: COLORS.error,
   },
   sectionLabel: {
     fontFamily: 'RobotoMono-Bold',
     fontSize: 16,
-    color: COLORS.primary600,
+    color: COLORS.accentLight,
   },
   modalWrapper: {
     backgroundColor: COLORS.primary100,

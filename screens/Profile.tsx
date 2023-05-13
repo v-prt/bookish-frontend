@@ -68,17 +68,17 @@ export const Profile: FC<Props> = ({ navigation }) => {
       </View>
       {/* TODO: ratings, reading activity, etc. ? */}
       <View style={styles.profileWrapper}>
+        {!!currentlyReading?.length && (
+          <Text style={styles.currentlyReadingText}>
+            Currently reading{' '}
+            <Text style={styles.currentlyReadingTitle}>"{currentlyReading?.[0].title}"</Text>{' '}
+            {currentlyReading?.length > 1 && `+ ${currentlyReading.length - 1} more`}
+          </Text>
+        )}
+
         <Text style={styles.headerText}>Books</Text>
         <View style={styles.divider} />
         <View style={styles.bookshelvesContainer}>
-          {!!currentlyReading?.length && (
-            <Text style={styles.currentlyReadingText}>
-              Currently reading{' '}
-              <Text style={styles.currentlyReadingTitle}>"{currentlyReading?.[0].title}"</Text>{' '}
-              {currentlyReading?.length > 1 && `+ ${currentlyReading.length - 1} more`}
-            </Text>
-          )}
-
           <View style={styles.bookshelfWrapper}>
             <Text style={styles.bookshelfLabel}>Owned</Text>
             <Text style={styles.bookshelfCount}>{numOwned}</Text>
@@ -179,9 +179,9 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   bookshelfLabel: {
-    fontFamily: 'RobotoMono-Regular',
+    color: COLORS.primary800,
+    fontFamily: 'RobotoMono-Medium',
     fontSize: 16,
-    color: COLORS.primary900,
   },
   bookshelfCount: {
     fontFamily: 'RobotoMono-Bold',
