@@ -32,11 +32,18 @@ export const SimpleBookshelf: FC<Props> = ({ bookshelf }) => {
               Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
               console.log('navigate to bookshelf screen')
             }}
-            style={({ pressed }) => [styles.bookshelfBtn, pressed && styles.pressed]}>
+            style={({ pressed }) => [
+              styles.bookshelfBtn,
+              pressed && styles.pressed,
+              !data?.books?.length && styles.disabled,
+            ]}
+            disabled={!data?.books?.length}>
             <Text style={styles.totalResults}>
               {data.totalResults} {data.totalResults === 1 ? 'book' : 'books'}
             </Text>
-            <MaterialIcons name='chevron-right' size={20} color={COLORS.accentLight} />
+            {!!data?.books?.length && (
+              <MaterialIcons name='chevron-right' size={20} color={COLORS.accentLight} />
+            )}
           </Pressable>
         ) : (
           <ActivityIndicator size='small' color={COLORS.primary400} />
@@ -54,7 +61,9 @@ export const SimpleBookshelf: FC<Props> = ({ bookshelf }) => {
         (data?.books?.length ? (
           <SimpleBookList books={data.books} />
         ) : (
-          <Text style={styles.infoText}>No books in this shelf.</Text>
+          <View style={styles.noBooks}>
+            <Text style={styles.infoText}>This shelf is empty.</Text>
+          </View>
         ))}
     </View>
   )
@@ -89,6 +98,9 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginLeft: 20,
   },
+  noBooks: {
+    height: 70,
+  },
   infoText: {
     fontFamily: 'RobotoMono-Regular',
     fontSize: 16,
@@ -103,6 +115,9 @@ const styles = StyleSheet.create({
   },
   pressed: {
     opacity: 0.6,
+  },
+  disabled: {
+    opacity: 0.3,
   },
   totalResults: {
     fontFamily: 'RobotoMono-Bold',
