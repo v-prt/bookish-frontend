@@ -1,13 +1,13 @@
 # Bookish Frontend
 
-Bookish is a mobile app built with React Native and TypeScript that allows users to discover, organize, and review books. Similar to Goodreads, users can create an account, browse a vast collection of books using the Google Books API, and manage their personal library across three bookshelves: "Want to Read," "Currently Reading," and "Read." Users can rate and review books when adding them to their "Read" bookshelf.
+Bookish is a mobile app built with React Native and TypeScript that allows users to discover, organize, and review books. Similar to Goodreads, users can create an account, browse a vast collection of books, and manage their personal library across three bookshelves: "Want to Read," "Currently Reading," and "Read." Users can rate and review books when adding them to their "Read" bookshelf.
 
 Additionally, Bookish offers genre-based recommendations by allowing users to select their favorite genres. The app provides a personalized reading experience by suggesting books based on the user's preferences. Users can also view an overview of their bookshelves, favorite genres, and reading activity on their profile.
 
 ## Key Features
 
 - User authentication: Create an account and securely log in.
-- Book browsing: Explore an extensive collection of books using the Google Books API.
+- Book browsing: Explore an extensive collection of books from the Google Books API.
 - Bookshelves: Manage books across three bookshelves: "Want to Read," "Currently Reading," and "Read."
 - Ratings and reviews: Rate and review books when adding them to the "Read" bookshelf.
 - Genre preferences: Select favorite genres to receive personalized book recommendations.
@@ -61,7 +61,9 @@ Please ensure that your code adheres to the existing code style and includes app
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE).
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 ## Acknowledgments
 
