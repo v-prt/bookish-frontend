@@ -1,4 +1,4 @@
-# Bookish
+# Bookish Frontend
 
 Bookish is a mobile app built with React Native and TypeScript that allows users to discover, organize, and review books. Similar to Goodreads, users can create an account, browse a vast collection of books using the Google Books API, and manage their personal library across three bookshelves: "Want to Read," "Currently Reading," and "Read." Users can rate and review books when adding them to their "Read" bookshelf.
 
