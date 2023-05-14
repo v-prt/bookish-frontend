@@ -180,7 +180,7 @@ export const Search: FC = () => {
 
 export const styles = StyleSheet.create({
   screen: {
-    backgroundColor: COLORS.primary100,
+    backgroundColor: COLORS.white,
     flex: 1,
   },
   loading: {
@@ -227,7 +227,7 @@ export const styles = StyleSheet.create({
   },
   quote: {
     fontFamily: 'RobotoMono-Italic',
-    fontSize: 16,
-    color: COLORS.primary800,
+    fontSize: 15,
+    color: COLORS.primary700,
   },
 })

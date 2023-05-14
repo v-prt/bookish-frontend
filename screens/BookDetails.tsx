@@ -270,8 +270,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 20,
     padding: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: COLORS.primary300,
   },
   text: {
     maxWidth: '60%',
@@ -281,6 +279,14 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     height: 150,
     aspectRatio: 2 / 3,
+
+    // android shadow
+    elevation: 4,
+    // ios shadow
+    shadowColor: COLORS.primary900,
+    shadowOffset: { width: 2, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 15,
   },
   title: {
     color: COLORS.accentDark,
@@ -299,7 +305,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   ratings: {
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.primary100,
     padding: 20,
     flexDirection: 'row',
     alignItems: 'center',
@@ -322,39 +328,10 @@ const styles = StyleSheet.create({
     fontFamily: 'RobotoMono-Regular',
     fontSize: 14,
   },
-  details: {
-    padding: 20,
-  },
-  headerText: {
-    fontFamily: 'RobotoMono-Bold',
-    fontSize: 20,
-    color: COLORS.accentDark,
-    marginBottom: 8,
-  },
-  divider: {
-    width: 100,
-    height: 1,
-    backgroundColor: COLORS.accentDark,
-    marginBottom: 20,
-    opacity: 0.6,
-  },
-  description: {
-    marginBottom: 30,
-  },
-  detailsText: {
-    fontFamily: 'RobotoMono-Regular',
-    fontSize: 16,
-    color: COLORS.primary700,
-    marginBottom: 10,
-  },
-  label: {
-    fontFamily: 'RobotoMono-Bold',
-    fontSize: 16,
-  },
+
   actions: {
-    backgroundColor: COLORS.white,
-    padding: 20,
-    paddingBottom: 0,
+    backgroundColor: COLORS.primary100,
+    paddingHorizontal: 20,
   },
   actionBtn: {
     width: '100%',
@@ -385,6 +362,38 @@ const styles = StyleSheet.create({
   secondaryActionText: {
     color: COLORS.accentLight,
   },
+
+  details: {
+    backgroundColor: COLORS.white,
+    padding: 20,
+  },
+  headerText: {
+    fontFamily: 'RobotoMono-Bold',
+    fontSize: 20,
+    color: COLORS.accentDark,
+    marginBottom: 8,
+  },
+  divider: {
+    width: 100,
+    height: 1,
+    backgroundColor: COLORS.accentDark,
+    marginBottom: 20,
+    opacity: 0.6,
+  },
+  description: {
+    marginBottom: 30,
+  },
+  detailsText: {
+    fontFamily: 'RobotoMono-Regular',
+    fontSize: 16,
+    color: COLORS.primary700,
+    marginBottom: 10,
+  },
+  label: {
+    fontFamily: 'RobotoMono-Bold',
+    fontSize: 16,
+  },
+
   reviewSection: {
     flexDirection: 'row',
     alignItems: 'flex-start',

@@ -122,7 +122,7 @@ export const Profile: FC<Props> = ({ navigation }) => {
   }
 
   return (
-    <ScrollView style={styles.screen}>
+    <View style={styles.screen}>
       <View style={styles.profileHeader}>
         <View style={styles.basicInfo}>
           <Avatar initials={`${userData.firstName[0]}${userData.lastName[0]}`} />
@@ -141,8 +141,9 @@ export const Profile: FC<Props> = ({ navigation }) => {
           }}
         />
       </View>
-      {/* TODO: ratings, reading activity, etc. ? */}
-      <View style={styles.profileWrapper}>
+
+      <ScrollView style={styles.screenInner}>
+        {/* TODO: ratings, reading activity, etc. ? */}
         {!!currentlyReading?.length && (
           <Text style={styles.currentlyReadingText}>
             Currently reading{' '}
@@ -189,7 +190,7 @@ export const Profile: FC<Props> = ({ navigation }) => {
         ) : (
           <Text style={styles.infoText}>None selected.</Text>
         )}
-      </View>
+      </ScrollView>
 
       <Modal visible={genreModalVisible} animationType='slide'>
         <SafeAreaView style={styles.modalWrapper}>
@@ -287,7 +288,7 @@ export const Profile: FC<Props> = ({ navigation }) => {
           </Formik>
         </SafeAreaView>
       </Modal>
-    </ScrollView>
+    </View>
   )
 }
 
@@ -320,10 +321,12 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: COLORS.grey,
   },
-  profileWrapper: {
+  screenInner: {
     backgroundColor: COLORS.primary100,
     padding: 20,
-    minHeight: '100%',
+    flex: 1,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
   },
   headerWrapper: {
     flexDirection: 'row',
