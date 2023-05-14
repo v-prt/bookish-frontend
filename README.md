@@ -21,7 +21,7 @@ Additionally, Bookish offers genre-based recommendations by allowing users to se
    ```
 2. Navigate to the project directory:
    ```shell
-   cd bookish
+   cd bookish-frontend
    ```
 3. Install dependencies:
    ```shell
