@@ -265,7 +265,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   basicInfo: {
-    backgroundColor: COLORS.primary100,
     flexDirection: 'row',
     alignItems: 'center',
     gap: 20,
@@ -305,14 +304,11 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   ratings: {
-    backgroundColor: COLORS.primary100,
     padding: 20,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-evenly',
     gap: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: COLORS.primary300,
   },
   ratingGroup: {
     alignItems: 'center',
@@ -330,7 +326,6 @@ const styles = StyleSheet.create({
   },
 
   actions: {
-    backgroundColor: COLORS.primary100,
     paddingHorizontal: 20,
   },
   actionBtn: {
@@ -341,7 +336,7 @@ const styles = StyleSheet.create({
     gap: 5,
     paddingVertical: 10,
     paddingHorizontal: 20,
-    borderRadius: 10,
+    borderRadius: 20,
     borderWidth: 1,
   },
   primaryActionBtn: {
@@ -349,7 +344,7 @@ const styles = StyleSheet.create({
     borderColor: COLORS.accentLight,
   },
   secondaryActionBtn: {
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.primary100,
     borderColor: COLORS.accentLight,
   },
   actionText: {
@@ -366,6 +361,16 @@ const styles = StyleSheet.create({
   details: {
     backgroundColor: COLORS.white,
     padding: 20,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+
+    // android shadow
+    elevation: 4,
+    // ios shadow
+    shadowColor: COLORS.primary700,
+    shadowOffset: { width: -2, height: -2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 15,
   },
   headerText: {
     fontFamily: 'RobotoMono-Bold',

@@ -22,7 +22,7 @@ export const SimpleBookshelf: FC<Props> = ({ bookshelf }) => {
   const { data, status } = useQuery(bookshelf.id, () => fetchBookshelf(userId, bookshelf.title))
 
   return (
-    <View>
+    <View style={styles.container}>
       <View style={styles.headerWrapper}>
         <Text style={styles.headerText}>{bookshelf.title}</Text>
         {status === 'success' && data ? (
@@ -70,6 +70,9 @@ export const SimpleBookshelf: FC<Props> = ({ bookshelf }) => {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    paddingVertical: 20,
+  },
   headerWrapper: {
     flexDirection: 'row',
     alignItems: 'center',

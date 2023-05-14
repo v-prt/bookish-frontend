@@ -18,6 +18,7 @@ export const SearchProvider: FC<Props> = ({ children }) => {
   const [selectedGenre, setSelectedGenre] = useState<string | null>(null)
   const [genreSearchText, setGenreSearchText] = useState<string>('')
   const [genreSearchResults, setGenreSearchResults] = useState<any>([])
+  const [totalGenreResults, setTotalGenreResults] = useState<number | null>(null)
 
   const maxResults = 20
 
@@ -99,6 +100,7 @@ export const SearchProvider: FC<Props> = ({ children }) => {
     if (genreSearchStatus === 'success' && genreSearchData) {
       const genreSearchResults = filterBooks(genreSearchData.pages)
       setGenreSearchResults(genreSearchResults)
+      setTotalGenreResults(genreSearchData.pages[0]?.totalItems)
     }
   }, [genreSearchStatus, genreSearchData])
 
@@ -131,6 +133,7 @@ export const SearchProvider: FC<Props> = ({ children }) => {
         selectedGenre,
         setSelectedGenre,
         genreSearchResults,
+        totalGenreResults,
         setGenreSearchResults,
         handleLoadMoreGenreResults,
         isFetchingNextGenreSearchPage,

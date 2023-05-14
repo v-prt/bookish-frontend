@@ -13,8 +13,9 @@ interface Props {
 export const GenreSearch: FC<Props> = ({ navigation }) => {
   const {
     selectedGenre,
-    genreSearchResults,
     genreSearchStatus,
+    genreSearchResults,
+    totalGenreResults,
     handleLoadMoreGenreResults,
     isFetchingNextGenreSearchPage,
   } = useContext(SearchContext)
@@ -41,30 +42,37 @@ export const GenreSearch: FC<Props> = ({ navigation }) => {
 
   return (
     <View style={styles.screen}>
-      <View style={styles.headerWrapper}>
+      <View style={styles.quoteWrapper}>
         <Text style={styles.quote}>{quote}</Text>
       </View>
 
-      {genreSearchStatus === 'loading' && (
-        <View style={styles.loading}>
-          <ActivityIndicator size='large' color={COLORS.primary300} />
-        </View>
-      )}
-
-      {genreSearchStatus === 'success' &&
-        (genreSearchResults?.length > 0 ? (
-          <>
-            <DetailedBookList
-              books={genreSearchResults}
-              infiniteScroll={handleLoadMoreGenreResults}
-              isLoading={isFetchingNextGenreSearchPage}
-            />
-          </>
-        ) : (
+      <View style={styles.screenInner}>
+        {genreSearchStatus === 'loading' && (
           <View style={styles.loading}>
-            <Text style={styles.text}>No Results</Text>
+            <ActivityIndicator size='large' color={COLORS.primary300} />
           </View>
-        ))}
+        )}
+
+        {genreSearchStatus === 'success' &&
+          (genreSearchResults?.length > 0 ? (
+            <>
+              <View style={styles.resultsHeader}>
+                <Text style={styles.resultsText}>
+                  Total Results: {totalGenreResults?.toLocaleString()}
+                </Text>
+              </View>
+              <DetailedBookList
+                books={genreSearchResults}
+                infiniteScroll={handleLoadMoreGenreResults}
+                isLoading={isFetchingNextGenreSearchPage}
+              />
+            </>
+          ) : (
+            <View style={styles.loading}>
+              <Text style={styles.noResults}>No Results</Text>
+            </View>
+          ))}
+      </View>
     </View>
   )
 }

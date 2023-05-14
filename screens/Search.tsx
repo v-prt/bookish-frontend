@@ -88,7 +88,7 @@ export const Search: FC = () => {
       }}>
       {({ handleChange, handleBlur, handleSubmit, values, setValues }) => (
         <View style={styles.screen}>
-          <View style={styles.searchBar}>
+          <View style={styles.searchHeader}>
             <Input
               config={{
                 // submit form on change
@@ -120,58 +120,60 @@ export const Search: FC = () => {
             {/* <IconButton icon='arrow-forward' color={COLORS.accentLight} onPress={handleSubmit} /> */}
           </View>
 
-          {status === 'loading' && (
-            <View style={styles.loading}>
-              <ActivityIndicator size='large' color={COLORS.primary300} />
-            </View>
-          )}
-
-          {status === 'success' &&
-            (searchResults?.length > 0 ? (
-              <>
-                <View style={styles.resultsHeader}>
-                  <Text style={styles.text}>
-                    Total Results: {totalResults?.toLocaleString()}
-                    {selectedGenre && ` (${selectedGenre})`}
-                  </Text>
-                  <Pressable
-                    onPress={() => {
-                      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
-                      setValues({ search: '' })
-                      setSearchText('')
-                      setSelectedGenre(null)
-                      handleSubmit()
-                    }}>
-                    <Text style={styles.resetBtnText}>Reset</Text>
-                  </Pressable>
-                </View>
-                <DetailedBookList
-                  books={searchResults}
-                  infiniteScroll={handleLoadMore}
-                  isLoading={isFetchingNextPage}
-                />
-              </>
-            ) : searchText?.length > 0 ? (
+          <View style={styles.screenInner}>
+            {status === 'loading' && (
               <View style={styles.loading}>
-                <Text style={styles.text}>No Results</Text>
+                <ActivityIndicator size='large' color={COLORS.primary500} />
               </View>
-            ) : (
-              <ScrollView keyboardDismissMode='on-drag'>
-                <View style={styles.genres}>
-                  {genres.map((genre, i) => (
-                    <GenreButton
-                      key={i}
-                      label={genre.label}
-                      image={genre.image}
+            )}
+
+            {status === 'success' &&
+              (searchResults?.length > 0 ? (
+                <>
+                  <View style={styles.resultsHeader}>
+                    <Text style={styles.resultsText}>
+                      Total Results: {totalResults?.toLocaleString()}
+                      {selectedGenre && ` (${selectedGenre})`}
+                    </Text>
+                    <Pressable
                       onPress={() => {
                         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
-                        handleGenreSearch(genre.label)
-                      }}
-                    />
-                  ))}
+                        setValues({ search: '' })
+                        setSearchText('')
+                        setSelectedGenre(null)
+                        handleSubmit()
+                      }}>
+                      <Text style={styles.resetBtnText}>Reset</Text>
+                    </Pressable>
+                  </View>
+                  <DetailedBookList
+                    books={searchResults}
+                    infiniteScroll={handleLoadMore}
+                    isLoading={isFetchingNextPage}
+                  />
+                </>
+              ) : searchText?.length > 0 ? (
+                <View style={styles.loading}>
+                  <Text style={styles.noResults}>No Results</Text>
                 </View>
-              </ScrollView>
-            ))}
+              ) : (
+                <ScrollView keyboardDismissMode='on-drag' showsVerticalScrollIndicator={false}>
+                  <View style={styles.genres}>
+                    {genres.map((genre, i) => (
+                      <GenreButton
+                        key={i}
+                        label={genre.label}
+                        image={genre.image}
+                        onPress={() => {
+                          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+                          handleGenreSearch(genre.label)
+                        }}
+                      />
+                    ))}
+                  </View>
+                </ScrollView>
+              ))}
+          </View>
         </View>
       )}
     </Formik>
@@ -180,8 +182,22 @@ export const Search: FC = () => {
 
 export const styles = StyleSheet.create({
   screen: {
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.primary300,
     flex: 1,
+  },
+  screenInner: {
+    backgroundColor: COLORS.primary100,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    flex: 1,
+
+    // android shadow
+    elevation: 4,
+    // ios shadow
+    shadowColor: COLORS.primary700,
+    shadowOffset: { width: -2, height: -2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 15,
   },
   loading: {
     flex: 1,
@@ -190,44 +206,52 @@ export const styles = StyleSheet.create({
     padding: 30,
   },
   genres: {
-    flex: 1,
+    display: 'flex',
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 10,
-    margin: 10,
+    justifyContent: 'center',
+    marginVertical: -(20 / 2),
+    marginHorizontal: -(20 / 2),
+    paddingVertical: 25,
   },
-  searchBar: {
-    backgroundColor: COLORS.primary300,
+  searchHeader: {
+    height: 65,
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 15,
+    justifyContent: 'center',
+    paddingHorizontal: 20,
   },
   resultsHeader: {
-    backgroundColor: COLORS.primary300,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 15,
-    paddingBottom: 10,
+    padding: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.primary200,
   },
   resetBtnText: {
     fontFamily: 'RobotoMono-Bold',
     color: COLORS.accentLight,
   },
-  text: {
+  resultsText: {
     fontFamily: 'RobotoMono-Regular',
     fontSize: 12,
     color: COLORS.primary800,
   },
+  noResults: {
+    fontFamily: 'RobotoMono-Medium',
+    fontSize: 18,
+    color: COLORS.grey,
+  },
 
   // for GenreSearch
-  headerWrapper: {
+  quoteWrapper: {
     backgroundColor: COLORS.primary300,
     padding: 20,
   },
   quote: {
     fontFamily: 'RobotoMono-Italic',
-    fontSize: 15,
-    color: COLORS.primary700,
+    fontSize: 16,
+    color: COLORS.accentDark,
   },
 })

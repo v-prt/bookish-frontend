@@ -120,7 +120,7 @@ const LibraryStack = () => {
         name='Library'
         component={Library}
         options={{
-          headerTitle: () => <Text style={styles.headerTitle}>My Library</Text>,
+          headerShown: false,
         }}
       />
       <Stack.Screen

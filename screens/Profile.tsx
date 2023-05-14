@@ -142,55 +142,57 @@ export const Profile: FC<Props> = ({ navigation }) => {
         />
       </View>
 
-      <ScrollView style={styles.screenInner}>
-        {/* TODO: ratings, reading activity, etc. ? */}
-        {!!currentlyReading?.length && (
-          <Text style={styles.currentlyReadingText}>
-            Currently reading{' '}
-            <Text style={styles.currentlyReadingTitle}>"{currentlyReading?.[0].title}"</Text>{' '}
-            {currentlyReading?.length > 1 && `+ ${currentlyReading.length - 1} more`}
-          </Text>
-        )}
+      <View style={styles.screenInnerWrapper}>
+        <ScrollView style={styles.screenInner}>
+          {/* TODO: ratings, reading activity, etc. ? */}
+          {!!currentlyReading?.length && (
+            <Text style={styles.currentlyReadingText}>
+              Currently reading{' '}
+              <Text style={styles.currentlyReadingTitle}>"{currentlyReading?.[0].title}"</Text>{' '}
+              {currentlyReading?.length > 1 && `+ ${currentlyReading.length - 1} more`}
+            </Text>
+          )}
 
-        <Text style={styles.headerText}>Books</Text>
-        <View style={styles.divider} />
-        <View style={styles.bookshelvesContainer}>
-          <View style={styles.bookshelfWrapper}>
-            <Text style={styles.bookshelfLabel}>Owned</Text>
-            <Text style={styles.bookshelfCount}>{numOwned}</Text>
+          <Text style={styles.headerText}>Books</Text>
+          <View style={styles.divider} />
+          <View style={styles.bookshelvesContainer}>
+            <View style={styles.bookshelfWrapper}>
+              <Text style={styles.bookshelfLabel}>Owned</Text>
+              <Text style={styles.bookshelfCount}>{numOwned}</Text>
+            </View>
+            <View style={styles.bookshelfWrapper}>
+              <Text style={styles.bookshelfLabel}>Want to read</Text>
+              <Text style={styles.bookshelfCount}>{numWantToRead}</Text>
+            </View>
+            <View style={styles.bookshelfWrapper}>
+              <Text style={styles.bookshelfLabel}>Read</Text>
+              <Text style={styles.bookshelfCount}>{numRead}</Text>
+            </View>
           </View>
-          <View style={styles.bookshelfWrapper}>
-            <Text style={styles.bookshelfLabel}>Want to read</Text>
-            <Text style={styles.bookshelfCount}>{numWantToRead}</Text>
-          </View>
-          <View style={styles.bookshelfWrapper}>
-            <Text style={styles.bookshelfLabel}>Read</Text>
-            <Text style={styles.bookshelfCount}>{numRead}</Text>
-          </View>
-        </View>
 
-        <View style={styles.headerWrapper}>
-          <Text style={styles.headerText}>Favorite genres</Text>
-          <IconButton
-            icon='edit'
-            color={COLORS.primary600}
-            onPress={() => setGenreModalVisible(true)}
-          />
-        </View>
-
-        <View style={styles.divider} />
-        {userData?.faveGenres?.length > 0 ? (
-          <View style={styles.genresContainer}>
-            {userData.faveGenres.map((genre: string, i: number) => (
-              <View style={styles.genreWrapper} key={i}>
-                <Text style={styles.genreLabel}>{genre}</Text>
-              </View>
-            ))}
+          <View style={styles.headerWrapper}>
+            <Text style={styles.headerText}>Favorite genres</Text>
+            <IconButton
+              icon='edit'
+              color={COLORS.primary600}
+              onPress={() => setGenreModalVisible(true)}
+            />
           </View>
-        ) : (
-          <Text style={styles.infoText}>None selected.</Text>
-        )}
-      </ScrollView>
+
+          <View style={styles.divider} />
+          {userData?.faveGenres?.length > 0 ? (
+            <View style={styles.genresContainer}>
+              {userData.faveGenres.map((genre: string, i: number) => (
+                <View style={styles.genreWrapper} key={i}>
+                  <Text style={styles.genreLabel}>{genre}</Text>
+                </View>
+              ))}
+            </View>
+          ) : (
+            <Text style={styles.infoText}>None selected.</Text>
+          )}
+        </ScrollView>
+      </View>
 
       <Modal visible={genreModalVisible} animationType='slide'>
         <SafeAreaView style={styles.modalWrapper}>
@@ -302,7 +304,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding: 20,
+    height: 65,
+    paddingHorizontal: 20,
     borderBottomWidth: 1,
     borderBottomColor: COLORS.primary300,
   },
@@ -321,12 +324,21 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: COLORS.grey,
   },
-  screenInner: {
+  screenInnerWrapper: {
     backgroundColor: COLORS.primary100,
-    padding: 20,
-    flex: 1,
+    // android shadow
+    elevation: 4,
+    // ios shadow
+    shadowColor: COLORS.primary700,
+    shadowOffset: { width: -2, height: -2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 15,
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
+    flex: 1,
+  },
+  screenInner: {
+    padding: 20,
   },
   headerWrapper: {
     flexDirection: 'row',

@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import { StyleSheet, ScrollView } from 'react-native'
+import { StyleSheet, ScrollView, View, Text } from 'react-native'
 import { COLORS } from '../GlobalStyles'
 import { SimpleBookshelf } from '../components/SimpleBookshelf'
 
@@ -11,22 +11,52 @@ export const Library: FC = () => {
   ]
 
   return (
-    <ScrollView
-      style={styles.screen}
-      contentContainerStyle={{
-        paddingBottom: 20,
-      }}>
-      {bookshelves.map((bookshelf: { title: string; id: string }, i: number) => (
-        <SimpleBookshelf bookshelf={bookshelf} key={i} />
-      ))}
-    </ScrollView>
+    <View style={styles.screen}>
+      <View style={styles.headerWrapper}>
+        <Text style={styles.headerText}>My Library</Text>
+      </View>
+
+      <View style={styles.screenInnerWrapper}>
+        <ScrollView style={styles.screenInner}>
+          {bookshelves.map((bookshelf: { title: string; id: string }, i: number) => (
+            <SimpleBookshelf bookshelf={bookshelf} key={i} />
+          ))}
+        </ScrollView>
+      </View>
+    </View>
   )
 }
 
 const styles = StyleSheet.create({
   screen: {
-    backgroundColor: COLORS.primary100,
+    backgroundColor: COLORS.primary300,
     flex: 1,
+  },
+  headerWrapper: {
+    backgroundColor: COLORS.primary300,
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 65,
+  },
+  headerText: {
+    fontFamily: 'RobotoMono-Bold',
+    color: COLORS.accentDark,
+    fontSize: 20,
+  },
+  screenInnerWrapper: {
+    backgroundColor: COLORS.primary100,
+    // android shadow
+    elevation: 4,
+    // ios shadow
+    shadowColor: COLORS.primary700,
+    shadowOffset: { width: -2, height: -2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 15,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    flex: 1,
+  },
+  screenInner: {
     paddingVertical: 20,
   },
 })
