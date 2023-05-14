@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from 'react'
+import { ReactNode, FC, createContext, useEffect, useState } from 'react'
 import { useQuery, useQueryClient } from 'react-query'
 import axios from 'axios'
 import { API_URL } from '../constants'
@@ -17,10 +17,10 @@ const deleteToken = async (key: string) => {
 export const UserContext = createContext<any>(null)
 
 interface Props {
-  children: React.ReactNode
+  children: ReactNode
 }
 
-export const UserProvider: React.FC<Props> = ({ children }) => {
+export const UserProvider: FC<Props> = ({ children }) => {
   const queryClient = useQueryClient()
 
   const [token, setToken] = useState<string | null>(null)

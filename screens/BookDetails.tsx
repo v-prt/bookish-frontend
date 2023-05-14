@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext, memo } from 'react'
+import { FC, useEffect, useState, useContext, memo } from 'react'
 import {
   StyleSheet,
   View,
@@ -24,7 +24,7 @@ interface Props {
   route: any
 }
 
-export const BookDetails: React.FC<Props> = ({
+export const BookDetails: FC<Props> = ({
   navigation,
   route: {
     params: { volumeId },

@@ -7,10 +7,11 @@ import { StatusBar } from 'expo-status-bar'
 import * as SplashScreen from 'expo-splash-screen'
 import { COLORS, customTextProps } from './GlobalStyles'
 import { UserContext, UserProvider } from './contexts/UserContext'
+import { BookProvider } from './contexts/BookContext'
+import { SearchProvider } from './contexts/SearchContext'
 import { useFonts } from './hooks/useFonts'
 import { UnauthenticatedStack } from './stacks/UnauthenticatedStack'
 import { AuthenticatedStack } from './stacks/AuthenticatedStack'
-import { BookProvider } from './contexts/BookContext'
 
 const queryClient = new QueryClient()
 
@@ -59,10 +60,12 @@ const App: React.FC = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <UserProvider>
-        <BookProvider>
-          <StatusBar style='dark' />
-          <Root />
-        </BookProvider>
+        <SearchProvider>
+          <BookProvider>
+            <StatusBar style='dark' />
+            <Root />
+          </BookProvider>
+        </SearchProvider>
       </UserProvider>
     </QueryClientProvider>
   )

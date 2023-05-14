@@ -29,7 +29,6 @@ interface Props {
 export const Settings: React.FC<Props> = ({ navigation }) => {
   const { userData, updateUser, handleLogout, deleteAccount } = useContext(UserContext)
 
-  const [genreModalVisible, setGenreModalVisible] = useState(false)
   const [passwordModalVisible, setPasswordModalVisible] = useState(false)
   const [deleteAccountModalVisible, setDeleteAccountModalVisible] = useState(false)
 
@@ -45,49 +44,11 @@ export const Settings: React.FC<Props> = ({ navigation }) => {
     })
   })
 
-  const genres = [
-    'Action',
-    'Adventure',
-    'Children',
-    'Classics',
-    'Comics',
-    'Crime',
-    'Drama',
-    'Fantasy',
-    'Fiction',
-    'History',
-    'Horror',
-    'Humor',
-    'Manga',
-    'Memoir',
-    'Music',
-    'Mystery',
-    'Nonfiction',
-    'Paranormal',
-    'Philosophy',
-    'Poetry',
-    'Psychology',
-    'Religion',
-    'Romance',
-    'Science',
-    'Sci-Fi',
-    'Suspense',
-    'Spirituality',
-    'Sports',
-    'Thriller',
-    'Travel',
-    'Young Adult',
-  ]
-
   // #region Initial Values
   const accountInitialValues = {
     firstName: userData?.firstName,
     lastName: userData?.lastName,
     email: userData?.email,
-  }
-
-  const genresInitialValues = {
-    faveGenres: userData?.faveGenres || [],
   }
 
   const passwordInitialValues = {
@@ -101,14 +62,6 @@ export const Settings: React.FC<Props> = ({ navigation }) => {
     firstName: yup.string().min(2, `That's too short`).required('Required'),
     lastName: yup.string().min(2, `That's too short`).required('Required'),
     email: yup.string().email('Invalid email').required('Required'),
-  })
-
-  const genresSchema = yup.object().shape({
-    faveGenres: yup
-      .array()
-      .min(1, 'Select at least one genre')
-      .required('Required')
-      .max(6, 'Select up to 6'),
   })
 
   const passwordSchema = yup.object().shape({
@@ -126,18 +79,6 @@ export const Settings: React.FC<Props> = ({ navigation }) => {
       setStatus(result.error)
     } else {
       Alert.alert('Success', 'Your account has been updated')
-    }
-  }
-
-  const handleGenresUpdate = async (values: any, { setStatus }: any) => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
-    setStatus(undefined)
-    const result = await updateUser(values)
-    if (result.error) {
-      setStatus(result.error)
-    } else {
-      Alert.alert('Success', 'Your favorite genres have been updated')
-      setGenreModalVisible(false)
     }
   }
 
@@ -240,111 +181,6 @@ export const Settings: React.FC<Props> = ({ navigation }) => {
           </View>
         )}
       </Formik>
-
-      {/* FAVE GENRE SELECTION */}
-      <View style={styles.section}>
-        <Text style={styles.sectionLabel}>Favorite Genres</Text>
-        <Pressable onPress={() => setGenreModalVisible(true)}>
-          <MaterialIcons name='edit' size={24} color={COLORS.accentLight} />
-        </Pressable>
-      </View>
-
-      <Modal visible={genreModalVisible} animationType='slide'>
-        <SafeAreaView style={styles.modalWrapper}>
-          <Formik
-            initialValues={genresInitialValues}
-            validationSchema={genresSchema}
-            onSubmit={handleGenresUpdate}>
-            {({ handleSubmit, values, setValues, isSubmitting, status }) => (
-              <View style={styles.modalInner}>
-                <View style={styles.modalHeader}>
-                  <Text style={styles.modalTitle}>Favorite Genres</Text>
-                  <IconButton
-                    icon='close'
-                    color={COLORS.primary600}
-                    onPress={() => setGenreModalVisible(false)}
-                  />
-                </View>
-                {status && (
-                  <AlertText type='error' icon='error' title={`Couldn't save`} subtitle={status} />
-                )}
-                <View style={styles.formWrapper}>
-                  <FormItem
-                    name='faveGenres'
-                    label={
-                      // indicate number of genres selected
-                      `${values.faveGenres.length} / 6 selected`
-                    }>
-                    <ScrollView
-                      style={styles.genreList}
-                      showsVerticalScrollIndicator={false}
-                      contentContainerStyle={{ paddingBottom: 10 }}>
-                      {genres.map((genre, i) => (
-                        <Pressable
-                          key={i}
-                          onPress={() => {
-                            if (
-                              values.faveGenres.length === 6 &&
-                              !values.faveGenres.includes(genre)
-                            )
-                              return // prevent selecting more than 6 genres
-                            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
-                            if (values.faveGenres.includes(genre)) {
-                              setValues({
-                                ...values,
-                                faveGenres: values.faveGenres.filter((g: string) => g !== genre),
-                              })
-                            } else {
-                              setValues({
-                                ...values,
-                                faveGenres: [...values.faveGenres, genre],
-                              })
-                            }
-                          }}
-                          style={[
-                            styles.genreItem,
-                            values.faveGenres.includes(genre) && styles.genreItemActive,
-                          ]}>
-                          <Text
-                            style={[
-                              styles.genreItemText,
-                              values.faveGenres.includes(genre) && styles.genreItemActiveText,
-                            ]}>
-                            {genre}
-                          </Text>
-                          <MaterialIcons
-                            name={values.faveGenres.includes(genre) ? 'check-circle' : 'circle'}
-                            color={
-                              values.faveGenres.includes(genre)
-                                ? COLORS.accentDark
-                                : COLORS.primary400
-                            }
-                            size={18}
-                          />
-                        </Pressable>
-                      ))}
-                    </ScrollView>
-                  </FormItem>
-                </View>
-                <View style={styles.buttons}>
-                  <CustomButton
-                    type='primary'
-                    label='Submit'
-                    onPress={handleSubmit}
-                    loading={isSubmitting}
-                    disabled={isSubmitting}
-                  />
-                  <CustomButton
-                    type='secondary'
-                    label='Cancel'
-                    onPress={() => setGenreModalVisible(false)}
-                  />
-                </View>
-              </View>
-            )}
-          </Formik>
-        </SafeAreaView>
-      </Modal>
 
       {/* CHANGE PASSWORD */}
       <View style={styles.section}>
@@ -558,34 +394,5 @@ const styles = StyleSheet.create({
   },
   buttons: {
     gap: 16,
-  },
-  genreList: {
-    backgroundColor: COLORS.primary300,
-    padding: 10,
-    borderRadius: 10,
-    // FIXME: make this fill up the rest of the space while still keeping buttons visible
-    maxHeight: 400,
-  },
-  genreItem: {
-    backgroundColor: COLORS.primary200,
-    padding: 5,
-    borderWidth: 1,
-    borderColor: COLORS.primary500,
-    borderRadius: 10,
-    marginBottom: 10,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  genreItemActive: {
-    borderColor: COLORS.accentDark,
-  },
-  genreItemText: {
-    fontFamily: 'RobotoMono-Regular',
-    fontSize: 16,
-    color: COLORS.primary600,
-  },
-  genreItemActiveText: {
-    color: COLORS.accentDark,
   },
 })

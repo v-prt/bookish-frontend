@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { FC, useContext } from 'react'
 import { StyleSheet, View, Text, ScrollView } from 'react-native'
 import { UserContext } from '../contexts/UserContext'
 import { COLORS } from '../GlobalStyles'
@@ -9,16 +9,26 @@ interface Props {
   navigation: any
 }
 
-export const Home: React.FC<Props> = ({ navigation }) => {
+export const Home: FC<Props> = ({ navigation }) => {
   const { userData } = useContext(UserContext)
   const faveGenres = userData?.faveGenres
 
   return (
     <ScrollView style={styles.screen}>
+      <View style={styles.btnWrapper}>
+        <CustomButton
+          type='primary'
+          label='Search Books'
+          icon='search'
+          onPress={() => navigation.navigate('Search')}
+        />
+      </View>
       <Text style={styles.headerText}>Recommended for you</Text>
       <View style={styles.divider} />
       {faveGenres?.length > 0 ? (
-        faveGenres.map((genre: string, i: number) => <RecommendedBooks genre={genre} key={i} />)
+        faveGenres.map((genre: string, i: number) => (
+          <RecommendedBooks genre={genre} key={i} navigation={navigation} />
+        ))
       ) : (
         <View style={styles.noRecommendations}>
           <Text style={styles.infoText}>
@@ -46,6 +56,9 @@ const styles = StyleSheet.create({
   screen: {
     backgroundColor: COLORS.primary100,
     flex: 1,
+  },
+  btnWrapper: {
+    padding: 20,
   },
   headerText: {
     fontFamily: 'RobotoMono-Bold',

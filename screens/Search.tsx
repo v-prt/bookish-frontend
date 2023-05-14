@@ -1,3 +1,4 @@
+import { FC, useContext } from 'react'
 import {
   StyleSheet,
   View,
@@ -9,16 +10,14 @@ import {
   NativeSyntheticEvent,
   TextInputSubmitEditingEventData,
 } from 'react-native'
-import { useInfiniteQuery } from 'react-query'
 import { COLORS } from '../GlobalStyles'
-import { DetailedBookList } from '../components/DetailedBookList'
 import { Input } from '../ui/Input'
-import { useEffect, useState } from 'react'
-import axios from 'axios'
+import * as Haptics from 'expo-haptics'
 import { Formik } from 'formik'
 import { sanitizeText } from '../utils'
 import { GenreButton } from '../components/GenreButton'
-import * as Haptics from 'expo-haptics'
+import { DetailedBookList } from '../components/DetailedBookList'
+import { SearchContext } from '../contexts/SearchContext'
 
 // genre images
 const adventure = require('../assets/images/adventure.jpg')
@@ -36,68 +35,20 @@ const scienceFiction = require('../assets/images/science-fiction.jpg')
 const thriller = require('../assets/images/thriller.jpg')
 const youngAdult = require('../assets/images/young-adult.jpg')
 
-interface Props {}
-
-export const Search: React.FC<Props> = ({}) => {
-  const [searchText, setSearchText] = useState<string>('')
-  const [searchResults, setSearchResults] = useState<any>([])
-  const [totalResults, setTotalResults] = useState<number | null>(null)
-  const [selectedGenre, setSelectedGenre] = useState<string | null>(null)
-
-  const { data, status, fetchNextPage, isFetchingNextPage } = useInfiniteQuery(
-    ['books', searchText],
-    async ({ pageParam = 0 }) => {
-      if (searchText?.length > 0) {
-        const maxResults = 20
-
-        const res = await axios.get(
-          `https://www.googleapis.com/books/v1/volumes?q=${searchText}&startIndex=${pageParam}&maxResults=${maxResults}`
-        )
-
-        const items = res.data.items
-        const totalItems = res.data.totalItems
-        return { items, totalItems }
-      } else return { items: [], totalItems: 0 }
-    },
-    {
-      getNextPageParam: (lastPage, pages) => {
-        const maxResults = 20
-        const currentCount = pages.flatMap(page => page?.items).length
-        return currentCount < lastPage?.totalItems ? currentCount + maxResults : undefined
-      },
-    }
-  )
-
-  const filterBooks = (pages: any[]) => {
-    // remove duplicates and books without images
-    const books = pages.flatMap(page => page?.items || [])
-    const uniqueBooks = Array.from(new Set(books.map((book: any) => book.id))).map(id => {
-      const filteredBooks = books.filter(book => book.id === id)
-      const book = filteredBooks[0]
-      return {
-        volumeId: book.id,
-        title: book.volumeInfo.title,
-        image: book.volumeInfo.imageLinks?.thumbnail,
-        author: book.volumeInfo.authors?.[0],
-        averageRating: book.volumeInfo.averageRating,
-        ratingsCount: book.volumeInfo.ratingsCount,
-      }
-    })
-    const booksWithImages = uniqueBooks.filter((book: any) => book.image !== undefined)
-    return booksWithImages
-  }
-
-  useEffect(() => {
-    if (status === 'success' && data) {
-      const searchResults = filterBooks(data.pages)
-      setSearchResults(searchResults)
-      setTotalResults(data.pages[0]?.totalItems)
-    }
-  }, [status, data])
-
-  const handleLoadMore = () => {
-    fetchNextPage()
-  }
+export const Search: FC = () => {
+  const {
+    searchText,
+    setSearchText,
+    selectedGenre,
+    setSelectedGenre,
+    searchResults,
+    setSearchResults,
+    totalResults,
+    setTotalResults,
+    status,
+    handleLoadMore,
+    isFetchingNextPage,
+  } = useContext(SearchContext)
 
   const handleSearch = (text: string) => {
     const sanitizedText = sanitizeText(text)
@@ -227,7 +178,7 @@ export const Search: React.FC<Props> = ({}) => {
   )
 }
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
   screen: {
     backgroundColor: COLORS.primary100,
     flex: 1,
@@ -266,6 +217,17 @@ const styles = StyleSheet.create({
   text: {
     fontFamily: 'RobotoMono-Regular',
     fontSize: 12,
+    color: COLORS.primary800,
+  },
+
+  // for GenreSearch
+  headerWrapper: {
+    backgroundColor: COLORS.primary300,
+    padding: 20,
+  },
+  quote: {
+    fontFamily: 'RobotoMono-Italic',
+    fontSize: 16,
     color: COLORS.primary800,
   },
 })

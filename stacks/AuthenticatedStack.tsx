@@ -3,6 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { StyleSheet, Image, Text } from 'react-native'
 import { COLORS } from '../GlobalStyles'
 import { Home } from '../screens/Home'
+import { GenreSearch } from '../screens/GenreSearch'
 import { Search } from '../screens/Search'
 import { BookDetails } from '../screens/BookDetails'
 import { Library } from '../screens/Library'
@@ -44,6 +45,7 @@ const HomeStack = () => {
           headerShown: false,
         }}
       />
+      <Stack.Screen name='GenreSearch' component={GenreSearch} />
       <Stack.Screen
         name='BookDetails'
         component={BookDetails}
@@ -79,6 +81,8 @@ const SearchStack = () => {
         component={Search}
         options={{
           headerShown: false,
+          //  FIXME: not working
+          // headerBackTitle: 'Search',
         }}
       />
       <Stack.Screen
@@ -86,6 +90,7 @@ const SearchStack = () => {
         component={BookDetails}
         options={{
           title: '',
+          // headerBackTitle: 'Search',
         }}
       />
       <Stack.Screen
