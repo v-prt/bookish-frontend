@@ -19,6 +19,7 @@ export const DetailedBookList: React.FC<Props> = ({ books, infiniteScroll, isLoa
       onEndReachedThreshold={0.5}
       onEndReached={infiniteScroll}
       keyboardDismissMode='on-drag'
+      style={styles.list}
       // show loading indicator at bottom when fetching more books
       ListFooterComponent={() => {
         if (isLoading) {
@@ -36,6 +37,9 @@ export const DetailedBookList: React.FC<Props> = ({ books, infiniteScroll, isLoa
 }
 
 const styles = StyleSheet.create({
+  list: {
+    padding: 20,
+  },
   footerContainer: {
     padding: 10,
     alignItems: 'center',

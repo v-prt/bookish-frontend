@@ -6,6 +6,7 @@ import { View, Text, StyleSheet, Pressable, ActivityIndicator } from 'react-nati
 import { COLORS } from '../GlobalStyles'
 import * as Haptics from 'expo-haptics'
 import numeral from 'numeral'
+import { SimpleBookList } from './SimpleBookList'
 
 export const ReadingActivity: FC = () => {
   const { fetchReadingActivity } = useContext(UserContext)
@@ -21,7 +22,7 @@ export const ReadingActivity: FC = () => {
   )
 
   return (
-    <View style={styles.wrapper}>
+    <View>
       <View style={styles.toggles}>
         {dates.map(date => (
           <Pressable
@@ -71,6 +72,11 @@ export const ReadingActivity: FC = () => {
               </View>
             </View>
           )}
+
+          <View style={styles.headerWrapper}>
+            <Text style={styles.headerText}>Recently read</Text>
+          </View>
+          <SimpleBookList books={readingActivity.recentlyRead} />
         </>
       ) : (
         <View style={styles.loading}>
@@ -82,15 +88,13 @@ export const ReadingActivity: FC = () => {
 }
 
 const styles = StyleSheet.create({
-  wrapper: {
-    paddingHorizontal: 20,
-  },
   toggles: {
     backgroundColor: COLORS.primary300,
     flexDirection: 'row',
     justifyContent: 'space-between',
     gap: 5,
     marginBottom: 20,
+    marginHorizontal: 20,
     padding: 3,
     borderRadius: 10,
   },
@@ -119,6 +123,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 20,
     marginBottom: 20,
+    marginHorizontal: 20,
   },
   card: {
     backgroundColor: COLORS.primary200,
@@ -147,5 +152,22 @@ const styles = StyleSheet.create({
     padding: 20,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+
+  headerWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    borderBottomColor: COLORS.primary600,
+    borderBottomWidth: 1,
+    marginLeft: 20,
+    marginBottom: 20,
+    paddingRight: 20,
+    paddingBottom: 8,
+  },
+  headerText: {
+    fontFamily: 'RobotoMono-Regular',
+    fontSize: 18,
+    color: COLORS.primary900,
   },
 })

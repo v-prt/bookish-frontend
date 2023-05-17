@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    margin: 10,
+    marginBottom: 20,
   },
   image: {
     backgroundColor: COLORS.primary200,
