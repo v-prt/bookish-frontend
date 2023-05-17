@@ -12,7 +12,14 @@ interface Props {
 
 export const BookProvider: FC<Props> = ({ children }) => {
   const queryClient = useQueryClient()
-  const queryKeys = ['user', 'user-book', 'currently-reading', 'want-to-read', 'read']
+  const queryKeys = [
+    'user',
+    'user-book',
+    'currently-reading',
+    'want-to-read',
+    'read',
+    'reading-activity',
+  ]
 
   const fetchBook = async (userId: string, volumeId: string) => {
     const { data } = await axios.get(`${API_URL}/books/${userId}/${volumeId}`)

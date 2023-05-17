@@ -1,9 +1,11 @@
 import { FC, useContext } from 'react'
+import { useQuery } from 'react-query'
 import { StyleSheet, View, Text, ScrollView } from 'react-native'
 import { UserContext } from '../contexts/UserContext'
 import { COLORS } from '../GlobalStyles'
 import { RecommendedBooks } from '../components/RecommendedBooks'
 import { CustomButton } from '../ui/CustomButton'
+import { ReadingActivity } from '../components/ReadingActivity'
 
 interface Props {
   navigation: any
@@ -12,6 +14,10 @@ interface Props {
 export const Home: FC<Props> = ({ navigation }) => {
   const { userData } = useContext(UserContext)
   const faveGenres = userData?.faveGenres
+
+  // pick up to 3 random genres from user's fave genres
+  const randomGenres = faveGenres?.sort(() => 0.5 - Math.random()).slice(0, 3)
+
   // const [scrolledPastTop, setScrolledPastTop] = useState(false)
 
   // animate header based on scroll position
@@ -33,7 +39,11 @@ export const Home: FC<Props> = ({ navigation }) => {
       </View>
 
       <View style={styles.screenInnerWrapper}>
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{
+            paddingBottom: 40,
+          }}>
           <View style={styles.btnWrapper}>
             <CustomButton
               type='primary'
@@ -44,8 +54,8 @@ export const Home: FC<Props> = ({ navigation }) => {
           </View>
           <Text style={styles.headerText}>Recommended for you</Text>
           <View style={styles.divider} />
-          {faveGenres?.length > 0 ? (
-            faveGenres.map((genre: string, i: number) => (
+          {randomGenres?.length > 0 ? (
+            randomGenres.map((genre: string, i: number) => (
               <RecommendedBooks genre={genre} key={i} navigation={navigation} />
             ))
           ) : (
@@ -61,9 +71,9 @@ export const Home: FC<Props> = ({ navigation }) => {
               />
             </View>
           )}
-          {/* TODO: reading activity / stats, genre search buttons */}
-          {/* <Text style={styles.headerText}>Your reading activity</Text>
-          <View style={styles.divider} /> */}
+          <Text style={styles.headerText}>Your reading activity</Text>
+          <View style={styles.divider} />
+          <ReadingActivity />
         </ScrollView>
       </View>
     </View>

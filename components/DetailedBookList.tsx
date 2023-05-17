@@ -24,7 +24,7 @@ export const DetailedBookList: React.FC<Props> = ({ books, infiniteScroll, isLoa
         if (isLoading) {
           return (
             <View style={styles.footerContainer}>
-              <ActivityIndicator size='small' color={COLORS.primary300} />
+              <ActivityIndicator size='small' color={COLORS.primary400} />
             </View>
           )
         } else {

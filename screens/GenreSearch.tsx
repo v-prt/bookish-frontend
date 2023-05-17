@@ -37,7 +37,7 @@ export const GenreSearch: FC<Props> = ({ navigation }) => {
     })
 
     // clean selected genre string to match key in quotes object
-    setQuote(quotes[selectedGenre.toLowerCase().replace('-', '')])
+    setQuote(quotes[selectedGenre.toLowerCase().replace('-', '').replace(' ', '')])
   }, [])
 
   return (
@@ -49,7 +49,7 @@ export const GenreSearch: FC<Props> = ({ navigation }) => {
       <View style={styles.screenInner}>
         {genreSearchStatus === 'loading' && (
           <View style={styles.loading}>
-            <ActivityIndicator size='large' color={COLORS.primary300} />
+            <ActivityIndicator size='large' color={COLORS.primary400} />
           </View>
         )}
 

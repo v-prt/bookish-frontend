@@ -121,6 +121,17 @@ export const UserProvider: FC<Props> = ({ children }) => {
     }
   }
 
+  const fetchReadingActivity = async (dateRange: string) => {
+    try {
+      const res = await axios.get(`${API_URL}/users/${userId}/reading-activity`, {
+        params: { dateRange },
+      })
+      return res.data
+    } catch (err: any) {
+      return { error: err.response.data.message }
+    }
+  }
+
   return (
     <UserContext.Provider
       value={{
@@ -133,6 +144,7 @@ export const UserProvider: FC<Props> = ({ children }) => {
         handleLogout,
         updateUser,
         deleteAccount,
+        fetchReadingActivity,
         authenticated: !!userId,
       }}>
       {children}

@@ -21,6 +21,7 @@ export const SimpleBookshelf: FC<Props> = ({ bookshelf }) => {
 
   const { data, status } = useQuery(bookshelf.id, () => fetchBookshelf(userId, bookshelf.title))
 
+  // FIXME: improve styling of loading/empty states to keep height the same
   return (
     <View style={styles.container}>
       <View style={styles.headerWrapper}>
@@ -98,7 +99,7 @@ const styles = StyleSheet.create({
     height: 170,
     aspectRatio: 2 / 3,
     backgroundColor: COLORS.primary200,
-    borderRadius: 5,
+    borderRadius: 10,
     marginLeft: 20,
   },
   noBooks: {

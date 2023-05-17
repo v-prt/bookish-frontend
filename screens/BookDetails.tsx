@@ -113,7 +113,7 @@ export const BookDetails: FC<Props> = ({
     <View style={styles.screen}>
       {(googleBookStatus === 'loading' || !book) && (
         <View style={styles.loading}>
-          <ActivityIndicator size='large' color={COLORS.primary300} />
+          <ActivityIndicator size='large' color={COLORS.primary400} />
         </View>
       )}
 
@@ -230,7 +230,7 @@ export const BookDetails: FC<Props> = ({
             <View style={styles.divider} />
             <Text style={styles.detailsText}>
               <Text style={styles.label}>Genres: </Text>
-              {genres || ' Unknown'}
+              {genres || 'Unknown'}
             </Text>
             <Text style={styles.detailsText}>
               <Text style={styles.label}>Publisher: </Text>

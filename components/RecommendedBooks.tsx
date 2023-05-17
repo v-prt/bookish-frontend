@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
     height: 170,
     aspectRatio: 2 / 3,
     backgroundColor: COLORS.primary200,
-    borderRadius: 5,
+    borderRadius: 10,
     marginLeft: 20,
   },
   headerWrapper: {

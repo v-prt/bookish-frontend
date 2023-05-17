@@ -129,6 +129,10 @@ export const ManageBook: React.FC<Props> = ({
             {status && (
               <AlertText type='error' icon='error' title={`Couldn't save book`} subtitle={status} />
             )}
+            {/* TODO: show small book cover & title */}
+            {/* <Text style={styles.title}>
+              {book.title}
+            </Text> */}
             <FormItem name='owned' label='Owned'>
               <View style={styles.options}>
                 {ownedOptions.map((owned, i) => (

@@ -123,7 +123,7 @@ export const Search: FC = () => {
           <View style={styles.screenInner}>
             {status === 'loading' && (
               <View style={styles.loading}>
-                <ActivityIndicator size='large' color={COLORS.primary500} />
+                <ActivityIndicator size='large' color={COLORS.primary400} />
               </View>
             )}
 
