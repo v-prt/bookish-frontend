@@ -9,6 +9,8 @@ export interface Book {
   image: string
 
   // custom data
-  owned: boolean
-  bookshelf: string
+  owned?: boolean
+  bookshelf?: string
+  rating?: number
+  dateRead?: string
 }

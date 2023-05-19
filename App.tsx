@@ -60,12 +60,12 @@ const App: React.FC = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <UserProvider>
-        <SearchProvider>
-          <BookProvider>
+        <BookProvider>
+          <SearchProvider>
             <StatusBar style='dark' />
             <Root />
-          </BookProvider>
-        </SearchProvider>
+          </SearchProvider>
+        </BookProvider>
       </UserProvider>
     </QueryClientProvider>
   )

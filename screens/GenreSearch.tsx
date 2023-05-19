@@ -13,10 +13,9 @@ interface Props {
 export const GenreSearch: FC<Props> = ({ navigation }) => {
   const {
     selectedGenre,
+    genreSearchData,
     genreSearchStatus,
-    genreSearchResults,
-    totalGenreResults,
-    handleLoadMoreGenreResults,
+    fetchNextGenreSearchPage,
     isFetchingNextGenreSearchPage,
   } = useContext(SearchContext)
   const [quote, setQuote] = useState<string>('')
@@ -54,16 +53,18 @@ export const GenreSearch: FC<Props> = ({ navigation }) => {
         )}
 
         {genreSearchStatus === 'success' &&
-          (genreSearchResults?.length > 0 ? (
+          (genreSearchData?.pages?.[0].totalItems > 0 ? (
             <>
               <View style={styles.resultsHeader}>
                 <Text style={styles.resultsText}>
-                  Total Results: {totalGenreResults?.toLocaleString()}
+                  Total Results: {genreSearchData?.pages?.[0].totalItems?.toLocaleString()}
                 </Text>
               </View>
               <DetailedBookList
-                books={genreSearchResults}
-                infiniteScroll={handleLoadMoreGenreResults}
+                books={genreSearchData.pages
+                  .map((group: { items: any[] }) => group.items.map((item: any) => item))
+                  .flat()}
+                infiniteScroll={fetchNextGenreSearchPage}
                 isLoading={isFetchingNextGenreSearchPage}
               />
             </>

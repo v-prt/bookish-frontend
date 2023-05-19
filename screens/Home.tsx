@@ -49,7 +49,7 @@ export const Home: FC<Props> = ({ navigation }) => {
               type='primary'
               label='Search Books'
               icon='search'
-              onPress={() => navigation.navigate('Search')}
+              onPress={() => navigation.navigate('SearchStack')}
             />
           </View>
           <Text style={styles.headerText}>Recommended for you</Text>

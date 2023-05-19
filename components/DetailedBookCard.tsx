@@ -6,6 +6,7 @@ import { Book } from '../Interfaces'
 import { RootStackParamList } from '../Types'
 import { MaterialIcons } from '@expo/vector-icons'
 import { ImageLoader } from '../ui/ImageLoader'
+import moment from 'moment'
 
 interface Props {
   book: Book
@@ -26,15 +27,31 @@ export const DetailedBookCard: React.FC<Props> = ({ book }) => {
           {book.title}
         </Text>
         <Text style={styles.author}>by {book.author || 'Unknown Author'}</Text>
+
         <View style={styles.ratingContainer}>
-          <MaterialIcons name='star' size={18} color={book.averageRating ? 'gold' : '#ccc'} />
+          <MaterialIcons name='star' size={16} color={book.averageRating ? 'gold' : '#ccc'} />
           <Text style={styles.rating}>{book.averageRating || 'No rating'}</Text>
           {book.ratingsCount > 0 && (
             <Text style={styles.ratingsCount}>
-              • ({book.ratingsCount.toLocaleString()} rating{book.ratingsCount > 1 && 's'})
+              ({book.ratingsCount.toLocaleString()} rating{book.ratingsCount > 1 && 's'})
             </Text>
           )}
+          {book.rating && (
+            <>
+              <View style={styles.divider} />
+              <MaterialIcons
+                name='star'
+                size={16}
+                color={book.rating ? COLORS.accentLight : '#ccc'}
+              />
+              <Text style={styles.rating}>{book.rating}</Text>
+            </>
+          )}
         </View>
+
+        {book.dateRead && (
+          <Text style={styles.dateRead}>Read on {moment(book.dateRead).format('ll')}</Text>
+        )}
       </View>
     </Pressable>
   )
@@ -42,17 +59,27 @@ export const DetailedBookCard: React.FC<Props> = ({ book }) => {
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: COLORS.white,
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 20,
+    borderRadius: 10,
+    // android shadow
+    elevation: 4,
+    // ios shadow
+    shadowColor: COLORS.primary600,
+    shadowOffset: { width: 2, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 20,
   },
   image: {
     backgroundColor: COLORS.primary200,
     borderRadius: 10,
-    height: 110,
+    height: 125,
     aspectRatio: 2 / 3,
   },
   textContainer: {
+    padding: 10,
     maxWidth: '70%',
     marginLeft: 10,
   },
@@ -79,5 +106,17 @@ const styles = StyleSheet.create({
     color: COLORS.primary500,
     fontFamily: 'RobotoMono-Regular',
     fontSize: 14,
+  },
+  dateRead: {
+    color: COLORS.primary500,
+    fontFamily: 'RobotoMono-Regular',
+    fontSize: 14,
+    marginTop: 3,
+  },
+  divider: {
+    width: 1,
+    height: 20,
+    backgroundColor: COLORS.primary300,
+    marginHorizontal: 5,
   },
 })

@@ -16,7 +16,7 @@ export const DetailedBookList: React.FC<Props> = ({ books, infiniteScroll, isLoa
       keyExtractor={book => book.volumeId}
       renderItem={({ item }) => <DetailedBookCard book={item} />}
       contentContainerStyle={{ paddingBottom: 10 }}
-      onEndReachedThreshold={0.5}
+      onEndReachedThreshold={0.2}
       onEndReached={infiniteScroll}
       keyboardDismissMode='on-drag'
       style={styles.list}
@@ -42,6 +42,7 @@ const styles = StyleSheet.create({
   },
   footerContainer: {
     padding: 10,
+    paddingBottom: 40,
     alignItems: 'center',
   },
 })
