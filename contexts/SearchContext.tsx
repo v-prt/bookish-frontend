@@ -32,17 +32,15 @@ export const SearchProvider: FC<Props> = ({ children }) => {
         return data
       } else return null
     },
-    // FIXME: pages not working properly
     {
       getNextPageParam: lastPage => lastPage?.nextCursor,
     }
   )
 
-  console.log(data)
-
   const {
     data: genreSearchData,
     status: genreSearchStatus,
+    hasNextPage: genreSearchHasNextPage,
     fetchNextPage: fetchNextGenreSearchPage,
     isFetchingNextPage: isFetchingNextGenreSearchPage,
   } = useInfiniteQuery(
@@ -65,10 +63,14 @@ export const SearchProvider: FC<Props> = ({ children }) => {
   )
 
   const handleInfiniteScroll = () => {
-    console.log('hasNextPage', hasNextPage)
-    console.log('isFetchingNextPage', isFetchingNextPage)
     if (hasNextPage && !isFetchingNextPage) {
       fetchNextPage()
+    }
+  }
+
+  const handleInfiniteGenreSearchScroll = () => {
+    if (genreSearchHasNextPage && !isFetchingNextGenreSearchPage) {
+      fetchNextGenreSearchPage()
     }
   }
 
@@ -90,7 +92,7 @@ export const SearchProvider: FC<Props> = ({ children }) => {
         setGenreSearchText,
         selectedGenre,
         setSelectedGenre,
-        fetchNextGenreSearchPage,
+        handleInfiniteGenreSearchScroll,
         isFetchingNextGenreSearchPage,
       }}>
       {children}

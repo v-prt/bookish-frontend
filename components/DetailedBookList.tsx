@@ -10,11 +10,28 @@ interface Props {
 }
 
 export const DetailedBookList: React.FC<Props> = ({ books, infiniteScroll, isLoading }) => {
+  // remove any duplicate books (issue with Google Books API)
+  const uniqueBooks =
+    // create array of unique volumeIds
+    Array.from(new Set(books.map(book => book.volumeId))).map(volumeId => {
+      // find first instance of book with matching volumeId
+      return books.find(book => book.volumeId === volumeId)
+    })
+
+  // ignore books without images
+  const booksWithImages = uniqueBooks.filter((book: any) => book.image !== undefined)
+
+  const generateKey = () => {
+    // generate random number between 1 and 1000000
+    const randomNum = Math.floor(Math.random() * 1000000) + 1
+    return randomNum.toString()
+  }
+
   return (
     <FlatList
-      data={books}
-      keyExtractor={book => book.volumeId}
-      renderItem={({ item }) => <DetailedBookCard book={item} />}
+      data={booksWithImages}
+      keyExtractor={book => book?.volumeId || generateKey()}
+      renderItem={({ item }) => (item ? <DetailedBookCard book={item} /> : null)}
       contentContainerStyle={{ paddingBottom: 10 }}
       onEndReachedThreshold={0.2}
       onEndReached={infiniteScroll}

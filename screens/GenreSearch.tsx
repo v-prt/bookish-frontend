@@ -15,7 +15,7 @@ export const GenreSearch: FC<Props> = ({ navigation }) => {
     selectedGenre,
     genreSearchData,
     genreSearchStatus,
-    fetchNextGenreSearchPage,
+    handleInfiniteGenreSearchScroll,
     isFetchingNextGenreSearchPage,
   } = useContext(SearchContext)
   const [quote, setQuote] = useState<string>('')
@@ -64,7 +64,7 @@ export const GenreSearch: FC<Props> = ({ navigation }) => {
                 books={genreSearchData.pages
                   .map((group: { items: any[] }) => group.items.map((item: any) => item))
                   .flat()}
-                infiniteScroll={fetchNextGenreSearchPage}
+                infiniteScroll={handleInfiniteGenreSearchScroll}
                 isLoading={isFetchingNextGenreSearchPage}
               />
             </>
