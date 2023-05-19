@@ -37,16 +37,13 @@ const youngAdult = require('../assets/images/young-adult.jpg')
 
 export const Search: FC = () => {
   const {
+    data,
+    status,
     searchText,
     setSearchText,
     selectedGenre,
     setSelectedGenre,
-    searchResults,
-    setSearchResults,
-    totalResults,
-    setTotalResults,
-    status,
-    handleLoadMore,
+    handleInfiniteScroll,
     isFetchingNextPage,
   } = useContext(SearchContext)
 
@@ -82,9 +79,6 @@ export const Search: FC = () => {
       initialValues={{ search: '' }}
       onSubmit={values => {
         handleSearch(values.search)
-        // reset search results
-        setSearchResults(null)
-        setTotalResults(null)
       }}>
       {({ handleChange, handleBlur, handleSubmit, values, setValues }) => (
         <View style={styles.screen}>
@@ -111,8 +105,6 @@ export const Search: FC = () => {
                   Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
                   handleChange('search')('')
                   setSearchText('')
-                  setSearchResults(null)
-                  setTotalResults(null)
                 }
               }}
             />
@@ -128,11 +120,11 @@ export const Search: FC = () => {
             )}
 
             {status === 'success' &&
-              (searchResults?.length > 0 ? (
+              (data?.pages?.[0]?.totalItems > 0 ? (
                 <>
                   <View style={styles.resultsHeader}>
                     <Text style={styles.resultsText}>
-                      Total Results: {totalResults?.toLocaleString()}
+                      Total Results: {data?.pages?.[0].totalItems?.toLocaleString()}
                       {selectedGenre && ` (${selectedGenre})`}
                     </Text>
                     <Pressable
@@ -147,8 +139,10 @@ export const Search: FC = () => {
                     </Pressable>
                   </View>
                   <DetailedBookList
-                    books={searchResults}
-                    infiniteScroll={handleLoadMore}
+                    books={data.pages
+                      .map((group: { items: any[] }) => group.items.map((item: any) => item))
+                      .flat()}
+                    infiniteScroll={handleInfiniteScroll}
                     isLoading={isFetchingNextPage}
                   />
                 </>

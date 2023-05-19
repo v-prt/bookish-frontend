@@ -6,7 +6,7 @@ import { View, Text, StyleSheet, Pressable, ActivityIndicator } from 'react-nati
 import { COLORS } from '../GlobalStyles'
 import * as Haptics from 'expo-haptics'
 import numeral from 'numeral'
-import { SimpleBookList } from './SimpleBookList'
+import { DetailedBookCard } from './DetailedBookCard'
 
 export const ReadingActivity: FC = () => {
   const { fetchReadingActivity } = useContext(UserContext)
@@ -73,10 +73,18 @@ export const ReadingActivity: FC = () => {
             </View>
           )}
 
-          <View style={styles.headerWrapper}>
-            <Text style={styles.headerText}>Recently read</Text>
-          </View>
-          <SimpleBookList books={readingActivity.recentlyRead} />
+          {!!readingActivity.recentlyRead?.length && (
+            <View>
+              <View style={styles.headerWrapper}>
+                <Text style={styles.headerText}>Recently read</Text>
+              </View>
+              <View style={styles.books}>
+                {readingActivity.recentlyRead.map((book: any) => (
+                  <DetailedBookCard key={book.volumeId} book={book} />
+                ))}
+              </View>
+            </View>
+          )}
         </>
       ) : (
         <View style={styles.loading}>
@@ -169,5 +177,9 @@ const styles = StyleSheet.create({
     fontFamily: 'RobotoMono-Regular',
     fontSize: 18,
     color: COLORS.primary900,
+  },
+
+  books: {
+    paddingHorizontal: 20,
   },
 })
