@@ -1,12 +1,12 @@
-import { FC, useState, useEffect, useContext } from 'react'
+import { FC, useContext } from 'react'
 import { useQuery } from 'react-query'
 import { ScrollView, View, Text, StyleSheet, Pressable } from 'react-native'
 import { SimpleBookList } from '../components/SimpleBookList'
 import { COLORS } from '../GlobalStyles'
-import axios from 'axios'
 import * as Haptics from 'expo-haptics'
 import { MaterialIcons } from '@expo/vector-icons'
 import { SearchContext } from '../contexts/SearchContext'
+import { UserContext } from '../contexts/UserContext'
 
 interface Props {
   genre: string
@@ -14,38 +14,12 @@ interface Props {
 }
 
 export const RecommendedBooks: FC<Props> = ({ genre, navigation }) => {
-  // TODO: get user's books to compare with results and ignore books they already have in any bookshelf (create endpoint in backend to handle this logic)
   const { setGenreSearchText, setSelectedGenre } = useContext(SearchContext)
-  const [recommendedBooks, setRecommendedBooks] = useState<any>([])
+  const { fetchRecommendedBooks } = useContext(UserContext)
 
-  const fetchRecommendedBooks = async (genre: string) => {
-    let searchText = `highly rated ${genre} books`
-    let pageParam = 0
-    let maxResults = 6
-
-    const res = await axios.get(
-      `https://www.googleapis.com/books/v1/volumes?q=${searchText}&startIndex=${pageParam}&maxResults=${maxResults}`
-    )
-    return res.data.items
-  }
-
-  const { data, status } = useQuery(['recommendedBooks', genre], () => fetchRecommendedBooks(genre))
-
-  useEffect(() => {
-    if (status === 'success' && data) {
-      const structuredBooks = data.map((book: any) => {
-        return {
-          volumeId: book.id,
-          title: book.volumeInfo.title,
-          image: book.volumeInfo.imageLinks?.thumbnail,
-          author: book.volumeInfo.authors?.[0],
-          averageRating: book.volumeInfo.averageRating,
-          ratingsCount: book.volumeInfo.ratingsCount,
-        }
-      })
-      setRecommendedBooks(structuredBooks)
-    }
-  }, [status, data])
+  const { data, status } = useQuery(['recommended-books', genre], () =>
+    fetchRecommendedBooks(genre)
+  )
 
   const handleGenreSearch = (genre: string) => {
     setGenreSearchText(`highly rated ${genre} books`)
@@ -81,7 +55,7 @@ export const RecommendedBooks: FC<Props> = ({ genre, navigation }) => {
           ))}
         </ScrollView>
       )}
-      {status === 'success' && <SimpleBookList books={recommendedBooks} />}
+      {status === 'success' && data && <SimpleBookList books={data.recommendedBooks} />}
     </View>
   )
 }

@@ -19,6 +19,7 @@ export const BookProvider: FC<Props> = ({ children }) => {
     'want-to-read',
     'read',
     'reading-activity',
+    'recommended-books',
   ]
 
   const fetchBook = async (userId: string, volumeId: string) => {

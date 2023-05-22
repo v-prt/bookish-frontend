@@ -123,10 +123,21 @@ export const UserProvider: FC<Props> = ({ children }) => {
 
   const fetchReadingActivity = async (dateRange: string) => {
     try {
-      const res = await axios.get(`${API_URL}/users/${userId}/reading-activity`, {
+      const { data } = await axios.get(`${API_URL}/users/${userId}/reading-activity`, {
         params: { dateRange },
       })
-      return res.data
+      return data
+    } catch (err: any) {
+      return { error: err.response.data.message }
+    }
+  }
+
+  const fetchRecommendedBooks = async (genre: string) => {
+    try {
+      const { data } = await axios.get(`${API_URL}/users/${userId}/recommended-books`, {
+        params: { genre },
+      })
+      return data
     } catch (err: any) {
       return { error: err.response.data.message }
     }
@@ -145,6 +156,7 @@ export const UserProvider: FC<Props> = ({ children }) => {
         updateUser,
         deleteAccount,
         fetchReadingActivity,
+        fetchRecommendedBooks,
         authenticated: !!userId,
       }}>
       {children}

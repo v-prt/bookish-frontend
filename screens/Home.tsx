@@ -1,5 +1,4 @@
 import { FC, useContext } from 'react'
-import { useQuery } from 'react-query'
 import { StyleSheet, View, Text, ScrollView } from 'react-native'
 import { UserContext } from '../contexts/UserContext'
 import { COLORS } from '../GlobalStyles'
@@ -16,7 +15,7 @@ export const Home: FC<Props> = ({ navigation }) => {
   const faveGenres = userData?.faveGenres
 
   // pick up to 3 random genres from user's fave genres
-  const randomGenres = faveGenres?.sort(() => 0.5 - Math.random()).slice(0, 3)
+  // const randomGenres = faveGenres?.sort(() => 0.5 - Math.random()).slice(0, 3)
 
   // const [scrolledPastTop, setScrolledPastTop] = useState(false)
 
@@ -54,8 +53,8 @@ export const Home: FC<Props> = ({ navigation }) => {
           </View>
           <Text style={styles.headerText}>Recommended for you</Text>
           <View style={styles.divider} />
-          {randomGenres?.length > 0 ? (
-            randomGenres.map((genre: string, i: number) => (
+          {faveGenres?.length > 0 ? (
+            faveGenres.map((genre: string, i: number) => (
               <RecommendedBooks genre={genre} key={i} navigation={navigation} />
             ))
           ) : (
