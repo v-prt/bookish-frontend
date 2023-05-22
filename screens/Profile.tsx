@@ -144,9 +144,14 @@ export const Profile: FC<Props> = ({ navigation }) => {
         />
       </View>
 
+      {/* TODO: add user's ratings */}
       <View style={styles.screenInnerWrapper}>
-        <ScrollView style={styles.screenInner}>
-          {/* TODO: ratings, reading activity, etc. ? */}
+        <ScrollView
+          style={styles.screenInner}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{
+            paddingBottom: 80,
+          }}>
           <View style={styles.headerWrapper}>
             <Text style={styles.headerText}>Books</Text>
           </View>
@@ -364,10 +369,11 @@ const styles = StyleSheet.create({
   },
   currentlyReadingWrapper: {
     paddingHorizontal: 20,
+    marginBottom: 30,
   },
   bookshelvesContainer: {
     paddingHorizontal: 20,
-    marginBottom: 20,
+    marginBottom: 30,
   },
   bookshelfWrapper: {
     flexDirection: 'row',
@@ -386,14 +392,14 @@ const styles = StyleSheet.create({
   },
   bookshelfCount: {
     fontFamily: 'RobotoMono-Bold',
-    fontSize: 16,
+    fontSize: 18,
     color: COLORS.accentDark,
   },
   genresContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 10,
-    paddingHorizontal: 20,
+    marginHorizontal: 20,
   },
   genreWrapper: {
     backgroundColor: COLORS.primary200,
@@ -402,8 +408,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   genreLabel: {
-    color: COLORS.accentDark,
-    fontFamily: 'RobotoMono-Regular',
+    color: COLORS.primary800,
+    fontFamily: 'RobotoMono-Medium',
     fontSize: 14,
   },
   infoText: {

@@ -49,8 +49,15 @@ export const DetailedBookCard: React.FC<Props> = ({ book }) => {
           )}
         </View>
 
-        {book.dateRead && (
-          <Text style={styles.dateRead}>Read on {moment(book.dateRead).format('ll')}</Text>
+        {book.bookshelf && (
+          <View style={styles.userBookInfo}>
+            <View style={styles.bookshelfTag}>
+              <Text style={styles.bookshelfTagText}>{book.bookshelf}</Text>
+            </View>
+            {book.dateRead && (
+              <Text style={styles.dateRead}>{moment(book.dateRead).format('ll')}</Text>
+            )}
+          </View>
         )}
       </View>
     </Pressable>
@@ -107,16 +114,37 @@ const styles = StyleSheet.create({
     fontFamily: 'RobotoMono-Regular',
     fontSize: 14,
   },
-  dateRead: {
-    color: COLORS.primary500,
-    fontFamily: 'RobotoMono-Regular',
-    fontSize: 14,
-    marginTop: 3,
-  },
   divider: {
     width: 1,
     height: 20,
     backgroundColor: COLORS.primary300,
     marginHorizontal: 5,
+  },
+  userBookInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    marginTop: 5,
+  },
+  bookshelfTag: {
+    backgroundColor: COLORS.accentDark,
+    borderRadius: 20,
+    paddingVertical: 3,
+    paddingHorizontal: 8,
+    alignSelf: 'flex-start',
+    opacity: 0.4,
+  },
+  bookshelfTagText: {
+    color: COLORS.white,
+    fontFamily: 'RobotoMono-Bold',
+    fontSize: 12,
+    textTransform: 'uppercase',
+    letterSpacing: 1,
+  },
+  dateRead: {
+    color: COLORS.accentDark,
+    fontFamily: 'RobotoMono-Regular',
+    fontSize: 14,
+    opacity: 0.4,
   },
 })

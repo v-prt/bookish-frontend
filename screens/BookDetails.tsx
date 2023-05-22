@@ -82,7 +82,7 @@ export const BookDetails: FC<Props> = ({
             rating > i + 0.5 ? 'star' : rating > i && rating < i + 1 ? 'star-half' : 'star-border'
           }
           size={18}
-          color={rating > i ? 'gold' : '#ccc'}
+          color={rating > i ? COLORS.accentLight : COLORS.primary500}
         />
       )
     }
@@ -157,7 +157,7 @@ export const BookDetails: FC<Props> = ({
             <View style={styles.ratingGroup}>
               <MaterialIcons
                 name={book.averageRating ? 'star' : 'star-border'}
-                color={book.averageRating ? 'gold' : '#ccc'}
+                color={book.averageRating ? 'gold' : COLORS.primary500}
                 size={20}
               />
               <Text style={styles.ratingValue}>
@@ -170,7 +170,7 @@ export const BookDetails: FC<Props> = ({
             <View style={styles.ratingGroup}>
               <MaterialIcons
                 name={userBookData?.rating ? 'star' : 'star-border'}
-                color={userBookData?.rating ? COLORS.accentLight : '#ccc'}
+                color={userBookData?.rating ? COLORS.accentLight : COLORS.primary500}
                 size={20}
               />
               <Text style={styles.ratingValue}>
@@ -193,9 +193,7 @@ export const BookDetails: FC<Props> = ({
                   />
                   <View>
                     <View style={styles.reviewHeader}>
-                      <Text style={styles.name}>
-                        {userData.firstName} {userData.lastName}
-                      </Text>
+                      <Text style={styles.name}>{userData.firstName}</Text>
                       <View style={styles.stars}>{renderStars(userBookData.rating)}</View>
                     </View>
                     <Text style={styles.reviewDate}>

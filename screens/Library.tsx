@@ -9,7 +9,7 @@ interface Props {
 
 export const Library: FC<Props> = ({ navigation }) => {
   const bookshelves = [
-    // { title: 'Currently reading', id: 'currently-reading' },
+    { title: 'Currently reading', id: 'currently-reading' },
     { title: 'Want to read', id: 'want-to-read' },
     { title: 'Read', id: 'read' },
   ]

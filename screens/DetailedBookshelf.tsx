@@ -110,6 +110,7 @@ export const DetailedBookshelf: FC<Props> = ({
 const styles = StyleSheet.create({
   screen: {
     backgroundColor: COLORS.primary100,
+    flex: 1,
   },
   list: {
     padding: 20,
