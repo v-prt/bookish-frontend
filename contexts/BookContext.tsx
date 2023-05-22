@@ -26,13 +26,6 @@ export const BookProvider: FC<Props> = ({ children }) => {
     return data.book
   }
 
-  const fetchBookshelf = async (userId: string, bookshelf: string) => {
-    const { data } = await axios.get(`${API_URL}/bookshelf/${userId}`, {
-      params: { bookshelf },
-    })
-    return data
-  }
-
   const addBook = async (book: any) => {
     const { data } = await axios.post(`${API_URL}/books`, book)
     queryKeys.forEach(key => queryClient.invalidateQueries(key))
@@ -52,7 +45,7 @@ export const BookProvider: FC<Props> = ({ children }) => {
   }
 
   return (
-    <BookContext.Provider value={{ fetchBook, fetchBookshelf, addBook, updateBook, deleteBook }}>
+    <BookContext.Provider value={{ fetchBook, addBook, updateBook, deleteBook }}>
       {children}
     </BookContext.Provider>
   )

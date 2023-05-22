@@ -1,10 +1,8 @@
-import { ReactNode, FC, createContext, useState, useEffect, useContext } from 'react'
+import { ReactNode, FC, createContext, useState, useContext } from 'react'
 import { useInfiniteQuery } from 'react-query'
 import axios from 'axios'
 import { UserContext } from './UserContext'
-import { BookContext } from './BookContext'
 import { API_URL } from '../constants'
-import { isConstructorTypeNode } from 'typescript'
 
 export const SearchContext = createContext<any>(null)
 
@@ -33,7 +31,7 @@ export const SearchProvider: FC<Props> = ({ children }) => {
       } else return null
     },
     {
-      getNextPageParam: lastPage => lastPage?.nextCursor,
+      getNextPageParam: lastPage => lastPage?.nextPage,
     }
   )
 
@@ -58,7 +56,7 @@ export const SearchProvider: FC<Props> = ({ children }) => {
       } else return null
     },
     {
-      getNextPageParam: lastPage => lastPage?.nextCursor,
+      getNextPageParam: lastPage => lastPage?.nextPage,
     }
   )
 

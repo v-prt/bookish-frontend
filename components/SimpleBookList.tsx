@@ -1,23 +1,39 @@
-import { StyleSheet, ScrollView } from 'react-native'
+import { StyleSheet, FlatList, ActivityIndicator, View } from 'react-native'
 import { SimpleBookCard } from './SimpleBookCard'
 import { Book } from '../Interfaces'
+import { COLORS } from '../GlobalStyles'
 
 interface Props {
   books: Book[]
+  infiniteScroll?: () => void
+  isLoading?: boolean
 }
 
-export const SimpleBookList: React.FC<Props> = ({ books }) => {
+export const SimpleBookList: React.FC<Props> = ({ books, infiniteScroll, isLoading }) => {
   return (
-    <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.wrapper}>
-      {books.map((book, i) => (
-        <SimpleBookCard
-          key={i}
-          book={book}
-          // if book is last in list, pass true to lastChild prop to add margin to right side
-          lastChild={i === books.length - 1}
-        />
-      ))}
-    </ScrollView>
+    <FlatList
+      data={books}
+      keyExtractor={book => book.volumeId}
+      renderItem={({ item }) => (
+        <SimpleBookCard book={item} lastChild={books.indexOf(item) === books.length - 1} />
+      )}
+      horizontal={true}
+      showsHorizontalScrollIndicator={false}
+      onEndReachedThreshold={0.2}
+      onEndReached={infiniteScroll}
+      style={styles.wrapper}
+      ListFooterComponent={() => {
+        if (isLoading) {
+          return (
+            <View style={styles.footerContainer}>
+              <ActivityIndicator size='small' color={COLORS.primary400} />
+            </View>
+          )
+        } else {
+          return null
+        }
+      }}
+    />
   )
 }
 
@@ -25,5 +41,12 @@ const styles = StyleSheet.create({
   wrapper: {
     gap: 10,
     marginBottom: 25,
+  },
+  footerContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 10,
+    paddingRight: 30,
+    flex: 1,
   },
 })

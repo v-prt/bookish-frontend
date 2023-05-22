@@ -22,6 +22,8 @@ import { Formik } from 'formik'
 import { FormItem } from '../ui/FormItem'
 import { AlertText } from '../ui/AlertText'
 import { CustomButton } from '../ui/CustomButton'
+import { DetailedBookCard } from '../components/DetailedBookCard'
+import { Book } from '../Interfaces'
 
 interface Props {
   navigation: any
@@ -145,14 +147,6 @@ export const Profile: FC<Props> = ({ navigation }) => {
       <View style={styles.screenInnerWrapper}>
         <ScrollView style={styles.screenInner}>
           {/* TODO: ratings, reading activity, etc. ? */}
-          {!!currentlyReading?.length && (
-            <Text style={styles.currentlyReadingText}>
-              Currently reading{' '}
-              <Text style={styles.currentlyReadingTitle}>"{currentlyReading?.[0].title}"</Text>{' '}
-              {currentlyReading?.length > 1 && `+ ${currentlyReading.length - 1} more`}
-            </Text>
-          )}
-
           <View style={styles.headerWrapper}>
             <Text style={styles.headerText}>Books</Text>
           </View>
@@ -170,6 +164,19 @@ export const Profile: FC<Props> = ({ navigation }) => {
               <Text style={styles.bookshelfCount}>{numRead}</Text>
             </View>
           </View>
+
+          {!!currentlyReading?.length && (
+            <>
+              <View style={styles.headerWrapper}>
+                <Text style={styles.headerText}>Currently reading</Text>
+              </View>
+              <View style={styles.currentlyReadingWrapper}>
+                {currentlyReading.map((book: Book) => (
+                  <DetailedBookCard book={book} key={book.volumeId} />
+                ))}
+              </View>
+            </>
+          )}
 
           <View style={styles.headerWrapper}>
             <Text style={styles.headerText}>Favorite genres</Text>
@@ -355,14 +362,8 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: COLORS.primary900,
   },
-  currentlyReadingText: {
-    fontFamily: 'RobotoMono-Italic',
-    fontSize: 16,
-    color: COLORS.grey,
-    marginBottom: 20,
-  },
-  currentlyReadingTitle: {
-    color: COLORS.accentDark,
+  currentlyReadingWrapper: {
+    paddingHorizontal: 20,
   },
   bookshelvesContainer: {
     paddingHorizontal: 20,

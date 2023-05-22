@@ -176,6 +176,13 @@ const ProfileStack = () => {
           presentation: 'modal',
         }}
       />
+      <Stack.Screen
+        name='BookDetails'
+        component={BookDetails}
+        options={{
+          title: '',
+        }}
+      />
     </Stack.Navigator>
   )
 }

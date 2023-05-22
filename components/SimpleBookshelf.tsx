@@ -1,12 +1,13 @@
-import { FC, useContext } from 'react'
+import { FC, useContext, useState, useEffect } from 'react'
 import { ScrollView, Pressable, View, Text, StyleSheet, ActivityIndicator } from 'react-native'
 import { UserContext } from '../contexts/UserContext'
-import { BookContext } from '../contexts/BookContext'
-import { useQuery } from 'react-query'
+import { useInfiniteQuery } from 'react-query'
 import { SimpleBookList } from './SimpleBookList'
 import { COLORS } from '../GlobalStyles'
 import { MaterialIcons } from '@expo/vector-icons'
 import * as Haptics from 'expo-haptics'
+import axios from 'axios'
+import { API_URL } from '../constants'
 
 interface Props {
   bookshelf: {
@@ -18,9 +19,36 @@ interface Props {
 
 export const SimpleBookshelf: FC<Props> = ({ bookshelf, navigation }) => {
   const { userId } = useContext(UserContext)
-  const { fetchBookshelf } = useContext(BookContext)
+  const [totalBooks, setTotalBooks] = useState(undefined)
+  const [books, setBooks] = useState<any[]>([])
 
-  const { data, status } = useQuery(bookshelf.id, () => fetchBookshelf(userId, bookshelf.title))
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } = useInfiniteQuery(
+    [bookshelf.id, userId, bookshelf.title],
+    async ({ pageParam }) => {
+      const { data } = await axios.get(`${API_URL}/bookshelf/${userId}/${pageParam || 1}`, {
+        params: { bookshelf: bookshelf.title },
+      })
+      return data
+    },
+    {
+      getNextPageParam: (lastPage, pages) => lastPage?.nextPage,
+    }
+  )
+
+  useEffect(() => {
+    if (status === 'success' && data) {
+      setTotalBooks(data?.pages?.[0]?.totalBooks)
+      setBooks(
+        data.pages.map((group: { books: any[] }) => group.books.map((book: any) => book)).flat()
+      )
+    }
+  }, [status, data])
+
+  const handleInfiniteScroll = () => {
+    if (hasNextPage && !isFetchingNextPage) {
+      fetchNextPage()
+    }
+  }
 
   // FIXME: improve styling of loading/empty states to keep height the same
   return (
@@ -36,13 +64,13 @@ export const SimpleBookshelf: FC<Props> = ({ bookshelf, navigation }) => {
             style={({ pressed }) => [
               styles.bookshelfBtn,
               pressed && styles.pressed,
-              !data?.books?.length && styles.disabled,
+              !totalBooks && styles.disabled,
             ]}
-            disabled={!data?.books?.length}>
+            disabled={!totalBooks}>
             <Text style={styles.totalResults}>
-              {data.totalResults} {data.totalResults === 1 ? 'book' : 'books'}
+              {totalBooks} {totalBooks === 1 ? 'book' : 'books'}
             </Text>
-            {!!data?.books?.length && (
+            {!!totalBooks && (
               <MaterialIcons name='chevron-right' size={20} color={COLORS.accentLight} />
             )}
           </Pressable>
@@ -59,8 +87,12 @@ export const SimpleBookshelf: FC<Props> = ({ bookshelf, navigation }) => {
         </ScrollView>
       )}
       {status === 'success' &&
-        (data?.books?.length ? (
-          <SimpleBookList books={data.books} />
+        (totalBooks && books?.length ? (
+          <SimpleBookList
+            books={books}
+            infiniteScroll={handleInfiniteScroll}
+            isLoading={isFetchingNextPage}
+          />
         ) : (
           <View style={styles.noBooks}>
             <Text style={styles.infoText}>This shelf is empty.</Text>
