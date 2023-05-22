@@ -13,9 +13,10 @@ interface Props {
     title: string
     id: string
   }
+  navigation: any
 }
 
-export const SimpleBookshelf: FC<Props> = ({ bookshelf }) => {
+export const SimpleBookshelf: FC<Props> = ({ bookshelf, navigation }) => {
   const { userId } = useContext(UserContext)
   const { fetchBookshelf } = useContext(BookContext)
 
@@ -27,11 +28,10 @@ export const SimpleBookshelf: FC<Props> = ({ bookshelf }) => {
       <View style={styles.headerWrapper}>
         <Text style={styles.headerText}>{bookshelf.title}</Text>
         {status === 'success' && data ? (
-          // TODO: navigate to bookshelf screen (detailed book list with users ratings, functionality to remove book)
           <Pressable
             onPress={() => {
               Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
-              console.log('navigate to bookshelf screen')
+              navigation.navigate('DetailedBookshelf', { bookshelf })
             }}
             style={({ pressed }) => [
               styles.bookshelfBtn,

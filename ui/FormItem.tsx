@@ -60,11 +60,10 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   label: {
-    color: COLORS.primary900,
+    color: COLORS.primary700,
     marginBottom: 5,
     fontSize: 16,
     fontFamily: 'RobotoMono-Bold',
-    opacity: 0.7,
   },
   sublabel: {
     opacity: 0.5,

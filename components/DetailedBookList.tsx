@@ -32,7 +32,7 @@ export const DetailedBookList: React.FC<Props> = ({ books, infiniteScroll, isLoa
       data={booksWithImages}
       keyExtractor={book => book?.volumeId || generateKey()}
       renderItem={({ item }) => (item ? <DetailedBookCard book={item} /> : null)}
-      contentContainerStyle={{ paddingBottom: 10 }}
+      contentContainerStyle={{ paddingBottom: 20 }}
       onEndReachedThreshold={0.2}
       onEndReached={infiniteScroll}
       keyboardDismissMode='on-drag'

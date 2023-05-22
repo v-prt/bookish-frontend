@@ -195,9 +195,9 @@ export const ManageBook: React.FC<Props> = ({
             {values.bookshelf === 'Read' && (
               <>
                 <FormItem name='dateRead'>
-                  <View style={styles.datePicker}>
+                  <View style={styles.formRow}>
                     <View style={styles.labelWrapper}>
-                      <MaterialIcons name='calendar-today' color={COLORS.primary600} size={20} />
+                      <MaterialIcons name='calendar-today' color={COLORS.primary700} size={20} />
                       <Text style={styles.labelText}>Date read</Text>
                     </View>
                     <DateTimePicker
@@ -216,13 +216,16 @@ export const ManageBook: React.FC<Props> = ({
                   </View>
                 </FormItem>
 
-                <FormItem name='rating' label='Rating'>
-                  <RatingButtons
-                    rating={values.rating}
-                    setRating={rating => {
-                      setFieldValue('rating', rating)
-                    }}
-                  />
+                <FormItem name='rating'>
+                  <View style={styles.formRow}>
+                    <Text style={styles.labelText}>Rating</Text>
+                    <RatingButtons
+                      rating={values.rating}
+                      setRating={rating => {
+                        setFieldValue('rating', rating)
+                      }}
+                    />
+                  </View>
                 </FormItem>
 
                 <FormItem name='review' label='Review'>
@@ -305,20 +308,21 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   options: {
+    backgroundColor: COLORS.primary300,
+    borderRadius: 10,
+    padding: 10,
     gap: 10,
   },
   optionButton: {
     backgroundColor: COLORS.primary200,
-    padding: 5,
-    borderWidth: 1,
-    borderColor: COLORS.primary500,
+    padding: 8,
     borderRadius: 10,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
   selectedButton: {
-    borderColor: COLORS.accentDark,
+    backgroundColor: COLORS.primary100,
   },
   optionText: {
     fontFamily: 'RobotoMono-Regular',
@@ -328,13 +332,12 @@ const styles = StyleSheet.create({
   selectedText: {
     color: COLORS.accentDark,
   },
-  datePicker: {
-    backgroundColor: COLORS.white,
+  formRow: {
+    backgroundColor: COLORS.primary200,
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
     borderRadius: 10,
-    borderWidth: 1,
-    borderColor: COLORS.primary600,
     padding: 10,
   },
   labelWrapper: {
@@ -345,7 +348,7 @@ const styles = StyleSheet.create({
   labelText: {
     fontFamily: 'RobotoMono-Bold',
     fontSize: 16,
-    color: COLORS.primary600,
+    color: COLORS.primary700,
   },
   buttons: {
     marginVertical: 20,

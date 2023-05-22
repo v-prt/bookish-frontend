@@ -20,7 +20,7 @@ export const RatingButtons: FC<Props> = ({ rating, setRating }) => {
 
   const starButtons = [...Array(5)].map((_, i) => {
     const name = rating && i < rating ? 'star' : 'star-border'
-    const color = rating && i < rating ? 'gold' : '#ccc'
+    const color = rating && i < rating ? COLORS.accentLight : COLORS.primary500
 
     return (
       <Pressable key={i} onPress={() => handleRating(i + 1)}>
@@ -34,14 +34,9 @@ export const RatingButtons: FC<Props> = ({ rating, setRating }) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: COLORS.white,
-    borderWidth: 1,
-    borderColor: COLORS.primary600,
-    borderRadius: 10,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 10,
     gap: 10,
   },
 })

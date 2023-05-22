@@ -111,12 +111,9 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     paddingHorizontal: 10,
     borderRadius: 8,
-    borderWidth: 1,
-    borderColor: COLORS.primary300,
   },
   activeToggleBtn: {
     backgroundColor: COLORS.white,
-    borderColor: COLORS.primary600,
   },
   toggleText: {
     fontFamily: 'RobotoMono-Regular',

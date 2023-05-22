@@ -7,6 +7,7 @@ import { GenreSearch } from '../screens/GenreSearch'
 import { Search } from '../screens/Search'
 import { BookDetails } from '../screens/BookDetails'
 import { Library } from '../screens/Library'
+import { DetailedBookshelf } from '../screens/DetailedBookshelf'
 import { Profile } from '../screens/Profile'
 import { Settings } from '../screens/Settings'
 import { IconButton } from '../ui/IconButton'
@@ -121,6 +122,13 @@ const LibraryStack = () => {
         component={Library}
         options={{
           headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name='DetailedBookshelf'
+        component={DetailedBookshelf}
+        options={{
+          title: '',
         }}
       />
       <Stack.Screen

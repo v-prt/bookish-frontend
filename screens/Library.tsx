@@ -3,7 +3,11 @@ import { StyleSheet, ScrollView, View, Text } from 'react-native'
 import { COLORS } from '../GlobalStyles'
 import { SimpleBookshelf } from '../components/SimpleBookshelf'
 
-export const Library: FC = () => {
+interface Props {
+  navigation: any
+}
+
+export const Library: FC<Props> = ({ navigation }) => {
   const bookshelves = [
     { title: 'Currently reading', id: 'currently-reading' },
     { title: 'Want to read', id: 'want-to-read' },
@@ -19,7 +23,7 @@ export const Library: FC = () => {
       <View style={styles.screenInnerWrapper}>
         <ScrollView style={styles.screenInner}>
           {bookshelves.map((bookshelf: { title: string; id: string }, i: number) => (
-            <SimpleBookshelf bookshelf={bookshelf} key={i} />
+            <SimpleBookshelf bookshelf={bookshelf} key={i} navigation={navigation} />
           ))}
         </ScrollView>
       </View>

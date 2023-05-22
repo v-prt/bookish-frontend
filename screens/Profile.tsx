@@ -153,8 +153,9 @@ export const Profile: FC<Props> = ({ navigation }) => {
             </Text>
           )}
 
-          <Text style={styles.headerText}>Books</Text>
-          <View style={styles.divider} />
+          <View style={styles.headerWrapper}>
+            <Text style={styles.headerText}>Books</Text>
+          </View>
           <View style={styles.bookshelvesContainer}>
             <View style={styles.bookshelfWrapper}>
               <Text style={styles.bookshelfLabel}>Owned</Text>
@@ -178,8 +179,6 @@ export const Profile: FC<Props> = ({ navigation }) => {
               onPress={() => setGenreModalVisible(true)}
             />
           </View>
-
-          <View style={styles.divider} />
           {userData?.faveGenres?.length > 0 ? (
             <View style={styles.genresContainer}>
               {userData.faveGenres.map((genre: string, i: number) => (
@@ -338,25 +337,23 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   screenInner: {
-    padding: 20,
+    paddingVertical: 40,
   },
   headerWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    borderBottomColor: COLORS.primary600,
+    borderBottomWidth: 1,
+    marginLeft: 20,
+    marginBottom: 20,
+    paddingRight: 20,
+    paddingBottom: 8,
   },
   headerText: {
-    fontFamily: 'RobotoMono-Bold',
-    fontSize: 20,
-    color: COLORS.accentDark,
-    marginBottom: 8,
-  },
-  divider: {
-    width: 100,
-    height: 1,
-    backgroundColor: COLORS.accentDark,
-    marginBottom: 20,
-    opacity: 0.6,
+    fontFamily: 'RobotoMono-Regular',
+    fontSize: 18,
+    color: COLORS.primary900,
   },
   currentlyReadingText: {
     fontFamily: 'RobotoMono-Italic',
@@ -368,6 +365,7 @@ const styles = StyleSheet.create({
     color: COLORS.accentDark,
   },
   bookshelvesContainer: {
+    paddingHorizontal: 20,
     marginBottom: 20,
   },
   bookshelfWrapper: {
@@ -394,6 +392,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 10,
+    paddingHorizontal: 20,
   },
   genreWrapper: {
     backgroundColor: COLORS.primary200,
@@ -402,7 +401,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   genreLabel: {
-    color: COLORS.primary800,
+    color: COLORS.accentDark,
     fontFamily: 'RobotoMono-Regular',
     fontSize: 14,
   },
@@ -443,9 +442,9 @@ const styles = StyleSheet.create({
   },
   genreItem: {
     backgroundColor: COLORS.primary200,
-    padding: 5,
-    borderWidth: 1,
-    borderColor: COLORS.primary500,
+    padding: 8,
+    // borderWidth: 1,
+    // borderColor: COLORS.primary500,
     borderRadius: 10,
     marginBottom: 10,
     flexDirection: 'row',
@@ -453,7 +452,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   genreItemActive: {
-    borderColor: COLORS.accentDark,
+    backgroundColor: COLORS.primary100,
   },
   genreItemText: {
     fontFamily: 'RobotoMono-Regular',
