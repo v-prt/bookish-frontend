@@ -9,6 +9,7 @@ interface Props {
 
 export const Library: FC<Props> = ({ navigation }) => {
   const bookshelves = [
+    { title: 'Owned', id: 'owned' },
     { title: 'Currently reading', id: 'currently-reading' },
     { title: 'Want to read', id: 'want-to-read' },
     { title: 'Read', id: 'read' },
@@ -21,7 +22,11 @@ export const Library: FC<Props> = ({ navigation }) => {
       </View>
 
       <View style={styles.screenInnerWrapper}>
-        <ScrollView style={styles.screenInner}>
+        <ScrollView
+          style={styles.screenInner}
+          contentContainerStyle={{
+            paddingBottom: 40,
+          }}>
           {bookshelves.map((bookshelf: { title: string; id: string }, i: number) => (
             <SimpleBookshelf bookshelf={bookshelf} key={i} navigation={navigation} />
           ))}

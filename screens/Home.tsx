@@ -15,18 +15,7 @@ export const Home: FC<Props> = ({ navigation }) => {
   const faveGenres = userData?.faveGenres
 
   // pick up to 3 random genres from user's fave genres
-  // const randomGenres = faveGenres?.sort(() => 0.5 - Math.random()).slice(0, 3)
-
-  // const [scrolledPastTop, setScrolledPastTop] = useState(false)
-
-  // animate header based on scroll position
-  // const handleScroll = (e: any) => {
-  //   if (e.nativeEvent.contentOffset.y > 20) {
-  //     setScrolledPastTop(true)
-  //   } else {
-  //     setScrolledPastTop(false)
-  //   }
-  // }
+  const randomGenres = faveGenres?.sort(() => 0.5 - Math.random()).slice(0, 3)
 
   return (
     <View style={styles.screen}>
@@ -53,8 +42,8 @@ export const Home: FC<Props> = ({ navigation }) => {
           </View>
           <Text style={styles.headerText}>Recommended for you</Text>
           <View style={styles.divider} />
-          {faveGenres?.length > 0 ? (
-            faveGenres.map((genre: string, i: number) => (
+          {randomGenres?.length > 0 ? (
+            randomGenres.map((genre: string, i: number) => (
               <RecommendedBooks genre={genre} key={i} navigation={navigation} />
             ))
           ) : (

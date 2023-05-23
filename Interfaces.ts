@@ -9,8 +9,13 @@ export interface Book {
   image: string
 
   // custom data
+  _id?: string
   owned?: boolean
   bookshelf?: string
   rating?: number
+  review?: {
+    text: string
+    date: string
+  }
   dateRead?: string
 }

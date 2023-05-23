@@ -15,6 +15,7 @@ export const BookProvider: FC<Props> = ({ children }) => {
   const queryKeys = [
     'user',
     'user-book',
+    'owned',
     'currently-reading',
     'want-to-read',
     'read',

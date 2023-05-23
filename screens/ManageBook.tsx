@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react'
+import { FC, useContext, useEffect, useState } from 'react'
 import { StyleSheet, View, Text, Pressable, Alert, SafeAreaView, Modal } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { UserContext } from '../contexts/UserContext'
@@ -15,15 +15,16 @@ import { RatingButtons } from '../components/RatingButtons'
 import * as Haptics from 'expo-haptics'
 import * as yup from 'yup'
 import { IconButton } from '../ui/IconButton'
+import { ImageLoader } from '../ui/ImageLoader'
 
 interface Props {
   route: any
   navigation: any
 }
 
-export const ManageBook: React.FC<Props> = ({
+export const ManageBook: FC<Props> = ({
   route: {
-    params: { volumeId, existingBook },
+    params: { book, existingBook },
   },
   navigation,
 }) => {
@@ -69,7 +70,7 @@ export const ManageBook: React.FC<Props> = ({
         review: existingBook.review?.text,
       }
     : {
-        volumeId,
+        volumeId: book.volumeId,
         userId,
         bookshelf: null,
         owned: null,
@@ -83,6 +84,8 @@ export const ManageBook: React.FC<Props> = ({
 
     const data = {
       ...values,
+      title: book.title,
+      author: book.authors?.[0],
       review: values.review && {
         date: new Date(),
         text: values.review,
@@ -103,6 +106,7 @@ export const ManageBook: React.FC<Props> = ({
   }
 
   const handleDeleteBook = async () => {
+    if (!existingBook) return
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
 
     try {
@@ -129,10 +133,18 @@ export const ManageBook: React.FC<Props> = ({
             {status && (
               <AlertText type='error' icon='error' title={`Couldn't save book`} subtitle={status} />
             )}
-            {/* TODO: show small book cover & title */}
-            {/* <Text style={styles.title}>
-              {book.title}
-            </Text> */}
+            <View style={styles.basicInfo}>
+              <ImageLoader
+                style={styles.image}
+                source={{ uri: book.imageLinks?.thumbnail }}
+                borderRadius={10}
+              />
+              <View style={styles.text}>
+                <Text style={styles.title}>{book.title}</Text>
+                <Text style={styles.author}>{book.authors?.[0]}</Text>
+              </View>
+            </View>
+
             <FormItem name='owned' label='Owned'>
               <View style={styles.options}>
                 {ownedOptions.map((owned, i) => (
@@ -220,7 +232,7 @@ export const ManageBook: React.FC<Props> = ({
                   <View style={styles.formRow}>
                     <Text style={styles.labelText}>Rating</Text>
                     <RatingButtons
-                      rating={values.rating}
+                      rating={values.rating || null}
                       setRating={rating => {
                         setFieldValue('rating', rating)
                       }}
@@ -306,6 +318,50 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.primary100,
     flex: 1,
     padding: 20,
+  },
+  basicInfo: {
+    backgroundColor: COLORS.white,
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10,
+    borderRadius: 10,
+    // android shadow
+    elevation: 4,
+    // ios shadow
+    shadowColor: COLORS.primary600,
+    shadowOffset: { width: 2, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 20,
+  },
+  text: {
+    maxWidth: '70%',
+    padding: 10,
+    marginLeft: 5,
+  },
+  image: {
+    backgroundColor: COLORS.primary200,
+    borderRadius: 10,
+    height: 90,
+    aspectRatio: 2 / 3,
+
+    // android shadow
+    elevation: 4,
+    // ios shadow
+    shadowColor: COLORS.primary900,
+    shadowOffset: { width: 2, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 15,
+  },
+  title: {
+    color: COLORS.accentDark,
+    fontFamily: 'RobotoMono-Bold',
+    fontSize: 18,
+  },
+  author: {
+    fontFamily: 'RobotoMono-Regular',
+    color: COLORS.primary600,
+    fontSize: 15,
+    marginTop: 5,
   },
   options: {
     backgroundColor: COLORS.primary300,

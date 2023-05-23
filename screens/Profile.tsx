@@ -416,6 +416,7 @@ const styles = StyleSheet.create({
     fontFamily: 'RobotoMono-Regular',
     fontSize: 16,
     color: COLORS.grey,
+    marginLeft: 20,
   },
 
   modalWrapper: {

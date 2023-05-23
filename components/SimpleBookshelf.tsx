@@ -104,7 +104,7 @@ export const SimpleBookshelf: FC<Props> = ({ bookshelf, navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingVertical: 20,
+    paddingTop: 20,
   },
   headerWrapper: {
     flexDirection: 'row',

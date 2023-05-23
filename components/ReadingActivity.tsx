@@ -41,9 +41,10 @@ export const ReadingActivity: FC = () => {
 
       {readingActivityStatus === 'success' && readingActivity ? (
         <>
+          {/* TODO: styling for no activity, improve loading style to keep height consistent */}
           <View style={styles.row}>
             <View style={styles.card}>
-              <Text style={styles.number}>{readingActivity.totalBooks.toLocaleString()}</Text>
+              <Text style={styles.number}>{readingActivity.totalBooks?.toLocaleString() || 0}</Text>
               <Text style={styles.label}>book{readingActivity.totalBooks !== 1 && 's'}</Text>
             </View>
 
@@ -51,7 +52,7 @@ export const ReadingActivity: FC = () => {
               <Text style={styles.number}>
                 {readingActivity.totalPages > 9999
                   ? numeral(readingActivity.totalPages).format('0a')
-                  : readingActivity.totalPages.toLocaleString()}
+                  : readingActivity.totalPages?.toLocaleString() || 0}
               </Text>
               <Text style={styles.label}>pages</Text>
             </View>
@@ -59,7 +60,7 @@ export const ReadingActivity: FC = () => {
 
           <View style={styles.row}>
             <View style={styles.card}>
-              <Text style={styles.text}>{readingActivity.topCategory}</Text>
+              <Text style={styles.text}>{readingActivity.topCategory || 'None'}</Text>
               <Text style={styles.label}>top genre</Text>
             </View>
           </View>
