@@ -16,9 +16,15 @@ import * as Haptics from 'expo-haptics'
 import * as yup from 'yup'
 import { IconButton } from '../ui/IconButton'
 import { ImageLoader } from '../ui/ImageLoader'
+import { Book } from '../Interfaces'
 
 interface Props {
-  route: any
+  route: {
+    params: {
+      book: Book
+      existingBook?: Book
+    }
+  }
   navigation: any
 }
 
@@ -85,7 +91,7 @@ export const ManageBook: FC<Props> = ({
     const data = {
       ...values,
       title: book.title,
-      author: book.authors?.[0],
+      author: book.author,
       review: values.review && {
         date: new Date(),
         text: values.review,
@@ -134,14 +140,10 @@ export const ManageBook: FC<Props> = ({
               <AlertText type='error' icon='error' title={`Couldn't save book`} subtitle={status} />
             )}
             <View style={styles.basicInfo}>
-              <ImageLoader
-                style={styles.image}
-                source={{ uri: book.imageLinks?.thumbnail }}
-                borderRadius={10}
-              />
+              <ImageLoader style={styles.image} source={{ uri: book.image }} borderRadius={10} />
               <View style={styles.text}>
                 <Text style={styles.title}>{book.title}</Text>
-                <Text style={styles.author}>{book.authors?.[0]}</Text>
+                <Text style={styles.author}>{book.author}</Text>
               </View>
             </View>
 

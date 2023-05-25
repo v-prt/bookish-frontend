@@ -136,7 +136,12 @@ export const BookDetails: FC<Props> = ({
             <Pressable
               onPress={() =>
                 navigation.navigate('ManageBook', {
-                  book,
+                  book: {
+                    volumeId,
+                    title: book.title,
+                    author: book.authors?.[0],
+                    image: book.imageLinks?.thumbnail,
+                  },
                   existingBook: userBookData,
                 })
               }
