@@ -28,6 +28,21 @@ Additionally, Bookish offers genre-based recommendations by allowing users to se
    npm install
    ```
 
+## Configuration
+
+1. Create a `.env` file in the root directory of the project.
+2. Set the following environment variable in the `.env` file:
+
+   ```plaintext
+   REACT_APP_API_URL=http://<your-ip-address>:<your-port-number>/bookish-api/v1
+   ```
+
+   Replace `<your-ip-address>` with your computer's IP address (in IPv4 format) and `<your-port-number>` with the port number you designated for your server in the backend. This will allow your frontend application to send requests to your local server.
+
+   **Note:** Ensure the `.env` file is added to your `.gitignore` to avoid committing sensitive data to your version control system.
+
+   Proceed to the "Server Setup" section below for the details on setting up your backend.
+
 ## Usage
 
 1. Start the development server:
