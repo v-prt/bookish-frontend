@@ -295,7 +295,6 @@ export const Settings: React.FC<Props> = ({ navigation }) => {
               Are you sure you want to delete your Bookish account? This action cannot be undone.
             </Text>
             <View style={styles.buttons}>
-              {/* TODO: test deleting account */}
               <CustomButton
                 type='primary'
                 label='Delete'

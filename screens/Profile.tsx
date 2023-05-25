@@ -225,6 +225,7 @@ export const Profile: FC<Props> = ({ navigation }) => {
                 <View style={styles.formWrapper}>
                   <FormItem
                     name='faveGenres'
+                    style={{ flex: 1 }}
                     label={
                       // indicate number of genres selected
                       `${values.faveGenres.length} / 6 selected`
@@ -344,7 +345,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    borderBottomColor: COLORS.primary600,
+    borderBottomColor: COLORS.primary400,
     borderBottomWidth: 1,
     marginLeft: 20,
     marginBottom: 20,
@@ -414,6 +415,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   modalInner: {
+    flex: 1,
     padding: 20,
   },
   modalHeader: {
@@ -428,14 +430,14 @@ const styles = StyleSheet.create({
     color: COLORS.accentDark,
   },
   formWrapper: {
+    flex: 1,
     marginBottom: 20,
   },
   genreList: {
     backgroundColor: COLORS.primary300,
     padding: 10,
     borderRadius: 10,
-    // FIXME: make this fill up the rest of the space while still keeping buttons visible
-    maxHeight: 400,
+    flex: 1,
   },
   genreItem: {
     backgroundColor: COLORS.primary200,

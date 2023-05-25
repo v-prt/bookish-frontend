@@ -41,7 +41,7 @@ export const ReadingActivity: FC = () => {
 
       {readingActivityStatus === 'success' && readingActivity ? (
         <>
-          {/* TODO: styling for no activity, improve loading style to keep height consistent */}
+          {/* FIXME: styling for no activity, improve loading style to keep height consistent */}
           <View style={styles.row}>
             <View style={styles.card}>
               <Text style={styles.number}>{readingActivity.totalBooks?.toLocaleString() || 0}</Text>
@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    borderBottomColor: COLORS.primary600,
+    borderBottomColor: COLORS.primary400,
     borderBottomWidth: 1,
     marginLeft: 20,
     marginBottom: 20,

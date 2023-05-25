@@ -50,7 +50,6 @@ export const SimpleBookshelf: FC<Props> = ({ bookshelf, navigation }) => {
     }
   }
 
-  // FIXME: improve styling of loading/empty states to keep height the same
   return (
     <>
       <View style={styles.headerWrapper}>
@@ -94,8 +93,12 @@ export const SimpleBookshelf: FC<Props> = ({ bookshelf, navigation }) => {
             isLoading={isFetchingNextPage}
           />
         ) : (
-          <View style={styles.noBooks}>
-            <Text style={styles.infoText}>This shelf is empty.</Text>
+          <View style={styles.emptyView}>
+            <View style={styles.skelement}>
+              <Text style={styles.emptyText}>-</Text>
+              <Text style={styles.emptyText}>None</Text>
+              <Text style={styles.emptyText}>-</Text>
+            </View>
           </View>
         ))}
     </>
@@ -107,7 +110,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    borderBottomColor: COLORS.primary600,
+    borderBottomColor: COLORS.primary400,
     borderBottomWidth: 1,
     marginLeft: 20,
     marginBottom: 20,
@@ -130,15 +133,17 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.primary200,
     borderRadius: 10,
     marginLeft: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  noBooks: {
-    height: 70,
+  emptyView: {
+    height: 170,
+    marginBottom: 25,
   },
-  infoText: {
+  emptyText: {
     fontFamily: 'RobotoMono-Regular',
     fontSize: 16,
     color: COLORS.grey,
-    marginHorizontal: 20,
   },
   bookshelfBtn: {
     flexDirection: 'row',

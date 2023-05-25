@@ -26,7 +26,6 @@ export const AlertText: React.FC<Props> = ({ type, icon, title, subtitle }) => {
         {title && (
           <Text
             style={[
-              // FIXME: typescript error
               styles.title,
               {
                 color,

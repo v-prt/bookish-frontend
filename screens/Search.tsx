@@ -108,8 +108,6 @@ export const Search: FC = () => {
                 }
               }}
             />
-            {/* TODO: animate button to appear when input is focused */}
-            {/* <IconButton icon='arrow-forward' color={COLORS.accentLight} onPress={handleSubmit} /> */}
           </View>
 
           <View style={styles.screenInner}>
