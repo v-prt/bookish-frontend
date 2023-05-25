@@ -52,7 +52,7 @@ export const SimpleBookshelf: FC<Props> = ({ bookshelf, navigation }) => {
 
   // FIXME: improve styling of loading/empty states to keep height the same
   return (
-    <View style={styles.container}>
+    <>
       <View style={styles.headerWrapper}>
         <Text style={styles.headerText}>{bookshelf.title}</Text>
         {status === 'success' && data ? (
@@ -98,14 +98,11 @@ export const SimpleBookshelf: FC<Props> = ({ bookshelf, navigation }) => {
             <Text style={styles.infoText}>This shelf is empty.</Text>
           </View>
         ))}
-    </View>
+    </>
   )
 }
 
 const styles = StyleSheet.create({
-  container: {
-    paddingTop: 20,
-  },
   headerWrapper: {
     flexDirection: 'row',
     alignItems: 'center',

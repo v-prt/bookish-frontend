@@ -26,44 +26,43 @@ export const Home: FC<Props> = ({ navigation }) => {
         </Text>
       </View>
 
-      <View style={styles.screenInnerWrapper}>
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{
-            paddingBottom: 40,
-          }}>
-          <View style={styles.btnWrapper}>
+      <ScrollView
+        style={styles.screenInner}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{
+          paddingBottom: 40,
+        }}>
+        <View style={styles.btnWrapper}>
+          <CustomButton
+            type='primary'
+            label='Search Books'
+            icon='search'
+            onPress={() => navigation.navigate('SearchStack')}
+          />
+        </View>
+        <Text style={styles.headerText}>Recommended for you</Text>
+        <View style={styles.divider} />
+        {randomGenres?.length > 0 ? (
+          randomGenres.map((genre: string, i: number) => (
+            <RecommendedBooks genre={genre} key={i} navigation={navigation} />
+          ))
+        ) : (
+          <View style={styles.noRecommendations}>
+            <Text style={styles.infoText}>
+              Add your favorite genres in your profile to get recommendations for books you might
+              like.
+            </Text>
             <CustomButton
-              type='primary'
-              label='Search Books'
-              icon='search'
-              onPress={() => navigation.navigate('SearchStack')}
+              type='secondary'
+              label='Choose Genres'
+              onPress={() => navigation.navigate('ProfileStack')}
             />
           </View>
-          <Text style={styles.headerText}>Recommended for you</Text>
-          <View style={styles.divider} />
-          {randomGenres?.length > 0 ? (
-            randomGenres.map((genre: string, i: number) => (
-              <RecommendedBooks genre={genre} key={i} navigation={navigation} />
-            ))
-          ) : (
-            <View style={styles.noRecommendations}>
-              <Text style={styles.infoText}>
-                Add your favorite genres in your profile to get recommendations for books you might
-                like.
-              </Text>
-              <CustomButton
-                type='secondary'
-                label='Choose Genres'
-                onPress={() => navigation.navigate('ProfileStack')}
-              />
-            </View>
-          )}
-          <Text style={styles.headerText}>Your reading activity</Text>
-          <View style={styles.divider} />
-          <ReadingActivity />
-        </ScrollView>
-      </View>
+        )}
+        <Text style={styles.headerText}>Your reading activity</Text>
+        <View style={styles.divider} />
+        <ReadingActivity />
+      </ScrollView>
     </View>
   )
 }
@@ -87,15 +86,8 @@ const styles = StyleSheet.create({
   italic: {
     fontFamily: 'RobotoMono-Italic',
   },
-  screenInnerWrapper: {
+  screenInner: {
     backgroundColor: COLORS.primary100,
-    // android shadow
-    elevation: 4,
-    // ios shadow
-    shadowColor: COLORS.primary700,
-    shadowOffset: { width: -2, height: -2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 15,
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     flex: 1,

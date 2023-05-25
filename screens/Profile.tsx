@@ -145,65 +145,63 @@ export const Profile: FC<Props> = ({ navigation }) => {
       </View>
 
       {/* TODO: add user's ratings */}
-      <View style={styles.screenInnerWrapper}>
-        <ScrollView
-          style={styles.screenInner}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{
-            paddingBottom: 80,
-          }}>
-          <View style={styles.headerWrapper}>
-            <Text style={styles.headerText}>Books</Text>
+      <ScrollView
+        style={styles.screenInner}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{
+          paddingBottom: 80,
+        }}>
+        <View style={styles.headerWrapper}>
+          <Text style={styles.headerText}>Books</Text>
+        </View>
+        <View style={styles.bookshelvesContainer}>
+          <View style={styles.bookshelfWrapper}>
+            <Text style={styles.bookshelfLabel}>Owned</Text>
+            <Text style={styles.bookshelfCount}>{numOwned}</Text>
           </View>
-          <View style={styles.bookshelvesContainer}>
-            <View style={styles.bookshelfWrapper}>
-              <Text style={styles.bookshelfLabel}>Owned</Text>
-              <Text style={styles.bookshelfCount}>{numOwned}</Text>
-            </View>
-            <View style={styles.bookshelfWrapper}>
-              <Text style={styles.bookshelfLabel}>Want to read</Text>
-              <Text style={styles.bookshelfCount}>{numWantToRead}</Text>
-            </View>
-            <View style={styles.bookshelfWrapper}>
-              <Text style={styles.bookshelfLabel}>Read</Text>
-              <Text style={styles.bookshelfCount}>{numRead}</Text>
-            </View>
+          <View style={styles.bookshelfWrapper}>
+            <Text style={styles.bookshelfLabel}>Want to read</Text>
+            <Text style={styles.bookshelfCount}>{numWantToRead}</Text>
           </View>
+          <View style={styles.bookshelfWrapper}>
+            <Text style={styles.bookshelfLabel}>Read</Text>
+            <Text style={styles.bookshelfCount}>{numRead}</Text>
+          </View>
+        </View>
 
-          {!!currentlyReading?.length && (
-            <>
-              <View style={styles.headerWrapper}>
-                <Text style={styles.headerText}>Currently reading</Text>
-              </View>
-              <View style={styles.currentlyReadingWrapper}>
-                {currentlyReading.map((book: Book) => (
-                  <DetailedBookCard book={book} key={book.volumeId} />
-                ))}
-              </View>
-            </>
-          )}
-
-          <View style={styles.headerWrapper}>
-            <Text style={styles.headerText}>Favorite genres</Text>
-            <IconButton
-              icon='edit'
-              color={COLORS.primary600}
-              onPress={() => setGenreModalVisible(true)}
-            />
-          </View>
-          {userData?.faveGenres?.length > 0 ? (
-            <View style={styles.genresContainer}>
-              {userData.faveGenres.map((genre: string, i: number) => (
-                <View style={styles.genreWrapper} key={i}>
-                  <Text style={styles.genreLabel}>{genre}</Text>
-                </View>
+        {!!currentlyReading?.length && (
+          <>
+            <View style={styles.headerWrapper}>
+              <Text style={styles.headerText}>Currently reading</Text>
+            </View>
+            <View style={styles.currentlyReadingWrapper}>
+              {currentlyReading.map((book: Book) => (
+                <DetailedBookCard book={book} key={book.volumeId} />
               ))}
             </View>
-          ) : (
-            <Text style={styles.infoText}>None selected.</Text>
-          )}
-        </ScrollView>
-      </View>
+          </>
+        )}
+
+        <View style={styles.headerWrapper}>
+          <Text style={styles.headerText}>Favorite genres</Text>
+          <IconButton
+            icon='edit'
+            color={COLORS.primary600}
+            onPress={() => setGenreModalVisible(true)}
+          />
+        </View>
+        {userData?.faveGenres?.length > 0 ? (
+          <View style={styles.genresContainer}>
+            {userData.faveGenres.map((genre: string, i: number) => (
+              <View style={styles.genreWrapper} key={i}>
+                <Text style={styles.genreLabel}>{genre}</Text>
+              </View>
+            ))}
+          </View>
+        ) : (
+          <Text style={styles.infoText}>None selected.</Text>
+        )}
+      </ScrollView>
 
       <Modal visible={genreModalVisible} animationType='slide'>
         <SafeAreaView style={styles.modalWrapper}>
@@ -335,21 +333,12 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: COLORS.grey,
   },
-  screenInnerWrapper: {
+  screenInner: {
     backgroundColor: COLORS.primary100,
-    // android shadow
-    elevation: 4,
-    // ios shadow
-    shadowColor: COLORS.primary700,
-    shadowOffset: { width: -2, height: -2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 15,
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     flex: 1,
-  },
-  screenInner: {
-    paddingVertical: 40,
+    paddingVertical: 30,
   },
   headerWrapper: {
     flexDirection: 'row',

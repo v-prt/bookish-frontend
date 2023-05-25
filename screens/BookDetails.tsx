@@ -118,7 +118,7 @@ export const BookDetails: FC<Props> = ({
       )}
 
       {googleBookStatus === 'success' && book && (
-        <ScrollView style={styles.book}>
+        <ScrollView style={styles.book} showsVerticalScrollIndicator={false}>
           <View style={styles.basicInfo}>
             <ImageLoader
               style={styles.image}
@@ -359,8 +359,8 @@ const styles = StyleSheet.create({
   details: {
     backgroundColor: COLORS.white,
     padding: 20,
-    borderTopLeftRadius: 30,
-    borderTopRightRadius: 30,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
 
     // android shadow
     elevation: 4,

@@ -185,19 +185,18 @@ export const styles = StyleSheet.create({
     borderTopRightRadius: 30,
     flex: 1,
 
-    // android shadow
-    elevation: 4,
-    // ios shadow
-    shadowColor: COLORS.primary700,
-    shadowOffset: { width: -2, height: -2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 15,
+    // // android shadow
+    // elevation: 4,
+    // // ios shadow
+    // shadowColor: COLORS.primary700,
+    // shadowOffset: { width: -2, height: -2 },
+    // shadowOpacity: 0.2,
+    // shadowRadius: 15,
   },
   loading: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 30,
   },
   genres: {
     display: 'flex',

@@ -21,17 +21,16 @@ export const Library: FC<Props> = ({ navigation }) => {
         <Text style={styles.headerText}>My Library</Text>
       </View>
 
-      <View style={styles.screenInnerWrapper}>
-        <ScrollView
-          style={styles.screenInner}
-          contentContainerStyle={{
-            paddingBottom: 40,
-          }}>
-          {bookshelves.map((bookshelf: { title: string; id: string }, i: number) => (
-            <SimpleBookshelf bookshelf={bookshelf} key={i} navigation={navigation} />
-          ))}
-        </ScrollView>
-      </View>
+      <ScrollView
+        style={styles.screenInner}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{
+          paddingBottom: 40,
+        }}>
+        {bookshelves.map((bookshelf: { title: string; id: string }, i: number) => (
+          <SimpleBookshelf bookshelf={bookshelf} key={i} navigation={navigation} />
+        ))}
+      </ScrollView>
     </View>
   )
 }
@@ -52,20 +51,11 @@ const styles = StyleSheet.create({
     color: COLORS.accentDark,
     fontSize: 20,
   },
-  screenInnerWrapper: {
+  screenInner: {
     backgroundColor: COLORS.primary100,
-    // android shadow
-    elevation: 4,
-    // ios shadow
-    shadowColor: COLORS.primary700,
-    shadowOffset: { width: -2, height: -2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 15,
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     flex: 1,
-  },
-  screenInner: {
-    paddingVertical: 20,
+    paddingVertical: 30,
   },
 })
