@@ -91,7 +91,6 @@ const SearchStack = () => {
         component={BookDetails}
         options={{
           title: '',
-          // headerBackTitle: 'Search',
         }}
       />
       <Stack.Screen
@@ -182,6 +181,22 @@ const ProfileStack = () => {
         options={{
           title: '',
         }}
+      />
+      <Stack.Screen
+        name='ManageBook'
+        component={ManageBook}
+        options={({ navigation }) => ({
+          presentation: 'modal',
+          headerLeft: () => (
+            <IconButton
+              icon='close'
+              color={COLORS.primary600}
+              onPress={() => {
+                navigation.goBack()
+              }}
+            />
+          ),
+        })}
       />
     </Stack.Navigator>
   )

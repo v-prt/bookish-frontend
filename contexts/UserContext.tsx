@@ -29,7 +29,7 @@ export const UserProvider: FC<Props> = ({ children }) => {
   const { data: userData, status: userStatus } = useQuery(['user', userId], async () => {
     if (userId) {
       const { data } = await axios.get(`${API_URL}/users/${userId}`)
-      return data.user
+      return data
     } else return null
   })
 

@@ -1,4 +1,4 @@
-import { FC, useContext, useEffect, useState } from 'react'
+import { FC, useContext, useState } from 'react'
 import {
   StyleSheet,
   ScrollView,
@@ -13,7 +13,6 @@ import { UserContext } from '../contexts/UserContext'
 import { COLORS } from '../GlobalStyles'
 import { Avatar } from '../ui/Avatar'
 import moment from 'moment'
-import axios from 'axios'
 import * as yup from 'yup'
 import { IconButton } from '../ui/IconButton'
 import * as Haptics from 'expo-haptics'
@@ -24,6 +23,7 @@ import { AlertText } from '../ui/AlertText'
 import { CustomButton } from '../ui/CustomButton'
 import { DetailedBookCard } from '../components/DetailedBookCard'
 import { Book } from '../Interfaces'
+import { ImageLoader } from '../ui/ImageLoader'
 
 interface Props {
   navigation: any
@@ -31,39 +31,9 @@ interface Props {
 
 export const Profile: FC<Props> = ({ navigation }) => {
   const { userData, updateUser } = useContext(UserContext)
-  const books = userData.books
-  const numOwned = books?.filter((book: any) => book.owned).length
-  const numWantToRead = books?.filter((book: any) => book.bookshelf === 'Want to read').length
-  const numRead = books?.filter((book: any) => book.bookshelf === 'Read').length
-  const [currentlyReading, setCurrentlyReading] = useState<any>(null)
+  const { books, currentlyReading } = userData
+
   const [genreModalVisible, setGenreModalVisible] = useState(false)
-
-  const setBooksReading = async (books: any[]) => {
-    const data = await Promise.all(
-      books.map(async book => {
-        const { data } = await axios.get(
-          `https://www.googleapis.com/books/v1/volumes/${book.volumeId}`
-        )
-        return {
-          title: data.volumeInfo.title,
-          image: data.volumeInfo.imageLinks?.thumbnail,
-          author: data.volumeInfo.authors?.[0],
-          averageRating: data.volumeInfo.averageRating,
-          ratingsCount: data.volumeInfo.ratingsCount,
-          ...book,
-        }
-      })
-    )
-    setCurrentlyReading(data)
-  }
-
-  useEffect(() => {
-    const reading = books?.filter((book: any) => book.bookshelf === 'Currently reading')
-
-    if (reading.length) {
-      setBooksReading(reading)
-    }
-  }, [userData])
 
   const genres = [
     'Action',
@@ -144,30 +114,50 @@ export const Profile: FC<Props> = ({ navigation }) => {
         />
       </View>
 
-      {/* TODO: add user's ratings */}
       <ScrollView
         style={styles.screenInner}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
           paddingBottom: 80,
         }}>
-        <View style={styles.headerWrapper}>
-          <Text style={styles.headerText}>Books</Text>
-        </View>
-        <View style={styles.bookshelvesContainer}>
-          <View style={styles.bookshelfWrapper}>
-            <Text style={styles.bookshelfLabel}>Owned</Text>
-            <Text style={styles.bookshelfCount}>{numOwned}</Text>
-          </View>
-          <View style={styles.bookshelfWrapper}>
-            <Text style={styles.bookshelfLabel}>Want to read</Text>
-            <Text style={styles.bookshelfCount}>{numWantToRead}</Text>
-          </View>
-          <View style={styles.bookshelfWrapper}>
-            <Text style={styles.bookshelfLabel}>Read</Text>
-            <Text style={styles.bookshelfCount}>{numRead}</Text>
-          </View>
-        </View>
+        <ScrollView
+          style={styles.booksOverview}
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={{
+            paddingRight: 30,
+          }}>
+          {books.map((group: { books: Book[]; count: number; label: string }, index: number) => (
+            // TODO: link to detailed bookshelf / ratings list
+            <View style={styles.card} key={index}>
+              {group.books?.length ? (
+                <View style={styles.thumbnails}>
+                  {group.books.map((book: Book, index: number) => (
+                    <ImageLoader
+                      key={index}
+                      source={{ uri: book.image }}
+                      style={[
+                        styles.thumbnail,
+                        { zIndex: group.books.length - index },
+                        index === 0
+                          ? styles.thumbnailFirst
+                          : index === 1
+                          ? styles.thumbnailSecond
+                          : styles.thumbnailThird,
+                      ]}
+                      borderRadius={5}
+                    />
+                  ))}
+                </View>
+              ) : (
+                <View style={styles.noThumbnails} />
+              )}
+
+              <Text style={styles.count}>{group.count}</Text>
+              <Text style={styles.label}>{group.label}</Text>
+            </View>
+          ))}
+        </ScrollView>
 
         {!!currentlyReading?.length && (
           <>
@@ -340,6 +330,57 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 30,
     flex: 1,
     paddingVertical: 30,
+  },
+  booksOverview: {
+    paddingHorizontal: 20,
+    marginBottom: 30,
+    gap: 10,
+  },
+  card: {
+    backgroundColor: COLORS.primary200,
+    borderRadius: 10,
+    padding: 10,
+    position: 'relative',
+    width: 150,
+    height: 160,
+    marginRight: 10,
+  },
+  thumbnails: {
+    marginBottom: 10,
+    position: 'relative',
+  },
+  thumbnail: {
+    width: 60,
+    aspectRatio: 2 / 3,
+    position: 'absolute',
+  },
+  thumbnailFirst: {
+    left: 0,
+  },
+  thumbnailSecond: {
+    left: '30%',
+    top: 5,
+  },
+  thumbnailThird: {
+    right: 0,
+    top: 10,
+  },
+  noThumbnails: {
+    width: 50,
+    aspectRatio: 2 / 3,
+    backgroundColor: COLORS.primary400,
+    borderRadius: 5,
+  },
+  count: {
+    fontFamily: 'RobotoMono-Bold',
+    fontSize: 20,
+    color: COLORS.accentDark,
+    marginTop: 'auto',
+  },
+  label: {
+    fontFamily: 'RobotoMono-Regular',
+    fontSize: 14,
+    color: COLORS.grey,
   },
   headerWrapper: {
     flexDirection: 'row',

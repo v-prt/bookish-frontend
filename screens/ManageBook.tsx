@@ -19,12 +19,7 @@ import { ImageLoader } from '../ui/ImageLoader'
 import { Book } from '../Interfaces'
 
 interface Props {
-  route: {
-    params: {
-      book: Book
-      existingBook?: Book
-    }
-  }
+  route: any
   navigation: any
 }
 
