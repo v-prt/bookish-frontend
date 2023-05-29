@@ -93,12 +93,9 @@ export const SimpleBookshelf: FC<Props> = ({ bookshelf, navigation }) => {
             isLoading={isFetchingNextPage}
           />
         ) : (
-          <View style={styles.emptyView}>
-            <View style={styles.skelement}>
-              <Text style={styles.emptyText}>-</Text>
-              <Text style={styles.emptyText}>None</Text>
-              <Text style={styles.emptyText}>-</Text>
-            </View>
+          <View style={styles.blankSpace}>
+            <MaterialIcons name='book' size={40} color={COLORS.primary400} />
+            <Text style={styles.infoText}>No Books</Text>
           </View>
         ))}
     </>
@@ -135,14 +132,21 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     alignItems: 'center',
     justifyContent: 'center',
+    gap: 5,
   },
-  emptyView: {
+  blankSpace: {
     height: 170,
+    backgroundColor: COLORS.primary200,
+    borderRadius: 5,
+    marginHorizontal: 20,
     marginBottom: 25,
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 5,
   },
-  emptyText: {
+  infoText: {
     fontFamily: 'RobotoMono-Regular',
-    fontSize: 16,
+    fontSize: 14,
     color: COLORS.grey,
   },
   bookshelfBtn: {

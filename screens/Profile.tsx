@@ -1,4 +1,5 @@
 import { FC, useContext, useState } from 'react'
+import { useQuery } from 'react-query'
 import {
   StyleSheet,
   ScrollView,
@@ -8,6 +9,7 @@ import {
   Alert,
   Modal,
   SafeAreaView,
+  ActivityIndicator,
 } from 'react-native'
 import { UserContext } from '../contexts/UserContext'
 import { COLORS } from '../GlobalStyles'
@@ -30,8 +32,9 @@ interface Props {
 }
 
 export const Profile: FC<Props> = ({ navigation }) => {
-  const { userData, updateUser } = useContext(UserContext)
-  const { books, currentlyReading } = userData
+  const { userData, updateUser, fetchBookshelfSummaries } = useContext(UserContext)
+
+  const { data, status } = useQuery('bookshelf-summaries', () => fetchBookshelfSummaries())
 
   const [genreModalVisible, setGenreModalVisible] = useState(false)
 
@@ -114,84 +117,115 @@ export const Profile: FC<Props> = ({ navigation }) => {
         />
       </View>
 
-      <ScrollView
-        style={styles.screenInner}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{
-          paddingBottom: 80,
-        }}>
-        <ScrollView
-          style={styles.booksOverview}
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={{
-            paddingRight: 30,
-          }}>
-          {books.map((group: { books: Book[]; count: number; label: string }, index: number) => (
-            // TODO: link to detailed bookshelf / ratings list
-            <View style={styles.card} key={index}>
-              {group.books?.length ? (
-                <View style={styles.thumbnails}>
-                  {group.books.map((book: Book, index: number) => (
-                    <ImageLoader
-                      key={index}
-                      source={{ uri: book.image }}
-                      style={[
-                        styles.thumbnail,
-                        { zIndex: group.books.length - index },
-                        index === 0
-                          ? styles.thumbnailFirst
-                          : index === 1
-                          ? styles.thumbnailSecond
-                          : styles.thumbnailThird,
-                      ]}
-                      borderRadius={5}
-                    />
-                  ))}
-                </View>
-              ) : (
-                <View style={styles.noThumbnails} />
+      <View style={styles.screenInnerWrapper}>
+        {(status === 'loading' || !data) && (
+          <View style={styles.loading}>
+            <ActivityIndicator size='large' color={COLORS.primary400} />
+          </View>
+        )}
+
+        {status === 'success' && data && (
+          <ScrollView
+            style={styles.screenInner}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{
+              paddingBottom: 80,
+            }}>
+            <ScrollView
+              style={styles.booksOverview}
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={{
+                paddingRight: 30,
+              }}>
+              {data.books.map(
+                (
+                  group: { id: string; books: Book[]; count: number; label: string },
+                  index: number
+                ) => (
+                  <Pressable
+                    style={styles.card}
+                    key={index}
+                    onPress={() => {
+                      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+                      navigation.navigate('DetailedBookshelf', {
+                        bookshelf: {
+                          id: group.id,
+                          title: group.label,
+                        },
+                      })
+                    }}>
+                    {group.books?.length ? (
+                      <View style={styles.thumbnails}>
+                        {group.books.map((book: Book, index: number) => (
+                          <ImageLoader
+                            key={index}
+                            source={{ uri: book.image }}
+                            style={[
+                              styles.thumbnail,
+                              { zIndex: group.books.length - index },
+                              index === 0
+                                ? styles.thumbnailFirst
+                                : index === 1
+                                ? styles.thumbnailSecond
+                                : styles.thumbnailThird,
+                            ]}
+                            borderRadius={5}
+                          />
+                        ))}
+                      </View>
+                    ) : (
+                      <View style={styles.blankThumbnail} />
+                    )}
+
+                    <Text style={styles.count}>{group.count}</Text>
+                    <Text style={styles.label}>{group.label}</Text>
+                  </Pressable>
+                )
               )}
+            </ScrollView>
 
-              <Text style={styles.count}>{group.count}</Text>
-              <Text style={styles.label}>{group.label}</Text>
-            </View>
-          ))}
-        </ScrollView>
-
-        {!!currentlyReading?.length && (
-          <>
             <View style={styles.headerWrapper}>
               <Text style={styles.headerText}>Currently reading</Text>
             </View>
-            <View style={styles.currentlyReadingWrapper}>
-              {currentlyReading.map((book: Book) => (
-                <DetailedBookCard book={book} key={book.volumeId} />
-              ))}
-            </View>
-          </>
-        )}
-
-        <View style={styles.headerWrapper}>
-          <Text style={styles.headerText}>Favorite genres</Text>
-          <IconButton
-            icon='edit'
-            color={COLORS.primary600}
-            onPress={() => setGenreModalVisible(true)}
-          />
-        </View>
-        {userData?.faveGenres?.length > 0 ? (
-          <View style={styles.genresContainer}>
-            {userData.faveGenres.map((genre: string, i: number) => (
-              <View style={styles.genreWrapper} key={i}>
-                <Text style={styles.genreLabel}>{genre}</Text>
+            {data.currentlyReading?.length ? (
+              <View style={styles.currentlyReadingWrapper}>
+                {data.currentlyReading.map((book: Book) => (
+                  <DetailedBookCard book={book} key={book.volumeId} />
+                ))}
               </View>
-            ))}
-          </View>
-        ) : (
-          <Text style={styles.infoText}>None selected.</Text>
+            ) : (
+              <View style={styles.blankSpace}>
+                <MaterialIcons name='book' size={40} color={COLORS.primary400} />
+                <Text style={styles.infoText}>No Books</Text>
+              </View>
+            )}
+
+            <View style={styles.headerWrapper}>
+              <Text style={styles.headerText}>Favorite genres</Text>
+              <IconButton
+                icon='edit'
+                color={COLORS.primary600}
+                onPress={() => setGenreModalVisible(true)}
+              />
+            </View>
+            {userData?.faveGenres?.length > 0 ? (
+              <View style={styles.genresContainer}>
+                {userData.faveGenres.map((genre: string, i: number) => (
+                  <View style={styles.genreWrapper} key={i}>
+                    <Text style={styles.genreLabel}>{genre}</Text>
+                  </View>
+                ))}
+              </View>
+            ) : (
+              <View style={styles.blankSpace}>
+                <MaterialIcons name='book' size={40} color={COLORS.primary400} />
+                <Text style={styles.infoText}>No Genres</Text>
+              </View>
+            )}
+          </ScrollView>
         )}
-      </ScrollView>
+      </View>
 
       <Modal visible={genreModalVisible} animationType='slide'>
         <SafeAreaView style={styles.modalWrapper}>
@@ -324,16 +358,25 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: COLORS.grey,
   },
-  screenInner: {
+  screenInnerWrapper: {
     backgroundColor: COLORS.primary100,
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     flex: 1,
+  },
+  screenInner: {
     paddingVertical: 30,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+  },
+  loading: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   booksOverview: {
     paddingHorizontal: 20,
-    marginBottom: 30,
+    marginBottom: 40,
     gap: 10,
   },
   card: {
@@ -357,15 +400,14 @@ const styles = StyleSheet.create({
   thumbnailFirst: {
     left: 0,
   },
+  // TODO: make thumbnails progressively darker
   thumbnailSecond: {
     left: '30%',
-    top: 5,
   },
   thumbnailThird: {
     right: 0,
-    top: 10,
   },
-  noThumbnails: {
+  blankThumbnail: {
     width: 50,
     aspectRatio: 2 / 3,
     backgroundColor: COLORS.primary400,
@@ -402,30 +444,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     marginBottom: 30,
   },
-  bookshelvesContainer: {
-    paddingHorizontal: 20,
-    marginBottom: 30,
-  },
-  bookshelfWrapper: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    backgroundColor: COLORS.primary200,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 10,
-    marginBottom: 10,
-  },
-  bookshelfLabel: {
-    color: COLORS.primary800,
-    fontFamily: 'RobotoMono-Medium',
-    fontSize: 16,
-  },
-  bookshelfCount: {
-    fontFamily: 'RobotoMono-Bold',
-    fontSize: 18,
-    color: COLORS.accentDark,
-  },
+
   genresContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -433,21 +452,34 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
   },
   genreWrapper: {
-    backgroundColor: COLORS.primary200,
-    paddingVertical: 5,
-    paddingHorizontal: 10,
-    borderRadius: 10,
+    backgroundColor: COLORS.primary800,
+    borderRadius: 20,
+    paddingVertical: 3,
+    paddingHorizontal: 8,
+    alignSelf: 'flex-start',
+    opacity: 0.4,
   },
   genreLabel: {
-    color: COLORS.primary800,
-    fontFamily: 'RobotoMono-Medium',
-    fontSize: 14,
+    color: COLORS.white,
+    fontFamily: 'RobotoMono-Bold',
+    fontSize: 12,
+    textTransform: 'uppercase',
+    letterSpacing: 1,
+  },
+  blankSpace: {
+    height: 120,
+    backgroundColor: COLORS.primary200,
+    borderRadius: 5,
+    marginHorizontal: 20,
+    marginBottom: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 5,
   },
   infoText: {
     fontFamily: 'RobotoMono-Regular',
-    fontSize: 16,
+    fontSize: 14,
     color: COLORS.grey,
-    marginLeft: 20,
   },
 
   modalWrapper: {

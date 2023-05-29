@@ -143,6 +143,15 @@ export const UserProvider: FC<Props> = ({ children }) => {
     }
   }
 
+  const fetchBookshelfSummaries = async () => {
+    try {
+      const { data } = await axios.get(`${API_URL}/bookshelf-summaries/${userId}`)
+      return data
+    } catch (err: any) {
+      return { error: err.response.data.message }
+    }
+  }
+
   return (
     <UserContext.Provider
       value={{
@@ -157,6 +166,7 @@ export const UserProvider: FC<Props> = ({ children }) => {
         deleteAccount,
         fetchReadingActivity,
         fetchRecommendedBooks,
+        fetchBookshelfSummaries,
         authenticated: !!userId,
       }}>
       {children}

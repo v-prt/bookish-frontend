@@ -182,14 +182,6 @@ export const styles = StyleSheet.create({
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     flex: 1,
-
-    // // android shadow
-    // elevation: 4,
-    // // ios shadow
-    // shadowColor: COLORS.primary700,
-    // shadowOffset: { width: -2, height: -2 },
-    // shadowOpacity: 0.2,
-    // shadowRadius: 15,
   },
   loading: {
     flex: 1,

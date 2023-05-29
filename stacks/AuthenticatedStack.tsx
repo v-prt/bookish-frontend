@@ -176,6 +176,13 @@ const ProfileStack = () => {
         }}
       />
       <Stack.Screen
+        name='DetailedBookshelf'
+        component={DetailedBookshelf}
+        options={{
+          title: '',
+        }}
+      />
+      <Stack.Screen
         name='BookDetails'
         component={BookDetails}
         options={{

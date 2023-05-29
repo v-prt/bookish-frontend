@@ -13,6 +13,7 @@ export const Library: FC<Props> = ({ navigation }) => {
     { title: 'Currently reading', id: 'currently-reading' },
     { title: 'Want to read', id: 'want-to-read' },
     { title: 'Read', id: 'read' },
+    { title: 'Rated', id: 'rated' },
   ]
 
   return (

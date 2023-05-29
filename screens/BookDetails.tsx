@@ -186,41 +186,58 @@ export const BookDetails: FC<Props> = ({
           </View>
 
           <View style={styles.details}>
-            {userBookData?.review && (
+            <Text style={styles.headerText}>Reviews</Text>
+            <View style={styles.divider} />
+            {userBookData?.review ? (
               <>
                 {/* TODO: fetch all books from db with this volumeId and display other users' reviews (use FlatList and paginate), keep current user's own review at top */}
-                <Text style={styles.headerText}>Reviews</Text>
-                <View style={styles.divider} />
-                <View style={styles.reviewSection}>
-                  <Avatar
-                    initials={`${userData.firstName[0]}${userData.lastName[0]}`}
-                    size='small'
-                  />
-                  <View>
-                    <View style={styles.reviewHeader}>
-                      <Text style={styles.name}>{userData.firstName}</Text>
+
+                <View style={styles.reviewWrapper}>
+                  <View style={styles.reviewHeader}>
+                    <Avatar
+                      initials={`${userData.firstName[0]}${userData.lastName[0]}`}
+                      size='small'
+                    />
+
+                    <View>
+                      <Text style={styles.name}>
+                        {userData.firstName} {userData.lastName}
+                      </Text>
                       <View style={styles.stars}>{renderStars(userBookData.rating)}</View>
                     </View>
-                    <Text style={styles.reviewDate}>
-                      {moment(userBookData?.review?.date).format('lll')}
-                    </Text>
-                    <Text style={styles.reviewText}>{userBookData?.review?.text}</Text>
+
+                    <View style={styles.editReviewBtn}>
+                      <IconButton
+                        icon='edit'
+                        size={20}
+                        color={COLORS.primary600}
+                        onPress={() =>
+                          navigation.navigate('ManageBook', {
+                            book: {
+                              volumeId,
+                              title: book.title,
+                              author: book.authors?.[0],
+                              image: book.imageLinks?.thumbnail,
+                            },
+                            existingBook: userBookData,
+                          })
+                        }
+                      />
+                    </View>
                   </View>
-                  <View style={styles.editReviewBtn}>
-                    <IconButton
-                      icon='edit'
-                      size={20}
-                      color={COLORS.primary600}
-                      onPress={() =>
-                        navigation.navigate('ManageBook', {
-                          volumeId,
-                          existingBook: userBookData,
-                        })
-                      }
-                    />
-                  </View>
+
+                  <Text style={styles.reviewText}>{userBookData?.review?.text}</Text>
+
+                  <Text style={styles.reviewDate}>
+                    {moment(userBookData?.review?.date).format('ll')}
+                  </Text>
                 </View>
               </>
+            ) : (
+              <View style={styles.blankSpace}>
+                <MaterialIcons name='book' size={40} color='#ccc' />
+                <Text style={styles.infoText}>No Reviews</Text>
+              </View>
             )}
 
             <Text style={styles.headerText}>Description</Text>
@@ -402,19 +419,25 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 
-  reviewSection: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
+  reviewWrapper: {
+    backgroundColor: '#f2f2f2',
+    padding: 10,
+    borderRadius: 5,
     gap: 12,
     marginBottom: 20,
-    paddingBottom: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: COLORS.primary300,
   },
   reviewHeader: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
     gap: 10,
+  },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 8,
+    marginBottom: 8,
   },
   name: {
     fontFamily: 'RobotoMono-Bold',
@@ -427,17 +450,32 @@ const styles = StyleSheet.create({
     gap: 3,
   },
   reviewDate: {
-    fontFamily: 'RobotoMono-Regular',
+    fontFamily: 'RobotoMono-Medium',
     fontSize: 14,
-    color: COLORS.primary500,
-    marginBottom: 8,
+    color: COLORS.grey,
+    opacity: 0.6,
   },
   reviewText: {
     fontFamily: 'RobotoMono-Regular',
-    fontSize: 16,
-    color: COLORS.primary700,
+    fontSize: 14,
+    color: COLORS.grey,
   },
   editReviewBtn: {
     marginLeft: 'auto',
+  },
+
+  blankSpace: {
+    height: 120,
+    backgroundColor: '#f2f2f2',
+    borderRadius: 5,
+    marginBottom: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 5,
+  },
+  infoText: {
+    fontFamily: 'RobotoMono-Regular',
+    fontSize: 14,
+    color: COLORS.grey,
   },
 })
