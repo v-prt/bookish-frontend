@@ -1,4 +1,4 @@
-import { StyleSheet, Pressable, View, Image, Text } from 'react-native'
+import { StyleSheet, Pressable, View, Text } from 'react-native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { useNavigation } from '@react-navigation/native'
 import { COLORS } from '../GlobalStyles'

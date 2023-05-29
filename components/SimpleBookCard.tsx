@@ -22,11 +22,6 @@ export const SimpleBookCard: React.FC<Props> = ({ book, lastChild }) => {
   return (
     <Pressable style={[styles.wrapper, lastChild && styles.lastChild]} onPress={handlePress}>
       <ImageLoader style={styles.image} source={{ uri: book.image }} borderRadius={10} />
-      {/* {book.bookshelf === 'Read' && (
-        <View style={styles.ownedTag}>
-          <MaterialIcons name='check' size={18} color={COLORS.white} />
-        </View>
-      )} */}
     </Pressable>
   )
 }

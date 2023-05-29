@@ -16,7 +16,6 @@ import * as Haptics from 'expo-haptics'
 import * as yup from 'yup'
 import { IconButton } from '../ui/IconButton'
 import { ImageLoader } from '../ui/ImageLoader'
-import { Book } from '../Interfaces'
 
 interface Props {
   route: any
@@ -137,8 +136,12 @@ export const ManageBook: FC<Props> = ({
             <View style={styles.basicInfo}>
               <ImageLoader style={styles.image} source={{ uri: book.image }} borderRadius={10} />
               <View style={styles.text}>
-                <Text style={styles.title}>{book.title}</Text>
-                <Text style={styles.author}>{book.author}</Text>
+                <Text style={styles.title} numberOfLines={2}>
+                  {book.title}
+                </Text>
+                <Text style={styles.author} numberOfLines={1}>
+                  {book.author}
+                </Text>
               </View>
             </View>
 

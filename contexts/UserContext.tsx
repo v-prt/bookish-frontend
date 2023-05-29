@@ -22,6 +22,18 @@ interface Props {
 
 export const UserProvider: FC<Props> = ({ children }) => {
   const queryClient = useQueryClient()
+  const queryKeys = [
+    'user',
+    'user-book',
+    'owned',
+    'currently-reading',
+    'want-to-read',
+    'read',
+    'reading-activity',
+    'recommended-books',
+    'bookshelf-summaries',
+    'reviews',
+  ]
 
   const [token, setToken] = useState<string | null>(null)
   const [userId, setUserId] = useState<string | null>(null)
@@ -82,11 +94,15 @@ export const UserProvider: FC<Props> = ({ children }) => {
         // something wrong with token
         deleteToken('bookishToken')
         setUserId(null)
+        setToken(null)
+        queryClient.clear()
       }
     } catch (err) {
       // something wrong with token
       deleteToken('bookishToken')
       setUserId(null)
+      setToken(null)
+      queryClient.clear()
     }
   }
 
@@ -99,13 +115,15 @@ export const UserProvider: FC<Props> = ({ children }) => {
   const handleLogout = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
     deleteToken('bookishToken')
+    // remove all queries
+    queryClient.clear()
     setUserId(null)
   }
 
   const updateUser = async (data: any) => {
     try {
       const res = await axios.put(`${API_URL}/users/${userId}`, data)
-      queryClient.invalidateQueries('user')
+      queryKeys.forEach(key => queryClient.invalidateQueries(key))
       return res.data
     } catch (err: any) {
       return { error: err.response.data.message }

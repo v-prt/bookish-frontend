@@ -7,8 +7,11 @@ import {
   ScrollView,
   useWindowDimensions,
   Pressable,
+  FlatList,
 } from 'react-native'
-import { useQuery } from 'react-query'
+import { useInfiniteQuery, useQuery } from 'react-query'
+import axios from 'axios'
+import { API_URL } from '../constants'
 import { UserContext } from '../contexts/UserContext'
 import { BookContext } from '../contexts/BookContext'
 import { COLORS } from '../GlobalStyles'
@@ -16,8 +19,7 @@ import RenderHtml from 'react-native-render-html'
 import { MaterialIcons } from '@expo/vector-icons'
 import { ImageLoader } from '../ui/ImageLoader'
 import moment from 'moment'
-import { Avatar } from '../ui/Avatar'
-import { IconButton } from '../ui/IconButton'
+import { ReviewCard } from '../components/ReviewCard'
 
 interface Props {
   navigation: any
@@ -30,10 +32,12 @@ export const BookDetails: FC<Props> = ({
     params: { volumeId },
   },
 }: any) => {
-  const { userData, userId } = useContext(UserContext)
+  const { userId } = useContext(UserContext)
   const { fetchBook } = useContext(BookContext)
   const [book, setBook] = useState<any>(null)
   const [genres, setGenres] = useState<string | null>(null)
+  const [totalReviews, setTotalReviews] = useState(undefined)
+  const [reviews, setReviews] = useState<any[]>([])
 
   const { data: googleBookData, status: googleBookStatus } = useQuery(
     ['google-book', volumeId],
@@ -43,6 +47,41 @@ export const BookDetails: FC<Props> = ({
   const { data: userBookData } = useQuery(['user-book', volumeId], () =>
     fetchBook(userId, volumeId)
   )
+
+  const {
+    data: reviewsData,
+    status: reviewsStatus,
+    hasNextPage,
+    fetchNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery(
+    ['reviews', volumeId],
+    async ({ pageParam }) => {
+      const { data } = await axios.get(`${API_URL}/reviews/${volumeId}/${pageParam || 1}`)
+
+      return data
+    },
+    {
+      getNextPageParam: lastPage => lastPage?.nextPage,
+    }
+  )
+
+  useEffect(() => {
+    if (reviewsStatus === 'success' && reviewsData) {
+      setTotalReviews(reviewsData?.pages?.[0]?.totalReviews)
+      setReviews(
+        reviewsData.pages
+          .map((page: { reviews: any[] }) => page.reviews.map((review: any) => review))
+          .flat()
+      )
+    }
+  }, [reviewsStatus, reviewsData])
+
+  const handleInfiniteScroll = () => {
+    if (hasNextPage && !isFetchingNextPage) {
+      fetchNextPage()
+    }
+  }
 
   const actionBtnStyles = userBookData
     ? [styles.actionBtn, styles.primaryActionBtn]
@@ -59,6 +98,17 @@ export const BookDetails: FC<Props> = ({
   })
 
   useEffect(() => {
+    navigation.setOptions({
+      headerTitle: book?.title,
+      // header font
+      headerTitleStyle: {
+        fontFamily: 'RobotoMono-Bold',
+        fontSize: 16,
+      },
+    })
+  })
+
+  useEffect(() => {
     if (book?.categories?.length > 0) {
       // clean up categories (remove slashes and duplicate words)
       let cats = [
@@ -71,23 +121,6 @@ export const BookDetails: FC<Props> = ({
       setGenres(text)
     }
   }, [book])
-
-  const renderStars = (rating: number) => {
-    let stars = []
-    for (let i = 0; i < 5; i++) {
-      stars.push(
-        <MaterialIcons
-          key={i}
-          name={
-            rating > i + 0.5 ? 'star' : rating > i && rating < i + 1 ? 'star-half' : 'star-border'
-          }
-          size={18}
-          color={rating > i ? COLORS.accentLight : COLORS.primary500}
-        />
-      )
-    }
-    return stars
-  }
 
   const DescriptionDisplay = memo(function DescriptionDisplay() {
     // using memo to prevent re-rendering unnecessarily (warning occurs from RenderHtml)
@@ -132,31 +165,26 @@ export const BookDetails: FC<Props> = ({
             </View>
           </View>
 
-          <View style={styles.actions}>
-            <Pressable
-              onPress={() =>
-                navigation.navigate('ManageBook', {
-                  book: {
-                    volumeId,
-                    title: book.title,
-                    author: book.authors?.[0],
-                    image: book.imageLinks?.thumbnail,
-                  },
-                  existingBook: userBookData,
-                })
-              }
-              style={actionBtnStyles}>
-              <Text style={actionTextStyles}>
-                {userBookData?.bookshelf || 'Add to Library'}
-                {userBookData?.owned && ' (Owned)'}
-              </Text>
-              <MaterialIcons
-                name='expand-more'
-                color={userBookData ? COLORS.white : COLORS.accentLight}
-                size={24}
-              />
-            </Pressable>
-          </View>
+          <Pressable
+            onPress={() =>
+              navigation.navigate('ManageBook', {
+                book: {
+                  volumeId,
+                  title: book.title,
+                  author: book.authors?.[0],
+                  image: book.imageLinks?.thumbnail,
+                },
+                existingBook: userBookData,
+              })
+            }
+            style={actionBtnStyles}>
+            <Text style={actionTextStyles}>{userBookData?.bookshelf || 'Add to Library'}</Text>
+            <MaterialIcons
+              name='expand-more'
+              color={userBookData ? COLORS.white : COLORS.accentLight}
+              size={24}
+            />
+          </Pressable>
 
           <View style={styles.ratings}>
             <View style={styles.ratingGroup}>
@@ -185,61 +213,7 @@ export const BookDetails: FC<Props> = ({
             </View>
           </View>
 
-          <View style={styles.details}>
-            <Text style={styles.headerText}>Reviews</Text>
-            <View style={styles.divider} />
-            {userBookData?.review ? (
-              <>
-                {/* TODO: fetch all books from db with this volumeId and display other users' reviews (use FlatList and paginate), keep current user's own review at top */}
-
-                <View style={styles.reviewWrapper}>
-                  <View style={styles.reviewHeader}>
-                    <Avatar
-                      initials={`${userData.firstName[0]}${userData.lastName[0]}`}
-                      size='small'
-                    />
-
-                    <View>
-                      <Text style={styles.name}>
-                        {userData.firstName} {userData.lastName}
-                      </Text>
-                      <View style={styles.stars}>{renderStars(userBookData.rating)}</View>
-                    </View>
-
-                    <View style={styles.editReviewBtn}>
-                      <IconButton
-                        icon='edit'
-                        size={20}
-                        color={COLORS.primary600}
-                        onPress={() =>
-                          navigation.navigate('ManageBook', {
-                            book: {
-                              volumeId,
-                              title: book.title,
-                              author: book.authors?.[0],
-                              image: book.imageLinks?.thumbnail,
-                            },
-                            existingBook: userBookData,
-                          })
-                        }
-                      />
-                    </View>
-                  </View>
-
-                  <Text style={styles.reviewText}>{userBookData?.review?.text}</Text>
-
-                  <Text style={styles.reviewDate}>
-                    {moment(userBookData?.review?.date).format('ll')}
-                  </Text>
-                </View>
-              </>
-            ) : (
-              <View style={styles.blankSpace}>
-                <MaterialIcons name='book' size={40} color='#ccc' />
-                <Text style={styles.infoText}>No Reviews</Text>
-              </View>
-            )}
-
+          <View style={styles.bookInfoWrapper}>
             <Text style={styles.headerText}>Description</Text>
             <View style={styles.divider} />
             <View style={styles.description}>
@@ -248,22 +222,72 @@ export const BookDetails: FC<Props> = ({
 
             <Text style={styles.headerText}>Details</Text>
             <View style={styles.divider} />
-            <Text style={styles.detailsText}>
-              <Text style={styles.label}>Genres: </Text>
-              {genres || 'Unknown'}
-            </Text>
-            <Text style={styles.detailsText}>
-              <Text style={styles.label}>Publisher: </Text>
-              {book.publisher || 'Unknown'}
-            </Text>
-            <Text style={styles.detailsText}>
-              <Text style={styles.label}>Published: </Text>
-              {book.publishedDate ? moment(book.publishedDate).format('LL') : 'Unknown'}
-            </Text>
-            <Text style={styles.detailsText}>
-              <Text style={styles.label}>Pages: </Text>
-              {book.pageCount || 'Unknown'}
-            </Text>
+            <View style={styles.details}>
+              <Text style={styles.detailsText}>
+                <Text style={styles.label}>Genres: </Text>
+                {genres || 'Unknown'}
+              </Text>
+              <Text style={styles.detailsText}>
+                <Text style={styles.label}>Publisher: </Text>
+                {book.publisher || 'Unknown'}
+              </Text>
+              <Text style={styles.detailsText}>
+                <Text style={styles.label}>Published: </Text>
+                {book.publishedDate ? moment(book.publishedDate).format('LL') : 'Unknown'}
+              </Text>
+              <Text style={styles.detailsText}>
+                <Text style={styles.label}>Pages: </Text>
+                {book.pageCount || 'Unknown'}
+              </Text>
+            </View>
+
+            <Text style={styles.headerText}>Reviews</Text>
+            <View style={styles.divider} />
+            {reviewsStatus === 'loading' &&
+              [...Array(6)].map((_, i) => (
+                <View style={[styles.skelement, i === 5 && { marginRight: 20 }]} key={i} />
+              ))}
+            {reviewsStatus === 'success' &&
+              (totalReviews && reviews?.length ? (
+                <FlatList
+                  data={reviews}
+                  keyExtractor={review => review.userId._id}
+                  renderItem={({ item, index }) => (
+                    <ReviewCard
+                      key={item.id}
+                      review={{
+                        ...item,
+                        user: {
+                          firstName: item.userId.firstName,
+                          lastName: item.userId.lastName,
+                        },
+                      }}
+                      lastChild={index === reviews.length - 1}
+                    />
+                  )}
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  onEndReachedThreshold={0.2}
+                  onEndReached={handleInfiniteScroll}
+                  style={styles.reviews}
+                  ListFooterComponent={() => {
+                    if (isFetchingNextPage) {
+                      return (
+                        <View style={styles.footerContainer}>
+                          <ActivityIndicator size='small' color={COLORS.primary400} />
+                        </View>
+                      )
+                    } else {
+                      return null
+                    }
+                  }}
+                />
+              ) : (
+                <View style={styles.blankSpace}>
+                  <MaterialIcons name='book' size={40} color='#ccc' />
+                  <Text style={styles.infoText}>No Reviews</Text>
+                </View>
+              ))}
           </View>
         </ScrollView>
       )}
@@ -298,7 +322,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     height: 150,
     aspectRatio: 2 / 3,
-
     // android shadow
     elevation: 4,
     // ios shadow
@@ -308,12 +331,12 @@ const styles = StyleSheet.create({
     shadowRadius: 15,
   },
   title: {
-    color: COLORS.accentDark,
+    color: COLORS.primary900,
     fontFamily: 'RobotoMono-Bold',
     fontSize: 20,
   },
   subtitle: {
-    color: COLORS.accentDark,
+    color: COLORS.primary900,
     fontSize: 16,
     fontFamily: 'RobotoMono-Italic',
   },
@@ -344,18 +367,14 @@ const styles = StyleSheet.create({
     fontFamily: 'RobotoMono-Regular',
     fontSize: 14,
   },
-
-  actions: {
-    paddingHorizontal: 20,
-  },
   actionBtn: {
-    width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     gap: 5,
     paddingVertical: 10,
     paddingHorizontal: 20,
+    marginHorizontal: 20,
     borderRadius: 20,
     borderWidth: 1,
   },
@@ -378,9 +397,9 @@ const styles = StyleSheet.create({
     color: COLORS.accentLight,
   },
 
-  details: {
+  bookInfoWrapper: {
     backgroundColor: COLORS.white,
-    padding: 20,
+    paddingVertical: 20,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
 
@@ -396,22 +415,39 @@ const styles = StyleSheet.create({
     fontFamily: 'RobotoMono-Bold',
     fontSize: 20,
     color: COLORS.accentDark,
+    marginLeft: 20,
     marginBottom: 8,
   },
   divider: {
     width: 100,
     height: 1,
     backgroundColor: COLORS.accentDark,
+    marginLeft: 20,
     marginBottom: 20,
     opacity: 0.6,
   },
+  details: {
+    marginBottom: 20,
+  },
+  reviews: {
+    marginBottom: 20,
+  },
+  footerContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 10,
+    paddingRight: 30,
+    flex: 1,
+  },
   description: {
+    paddingHorizontal: 20,
     marginBottom: 30,
   },
   detailsText: {
     fontFamily: 'RobotoMono-Regular',
     fontSize: 16,
     color: COLORS.primary700,
+    paddingHorizontal: 20,
     marginBottom: 10,
   },
   label: {
@@ -419,51 +455,16 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 
-  reviewWrapper: {
+  skelement: {
+    // TODO: add shine animation for background color
+    height: 120,
     backgroundColor: '#f2f2f2',
-    padding: 10,
     borderRadius: 5,
-    gap: 12,
     marginBottom: 20,
-  },
-  reviewHeader: {
-    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    gap: 10,
+    justifyContent: 'center',
+    gap: 5,
   },
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    gap: 8,
-    marginBottom: 8,
-  },
-  name: {
-    fontFamily: 'RobotoMono-Bold',
-    fontSize: 16,
-    color: COLORS.accentLight,
-  },
-  stars: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 3,
-  },
-  reviewDate: {
-    fontFamily: 'RobotoMono-Medium',
-    fontSize: 14,
-    color: COLORS.grey,
-    opacity: 0.6,
-  },
-  reviewText: {
-    fontFamily: 'RobotoMono-Regular',
-    fontSize: 14,
-    color: COLORS.grey,
-  },
-  editReviewBtn: {
-    marginLeft: 'auto',
-  },
-
   blankSpace: {
     height: 120,
     backgroundColor: '#f2f2f2',
@@ -472,6 +473,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 5,
+    marginHorizontal: 20,
   },
   infoText: {
     fontFamily: 'RobotoMono-Regular',

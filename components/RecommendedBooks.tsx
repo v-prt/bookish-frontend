@@ -55,6 +55,7 @@ export const RecommendedBooks: FC<Props> = ({ genre, navigation }) => {
           ))}
         </ScrollView>
       )}
+      {/* FIXME: encountering children with the same key error (horror genre) */}
       {status === 'success' && data && <SimpleBookList books={data.recommendedBooks} />}
     </View>
   )
