@@ -1,14 +1,5 @@
-import { useState, useContext, useEffect } from 'react'
-import {
-  StyleSheet,
-  Pressable,
-  Text,
-  ScrollView,
-  View,
-  Modal,
-  Alert,
-  SafeAreaView,
-} from 'react-native'
+import { FC, useState, useContext, useEffect } from 'react'
+import { StyleSheet, Pressable, Text, View, Modal, Alert, SafeAreaView } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { UserContext } from '../contexts/UserContext'
 import { COLORS } from '../GlobalStyles'
@@ -26,7 +17,7 @@ interface Props {
   navigation: any
 }
 
-export const Settings: React.FC<Props> = ({ navigation }) => {
+export const Settings: FC<Props> = ({ navigation }) => {
   const { userData, updateUser, handleLogout, deleteAccount } = useContext(UserContext)
 
   const [passwordModalVisible, setPasswordModalVisible] = useState(false)
@@ -107,7 +98,6 @@ export const Settings: React.FC<Props> = ({ navigation }) => {
         {
           text: 'OK',
           onPress: () => {
-            // FIXME: welcome screen shows twice upon logout
             setDeleteAccountModalVisible(false)
             handleLogout()
           },
@@ -137,7 +127,6 @@ export const Settings: React.FC<Props> = ({ navigation }) => {
                 subtitle={status}
               />
             )}
-            {/* TODO: avatar selection */}
             <View style={styles.formRow}>
               <FormItem name='firstName' label='First name' style={styles.rowItem}>
                 <Input

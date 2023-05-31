@@ -1,3 +1,4 @@
+import { FC } from 'react'
 import { StyleSheet, FlatList, View, ActivityIndicator } from 'react-native'
 import { DetailedBookCard } from './DetailedBookCard'
 import { Book } from '../Interfaces'
@@ -9,7 +10,7 @@ interface Props {
   isLoading: boolean
 }
 
-export const DetailedBookList: React.FC<Props> = ({ books, infiniteScroll, isLoading }) => {
+export const DetailedBookList: FC<Props> = ({ books, infiniteScroll, isLoading }) => {
   // remove any duplicate books (issue with Google Books API)
   const uniqueBooks =
     // create array of unique volumeIds

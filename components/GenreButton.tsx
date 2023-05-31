@@ -1,3 +1,4 @@
+import { FC } from 'react'
 import { View, Pressable, StyleSheet, Text, Dimensions } from 'react-native'
 import { COLORS } from '../GlobalStyles'
 import { ImageLoader } from '../ui/ImageLoader'
@@ -15,7 +16,7 @@ const totalGapSize = gap * (itemPerRow + 1)
 const windowWidth = width
 const childWidth = (windowWidth - totalGapSize) / itemPerRow
 
-export const GenreButton: React.FC<Props> = ({ label, image, onPress }) => {
+export const GenreButton: FC<Props> = ({ label, image, onPress }) => {
   return (
     <Pressable onPress={onPress} style={styles.container}>
       <View style={styles.imageWrapper}>

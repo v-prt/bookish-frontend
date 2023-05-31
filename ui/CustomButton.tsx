@@ -1,3 +1,4 @@
+import { FC } from 'react'
 import { StyleSheet, Pressable, Text, ActivityIndicator } from 'react-native'
 import { COLORS } from '../GlobalStyles'
 import { MaterialIcons } from '@expo/vector-icons'
@@ -11,14 +12,7 @@ interface Props {
   disabled?: boolean
 }
 
-export const CustomButton: React.FC<Props> = ({
-  type,
-  label,
-  icon,
-  onPress,
-  loading,
-  disabled,
-}) => {
+export const CustomButton: FC<Props> = ({ type, label, icon, onPress, loading, disabled }) => {
   const buttonStyle = type === 'primary' ? styles.primaryBtn : styles.secondaryBtn
   const textStyle = type === 'primary' ? styles.primaryTxt : styles.secondaryTxt
 

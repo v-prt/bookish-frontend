@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react'
+import { FC, useEffect, useState, useRef } from 'react'
 import { Animated, StyleSheet, View, Image } from 'react-native'
 
 interface Props {
@@ -7,7 +7,7 @@ interface Props {
   borderRadius?: number
 }
 
-export const ImageLoader: React.FC<Props> = ({ style, source, borderRadius }) => {
+export const ImageLoader: FC<Props> = ({ style, source, borderRadius }) => {
   const fadeAnim = useRef(new Animated.Value(0)).current
   const [imageLoaded, setImageLoaded] = useState(false)
 

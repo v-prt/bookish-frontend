@@ -1,18 +1,18 @@
-import { StyleSheet, Pressable, View } from 'react-native'
+import { FC } from 'react'
+import { StyleSheet, Pressable } from 'react-native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { useNavigation } from '@react-navigation/native'
 import { Book } from '../Interfaces'
 import { RootStackParamList } from '../Types'
 import { ImageLoader } from '../ui/ImageLoader'
 import { COLORS } from '../GlobalStyles'
-import { MaterialIcons } from '@expo/vector-icons'
 
 interface Props {
   book: Book
   lastChild?: boolean
 }
 
-export const SimpleBookCard: React.FC<Props> = ({ book, lastChild }) => {
+export const SimpleBookCard: FC<Props> = ({ book, lastChild }) => {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
 
   const handlePress = () => {

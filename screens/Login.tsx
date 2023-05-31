@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react'
+import { FC, useState, useContext } from 'react'
 import { View, Text } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import * as yup from 'yup'
@@ -14,7 +14,7 @@ interface Props {
   navigation: any
 }
 
-export const Login: React.FC<Props> = ({ navigation }) => {
+export const Login: FC<Props> = ({ navigation }) => {
   const { handleLogin } = useContext(UserContext)
   const [passwordVisible, setPasswordVisible] = useState(false)
 

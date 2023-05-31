@@ -1,3 +1,4 @@
+import { FC } from 'react'
 import { StyleSheet, View, Text } from 'react-native'
 import { COLORS } from '../GlobalStyles'
 import { ImageLoader } from '../ui/ImageLoader'
@@ -8,7 +9,7 @@ interface Props {
   navigation: any
 }
 
-export const Welcome: React.FC<Props> = ({ navigation }) => {
+export const Welcome: FC<Props> = ({ navigation }) => {
   return (
     <View style={styles.screen}>
       <Text style={styles.logo}>

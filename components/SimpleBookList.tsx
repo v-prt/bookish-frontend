@@ -1,3 +1,4 @@
+import { FC } from 'react'
 import { StyleSheet, FlatList, ActivityIndicator, View } from 'react-native'
 import { SimpleBookCard } from './SimpleBookCard'
 import { Book } from '../Interfaces'
@@ -9,7 +10,7 @@ interface Props {
   isLoading?: boolean
 }
 
-export const SimpleBookList: React.FC<Props> = ({ books, infiniteScroll, isLoading }) => {
+export const SimpleBookList: FC<Props> = ({ books, infiniteScroll, isLoading }) => {
   return (
     <FlatList
       data={books}

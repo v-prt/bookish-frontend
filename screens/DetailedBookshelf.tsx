@@ -129,7 +129,6 @@ export const DetailedBookshelf: FC<Props> = ({
         )}
       </Formik>
 
-      {/* FIXME: border radius overflow visible */}
       <View style={styles.screenInner}>
         {status === 'loading' && (
           <View style={styles.loading}>
@@ -188,6 +187,8 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   list: {
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
     padding: 20,
   },
   loading: {

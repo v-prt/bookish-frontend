@@ -158,20 +158,28 @@ export const Profile: FC<Props> = ({ navigation }) => {
                     {group.books?.length ? (
                       <View style={styles.thumbnails}>
                         {group.books.map((book: Book, index: number) => (
-                          <ImageLoader
-                            key={index}
-                            source={{ uri: book.image }}
+                          <View
                             style={[
-                              styles.thumbnail,
+                              styles.thumbnailWrapper,
                               { zIndex: group.books.length - index },
                               index === 0
-                                ? styles.thumbnailFirst
+                                ? styles.thumbnailWrapperFirst
                                 : index === 1
-                                ? styles.thumbnailSecond
-                                : styles.thumbnailThird,
-                            ]}
-                            borderRadius={5}
-                          />
+                                ? styles.thumbnailWrapperSecond
+                                : styles.thumbnailWrapperThird,
+                            ]}>
+                            <ImageLoader
+                              key={index}
+                              source={{ uri: book.image }}
+                              style={[
+                                { zIndex: group.books.length - index },
+                                index === 1
+                                  ? styles.thumbnailSecond
+                                  : index === 2 && styles.thumbnailThird,
+                              ]}
+                              borderRadius={5}
+                            />
+                          </View>
                         ))}
                       </View>
                     ) : (
@@ -392,20 +400,27 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     position: 'relative',
   },
-  thumbnail: {
+  thumbnailWrapper: {
+    backgroundColor: '#000',
     width: 60,
     aspectRatio: 2 / 3,
     position: 'absolute',
+    borderRadius: 5,
   },
-  thumbnailFirst: {
+  thumbnailWrapperFirst: {
     left: 0,
   },
-  // TODO: make thumbnails progressively darker
-  thumbnailSecond: {
+  thumbnailWrapperSecond: {
     left: '30%',
   },
-  thumbnailThird: {
+  thumbnailWrapperThird: {
     right: 0,
+  },
+  thumbnailSecond: {
+    opacity: 0.7,
+  },
+  thumbnailThird: {
+    opacity: 0.5,
   },
   blankThumbnail: {
     width: 50,

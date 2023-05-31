@@ -456,7 +456,6 @@ const styles = StyleSheet.create({
   },
 
   skelement: {
-    // TODO: add shine animation for background color
     height: 120,
     backgroundColor: '#f2f2f2',
     borderRadius: 5,

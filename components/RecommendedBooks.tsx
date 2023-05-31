@@ -55,7 +55,6 @@ export const RecommendedBooks: FC<Props> = ({ genre, navigation }) => {
           ))}
         </ScrollView>
       )}
-      {/* FIXME: encountering children with the same key error (horror genre) */}
       {status === 'success' && data && <SimpleBookList books={data.recommendedBooks} />}
     </View>
   )
@@ -67,7 +66,6 @@ const styles = StyleSheet.create({
     marginBottom: 25,
   },
   skelement: {
-    // TODO: add shine animation for background color
     height: 170,
     aspectRatio: 2 / 3,
     backgroundColor: COLORS.primary200,

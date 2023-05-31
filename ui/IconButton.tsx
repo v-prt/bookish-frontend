@@ -1,3 +1,4 @@
+import { FC } from 'react'
 import { StyleSheet, Pressable } from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons'
 
@@ -10,14 +11,7 @@ interface Props {
   disabled?: boolean
 }
 
-export const IconButton: React.FC<Props> = ({
-  icon,
-  size = 24,
-  color,
-  onPress,
-  small,
-  disabled,
-}) => {
+export const IconButton: FC<Props> = ({ icon, size = 24, color, onPress, small, disabled }) => {
   return (
     <Pressable
       onPress={() => {

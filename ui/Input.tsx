@@ -1,3 +1,4 @@
+import { FC } from 'react'
 import { StyleSheet, View, TextInput } from 'react-native'
 import { COLORS } from '../GlobalStyles'
 import { IconButton } from './IconButton'
@@ -10,7 +11,7 @@ interface Props {
   style?: any
 }
 
-export const Input: React.FC<Props> = ({ config, icon, onIconPress, style }) => {
+export const Input: FC<Props> = ({ config, icon, onIconPress, style }) => {
   return (
     <View style={[styles.inputWrapper, style]}>
       <TextInput {...config} style={styles.input} selectionColor={COLORS.accentLight} />

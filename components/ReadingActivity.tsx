@@ -41,7 +41,6 @@ export const ReadingActivity: FC = () => {
 
       {readingActivityStatus === 'success' && readingActivity ? (
         <>
-          {/* FIXME: styling for no activity, improve loading style to keep height consistent */}
           <View style={styles.row}>
             <View style={styles.card}>
               <Text style={styles.number}>{readingActivity.totalBooks?.toLocaleString() || 0}</Text>

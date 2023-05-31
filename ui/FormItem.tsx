@@ -1,3 +1,4 @@
+import { FC } from 'react'
 import { StyleSheet, View, Text } from 'react-native'
 import { Field, ErrorMessage, FormikProps } from 'formik'
 import { MaterialIcons } from '@expo/vector-icons'
@@ -14,7 +15,7 @@ interface Props {
   required?: boolean
 }
 
-export const FormItem: React.FC<Props> = ({
+export const FormItem: FC<Props> = ({
   name,
   label,
   sublabel,

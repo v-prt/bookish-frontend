@@ -1,3 +1,4 @@
+import { FC } from 'react'
 import { StyleSheet, View, Text } from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons'
 import { COLORS } from '../GlobalStyles'
@@ -9,7 +10,7 @@ interface Props {
   subtitle?: string
 }
 
-export const AlertText: React.FC<Props> = ({ type, icon, title, subtitle }) => {
+export const AlertText: FC<Props> = ({ type, icon, title, subtitle }) => {
   const color =
     type === 'error'
       ? COLORS.error

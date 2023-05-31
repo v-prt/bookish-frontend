@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react'
+import { FC, useState, useContext } from 'react'
 import { StyleSheet, View, Text } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { Formik } from 'formik'
@@ -14,7 +14,7 @@ interface Props {
   navigation: any
 }
 
-export const Signup: React.FC<Props> = ({ navigation }) => {
+export const Signup: FC<Props> = ({ navigation }) => {
   const { handleSignup } = useContext(UserContext)
   const [passwordVisible, setPasswordVisible] = useState(false)
 

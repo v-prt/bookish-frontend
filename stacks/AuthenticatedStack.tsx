@@ -82,8 +82,6 @@ const SearchStack = () => {
         component={Search}
         options={{
           headerShown: false,
-          //  FIXME: not working
-          // headerBackTitle: 'Search',
         }}
       />
       <Stack.Screen

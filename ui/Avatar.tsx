@@ -1,3 +1,4 @@
+import { FC } from 'react'
 import { StyleSheet, View, Text } from 'react-native'
 import { COLORS } from '../GlobalStyles'
 
@@ -6,8 +7,7 @@ interface Props {
   size?: string
 }
 
-export const Avatar: React.FC<Props> = ({ initials, size }) => {
-  // TODO: cute animal icons (allow user to choose one)
+export const Avatar: FC<Props> = ({ initials, size }) => {
   const wrapperStyle = size === 'small' ? { padding: 8 } : { padding: 10 }
   const textStyle = size === 'small' ? { fontSize: 16 } : { fontSize: 20 }
 

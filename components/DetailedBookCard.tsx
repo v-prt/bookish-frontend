@@ -1,3 +1,4 @@
+import { FC } from 'react'
 import { StyleSheet, Pressable, View, Text } from 'react-native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { useNavigation } from '@react-navigation/native'
@@ -12,7 +13,7 @@ interface Props {
   book: Book
 }
 
-export const DetailedBookCard: React.FC<Props> = ({ book }) => {
+export const DetailedBookCard: FC<Props> = ({ book }) => {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
 
   const handlePress = () => {
