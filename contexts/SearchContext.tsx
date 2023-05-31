@@ -19,7 +19,7 @@ export const SearchProvider: FC<Props> = ({ children }) => {
   const { data, status, hasNextPage, fetchNextPage, isFetchingNextPage } = useInfiniteQuery(
     ['search-results', searchText],
     async ({ pageParam }) => {
-      if (searchText?.length > 0) {
+      if (userId && searchText?.length > 0) {
         const { data } = await axios.get(`${API_URL}/google-books/${userId}`, {
           params: {
             searchText,
@@ -44,7 +44,7 @@ export const SearchProvider: FC<Props> = ({ children }) => {
   } = useInfiniteQuery(
     ['genre-search-results', genreSearchText],
     async ({ pageParam = 0 }) => {
-      if (genreSearchText?.length > 0) {
+      if (userId && genreSearchText?.length > 0) {
         const { data } = await axios.get(`${API_URL}/google-books/${userId}`, {
           params: {
             searchText: genreSearchText,

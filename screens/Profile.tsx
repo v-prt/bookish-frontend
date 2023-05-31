@@ -34,7 +34,9 @@ interface Props {
 export const Profile: FC<Props> = ({ navigation }) => {
   const { userData, updateUser, fetchBookshelfSummaries } = useContext(UserContext)
 
-  const { data, status } = useQuery('bookshelf-summaries', () => fetchBookshelfSummaries())
+  const { data, status } = useQuery(['bookshelf-summaries', userData], () =>
+    fetchBookshelfSummaries()
+  )
 
   const [genreModalVisible, setGenreModalVisible] = useState(false)
 
@@ -118,13 +120,13 @@ export const Profile: FC<Props> = ({ navigation }) => {
       </View>
 
       <View style={styles.screenInnerWrapper}>
-        {(status === 'loading' || !data) && (
+        {(status === 'loading' || !data?.books) && (
           <View style={styles.loading}>
             <ActivityIndicator size='large' color={COLORS.primary400} />
           </View>
         )}
 
-        {status === 'success' && data && (
+        {status === 'success' && data?.books && (
           <ScrollView
             style={styles.screenInner}
             showsVerticalScrollIndicator={false}
@@ -159,6 +161,7 @@ export const Profile: FC<Props> = ({ navigation }) => {
                       <View style={styles.thumbnails}>
                         {group.books.map((book: Book, index: number) => (
                           <View
+                            key={index}
                             style={[
                               styles.thumbnailWrapper,
                               { zIndex: group.books.length - index },
@@ -169,7 +172,6 @@ export const Profile: FC<Props> = ({ navigation }) => {
                                 : styles.thumbnailWrapperThird,
                             ]}>
                             <ImageLoader
-                              key={index}
                               source={{ uri: book.image }}
                               style={[
                                 { zIndex: group.books.length - index },
